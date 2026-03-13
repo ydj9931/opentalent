@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开源贡献者面板 - 张伟 | 成长与协作资本</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --tech-color: #3b82f6;
+            --gov-color: #8b5cf6;
+            --eco-color: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section - 核心理念 */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 50px 0;
+            margin-bottom: 30px;
+            border-radius: 0 0 24px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-left {
+            flex: 1;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .hero-right {
+            text-align: center;
+        }
+
+        .avatar-large {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 5px solid rgba(255,255,255,0.3);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .platform-badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .badge.verified {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        /* Data Control Panel - 数据授权控制 */
+        .data-control-panel {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .data-control-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .data-control-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .data-control-text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .data-control-text p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .data-control-btn {
+            padding: 10px 20px;
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .data-control-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Section Styles */
+        .section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-title i {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .section-title.tech i { background: rgba(59, 130, 246, 0.2); color: var(--tech-color); }
+        .section-title.gov i { background: rgba(139, 92, 246, 0.2); color: var(--gov-color); }
+        .section-title.eco i { background: rgba(16, 185, 129, 0.2); color: var(--eco-color); }
+
+        /* Identity Section */
+        .identity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .identity-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .identity-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .identity-bio {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .identity-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .community-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .community-card {
+            background: var(--bg-hover);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .community-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .community-info h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .community-info .role {
+            font-size: 0.9rem;
+            color: var(--success);
+        }
+
+        .community-info .group {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Tech Stack */
+        .tech-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .tech-skills-section h4 {
+            font-size: 1rem;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .tech-item {
+            background: var(--bg-hover);
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tech-name {
+            font-weight: 500;
+        }
+
+        .tech-level {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--tech-color);
+        }
+
+        .tech-level.expert { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .tech-level.advanced { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+
+        .core-domains {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .domain-tag {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Tech Timeline - 新增 */
+        .tech-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .tech-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--bg-card);
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        .timeline-year {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-event {
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .timeline-skills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-skill {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            background: var(--bg-hover);
+            border-radius: 4px;
+            color: var(--text-secondary);
+        }
+
+        /* Contribution Cards */
+        .contribution-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: var(--bg-hover);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--border);
+        }
+
+        .contribution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 16px;
+        }
+
+        .contribution-card {
+            background: var(--bg-hover);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.2s;
+        }
+
+        .contribution-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .contribution-card.tech { border-left-color: var(--tech-color); }
+        .contribution-card.gov { border-left-color: var(--gov-color); }
+        .contribution-card.eco { border-left-color: var(--eco-color); }
+
+        .contribution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .contribution-title {
+            font-weight: 600;
+            font-size: 1rem;
+            flex: 1;
+        }
+
+        .contribution-type {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .contribution-project {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .contribution-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        /* Context Display - 新增 */
+        .contribution-context {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .contribution-context-label {
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .contribution-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .metric {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 4px;
+        }
+
+        .contribution-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .verification-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--success);
+        }
+
+        /* Project Cards */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: var(--bg-hover);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .project-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .project-version {
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            background: var(--primary);
+            border-radius: 12px;
+        }
+
+        .project-role {
+            font-size: 0.9rem;
+            color: var(--success);
+            margin-top: 8px;
+        }
+
+        /* Project Basic Data */
+        .project-basic-data {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .basic-data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .basic-data-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .repo-link {
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .repo-link:hover {
+            text-decoration: underline;
+        }
+
+        .basic-data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .basic-data-item {
+            text-align: center;
+            padding: 8px;
+            background: var(--bg-hover);
+            border-radius: 6px;
+        }
+
+        .basic-data-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .basic-data-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .basic-data-value.star { color: #f59e0b; }
+        .basic-data-value.fork { color: var(--tech-color); }
+        .basic-data-value.issue { color: var(--warning); }
+        .basic-data-value.pr { color: var(--success); }
+        .basic-data-value.contributor { color: var(--secondary); }
+
+        /* Growth Trend - 新增 */
+        .growth-trend {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 8px;
+        }
+
+        .growth-trend-title {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .growth-chart-container {
+            height: 100px;
+        }
+
+        .radar-chart-container {
+            width: 100%;
+            height: 250px;
+            margin: 20px 0;
+        }
+
+        .dimension-scores {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .dimension-score {
+            text-align: center;
+            padding: 12px 8px;
+            background: var(--bg-card);
+            border-radius: 8px;
+        }
+
+        .dimension-name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .dimension-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Participation */
+        .participation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .participation-card {
+            background: var(--bg-hover);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .part-project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .part-project-info {
+            flex: 1;
+        }
+
+        .participation-project {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .part-community {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .project-info-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .info-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            color: var(--text-secondary);
+        }
+
+        .info-tag.language { color: var(--tech-color); }
+        .info-tag.license { color: var(--warning); }
+
+        .participation-role {
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .part-dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .part-dimension-item {
+            text-align: center;
+            padding: 10px 4px;
+            background: var(--bg-card);
+            border-radius: 6px;
+        }
+
+        .part-dimension-name {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .part-dimension-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .part-dimension-value.health { color: var(--success); }
+        .part-dimension-value.criticality { color: var(--secondary); }
+        .part-dimension-value.impact { color: var(--warning); }
+        .part-dimension-value.security { color: var(--danger); }
+        .part-dimension-value.innovation { color: var(--tech-color); }
+
+        /* Collaboration Time & Personal Impact - 新增 */
+        .collab-impact-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .collab-time, .personal-impact {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .collab-time-title, .impact-title {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .collab-duration {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .collab-duration span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .impact-stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .impact-stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .impact-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .impact-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .participation-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .summary-item h5 {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .summary-item p {
+            font-size: 0.9rem;
+        }
+
+        .honor-list {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .honor {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border-radius: 6px;
+        }
+
+        /* Growth Record - 成长记录 */
+        .growth-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .growth-timeline-card, .growth-trend-card, .platform-usage-card {
+            background: var(--bg-hover);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .growth-card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .growth-card-title i {
+            color: var(--primary);
+        }
+
+        .growth-timeline-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .growth-timeline-item {
+            display: flex;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .growth-timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .growth-date {
+            min-width: 60px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .growth-content {
+            flex: 1;
+        }
+
+        .growth-event {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .growth-type {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+        }
+
+        .growth-type.milestone { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .growth-type.role_change { background: rgba(139, 92, 246, 0.2); color: var(--gov-color); }
+        .growth-type.technical { background: rgba(59, 130, 246, 0.2); color: var(--tech-color); }
+        .growth-type.ecosystem { background: rgba(16, 185, 129, 0.2); color: var(--eco-color); }
+
+        .trend-chart-container {
+            height: 200px;
+        }
+
+        .platform-usage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .platform-usage-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 8px;
+        }
+
+        .platform-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .platform-icon.github { color: #fff; }
+        .platform-icon.gitee { color: #c71d2f; }
+        .platform-icon.atomgit { color: var(--primary); }
+
+        .platform-contribs {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .platform-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .identity-grid, .tech-content, .growth-grid, .collab-impact-row {
+                grid-template-columns: 1fr;
+            }
+
+            .basic-data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .part-dimension-grid, .participation-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .platform-usage-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .dimension-scores {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="hero-tag">
+                        <i class="fas fa-seedling"></i>
+                        成长与协作资本
+                    </div>
+                    <h1 class="hero-title">开源贡献者面板</h1>
+                    <p class="hero-subtitle">
+                        这不是简单的代码统计，而是您在开源生态中的成长轨迹与协作资本积累。
+                        每一行代码、每一次评审、每一场分享，都在构建您的技术影响力。
+                    </p>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">2</div>
+                            <div class="hero-stat-label">发起项目</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">5</div>
+                            <div class="hero-stat-label">参与社区</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">28</div>
+                            <div class="hero-stat-label">2024贡献</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">3.5年</div>
+                            <div class="hero-stat-label">协作时长</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWei" alt="Avatar" class="avatar-large">
+                    <div class="platform-badges">
+                        <span class="badge verified"><i class="fab fa-github"></i> GitHub</span>
+                        <span class="badge verified"><i class="fas fa-code"></i> AtomGit</span>
+                        <span class="badge verified"><i class="fab fa-linux"></i> Gitee</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Data Control Panel -->
+        <div class="data-control-panel">
+            <div class="data-control-info">
+                <div class="data-control-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="data-control-text">
+                    <h4>数据授权控制</h4>
+                    <p>您可以控制哪些数据展示、授权范围及撤回权限</p>
+                </div>
+            </div>
+            <button class="data-control-btn">
+                <i class="fas fa-cog"></i>
+                管理我的数据
+            </button>
+        </div>
+
+        <!-- Section 1: Identity -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-id-card"></i>
+                    身份信息
+                </div>
+            </div>
+            <div class="identity-grid">
+                <div class="identity-info">
+                    <div class="identity-name">张伟</div>
+                    <div class="identity-bio">
+                        开源爱好者，专注于分布式系统与云原生技术。致力于推动开源生态发展。
+                    </div>
+                    <div class="identity-meta">
+                        <span class="meta-item"><i class="fas fa-map-marker-alt"></i> 北京</span>
+                        <span class="meta-item"><i class="fas fa-envelope"></i> zhangwei@example.com</span>
+                        <span class="meta-item"><i class="fas fa-building"></i> 企业职员</span>
+                    </div>
+                </div>
+                <div class="community-cards">
+                    <div class="community-card">
+                        <div class="community-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <div class="community-info">
+                            <h4>OpenAtom Foundation</h4>
+                            <div class="role"><i class="fas fa-check-circle"></i> SIG Leader</div>
+                            <div class="group">CloudNative SIG</div>
+                        </div>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                            <i class="fab fa-linux"></i>
+                        </div>
+                        <div class="community-info">
+                            <h4>OpenEuler Community</h4>
+                            <div class="role"><i class="fas fa-check-circle"></i> Committer</div>
+                            <div class="group">Infrastructure Team</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Tech Stack -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-code"></i>
+                    技术栈与领域
+                </div>
+            </div>
+            <div class="tech-content">
+                <div class="tech-skills-section">
+                    <div class="core-domains">
+                        <span class="domain-tag">分布式系统</span>
+                        <span class="domain-tag">云原生</span>
+                        <span class="domain-tag">容器技术</span>
+                    </div>
+                    <h4>技术技能</h4>
+                    <div class="tech-stack-grid">
+                        <div class="tech-item">
+                            <span class="tech-name">Go</span>
+                            <span class="tech-level expert">Expert</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Rust</span>
+                            <span class="tech-level advanced">Advanced</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Kubernetes</span>
+                            <span class="tech-level expert">Expert</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Docker</span>
+                            <span class="tech-level expert">Expert</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Python</span>
+                            <span class="tech-level advanced">Intermediate</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">CNCF</span>
+                            <span class="tech-level expert">Expert</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="font-size: 1rem; margin-bottom: 16px; color: var(--text-secondary);">
+                        <i class="fas fa-chart-line"></i> 技术演进轨迹
+                    </h4>
+                    <div class="tech-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-year">2019</div>
+                            <div class="timeline-event">开始学习Go语言</div>
+                            <div class="timeline-skills">
+                                <span class="timeline-skill">Go</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2020</div>
+                            <div class="timeline-event">深入Kubernetes生态</div>
+                            <div class="timeline-skills">
+                                <span class="timeline-skill">Kubernetes</span>
+                                <span class="timeline-skill">Docker</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2021</div>
+                            <div class="timeline-event">参与云原生项目开源</div>
+                            <div class="timeline-skills">
+                                <span class="timeline-skill">CNCF</span>
+                                <span class="timeline-skill">Prometheus</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2022</div>
+                            <div class="timeline-event">学习Rust进行系统级开发</div>
+                            <div class="timeline-skills">
+                                <span class="timeline-skill">Rust</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2023</div>
+                            <div class="timeline-event">担任SIG Leader</div>
+                            <div class="timeline-skills">
+                                <span class="timeline-skill">团队管理</span>
+                                <span class="timeline-skill">架构设计</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Contributions -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-tasks"></i>
+                    开源贡献行为审计
+                </div>
+            </div>
+            <div class="contribution-tabs">
+                <button class="tab-btn active" onclick="filterContributions('all')">全部</button>
+                <button class="tab-btn" onclick="filterContributions('tech')">技术贡献</button>
+                <button class="tab-btn" onclick="filterContributions('gov')">治理贡献</button>
+                <button class="tab-btn" onclick="filterContributions('eco')">生态贡献</button>
+            </div>
+            <div class="contribution-grid">
+                <!-- Technical -->
+                <div class="contribution-card tech" data-type="tech">
+                    <div class="contribution-header">
+                        <div class="contribution-title">实现容器沙箱隔离机制</div>
+                        <span class="contribution-type">代码提交</span>
+                    </div>
+                    <div class="contribution-project">
+                        <i class="fas fa-folder"></i> cloud-native-runtime
+                    </div>
+                    <div class="contribution-desc">新增沙箱隔离功能，支持多种容器运行时</div>
+                    <div class="contribution-context">
+                        <span class="contribution-context-label">影响范围：</span>
+                        影响3个核心模块，5000+用户受益
+                    </div>
+                    <div class="contribution-metrics">
+                        <span class="metric">+1523 / -234 行</span>
+                        <span class="metric">影响3个模块</span>
+                        <span class="metric">解决 #245</span>
+                    </div>
+                    <div class="contribution-footer">
+                        <span>2024-11-15</span>
+                        <span class="verification-tag"><i class="fas fa-check-circle"></i> Git已核验</span>
+                    </div>
+                </div>
+
+                <div class="contribution-card tech" data-type="tech">
+                    <div class="contribution-header">
+                        <div class="contribution-title">修复权限提升漏洞CVE-2024-1234</div>
+                        <span class="contribution-type" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">安全漏洞</span>
+                    </div>
+                    <div class="contribution-project">
+                        <i class="fas fa-folder"></i> secure-container
+                    </div>
+                    <div class="contribution-desc">修复容器逃逸风险，提交安全补丁</div>
+                    <div class="contribution-context">
+                        <span class="contribution-context-label">影响范围：</span>
+                        影响5000+生产环境用户
+                    </div>
+                    <div class="contribution-metrics">
+                        <span class="metric" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">严重程度: High</span>
+                        <span class="metric">CVE-2024-1234</span>
+                    </div>
+                    <div class="contribution-footer">
+                        <span>2024-08-10</span>
+                        <span class="verification-tag"><i class="fas fa-check-circle"></i> Git已核验</span>
+                    </div>
+                </div>
+
+                <div class="contribution-card tech" data-type="tech">
+                    <div class="contribution-header">
+                        <div class="contribution-title">提出分层存储架构设计方案</div>
+                        <span class="contribution-type">设计决策</span>
+                    </div>
+                    <div class="contribution-project">
+                        <i class="fas fa-folder"></i> cloud-native-runtime
+                    </div>
+                    <div class="contribution-desc">设计文档被采纳，成为项目标准架构</div>
+                    <div class="contribution-context">
+                        <span class="contribution-context-label">影响范围：</span>
+                        覆盖4个核心模块，项目100%采用
+                    </div>
+                    <div class="contribution-metrics">
+                        <span class="metric">设计4个模块</span>
+                        <span class="metric">采纳率: 100%</span>
+                    </div>
+                    <div class="contribution-footer">
+                        <span>2024-07-15</span>
+                        <span class="verification-tag"><i class="fas fa-check-circle"></i> Design Doc已采纳</span>
+                    </div>
+                </div>
+
+                <!-- Governance -->
+                <div class="contribution-card gov" data-type="gov">
+                    <div class="contribution-header">
+                        <div class="contribution-title">担任Q4 Release评审委员会成员</div>
+                        <span class="contribution-type">贡献评审</span>
+                    </div>
+                    <div class="contribution-project">
+                        <i class="fas fa-folder"></i> OpenAtom Foundation
+                    </div>
+                    <div class="contribution-desc">评审并批准12个项目的发布</div>
+                    <div class="contribution-context">
+                        <span class="contribution-context-label">影响范围：</span>
+                        覆盖500+贡献者，影响10万+用户
+                    </div>
+                    <div class="contribution-metrics">
+                        <span class="metric">评审12个项目</span>
+                        <span class="metric">采纳11项</span>
+                    </div>
+                    <div class="contribution-footer">
+                        <span>2024-12-20</span>
+                        <span class="verification-tag"><i class="fas fa-check-circle"></i> 会议纪要关联</span>
+                    </div>
+                </div>
+
+                <div class="contribution-card gov" data-type="gov">
+                    <div class="contribution-header">
+                        <div class="contribution-title">制定SIG代码贡献规范</div>
+                        <span class="contribution-type">规则与流程</span>
+                    </div>
+                    <div class="contribution-project">
+                        <i class="fas fa-folder"></i> CloudNative SIG
+                    </div>
+                    <div class="contribution-desc">编写贡献指南、PR审核流程、Code Style标准</div>
+                    <div class="contribution-context">
+                        <span class="contribution-context-label">影响范围：</span>
+                        社区45名贡献者遵循，流程合规率95%
+                    </div>
+                    <div class="contribution-metrics">
+                        <span class="metric">采纳率: 100%</span>
+                        <span class="metric">遵循率: 95%</span>
+                    </div>
+                    <div class="contribution-footer">
+                        <span>2024-06-01</span>
+                        <span class="verification-tag"><i class="fas fa-check-circle"></i> 官方文档关联</span>
+                    </div>
+                </div>
+
+                <!-- Ecosystem -->
+                <div class="contribution-card eco" data-type="eco">
+                    <div class="contribution-header">
+                        <div class="contribution-title">KubeCon China 2024 演讲</div>
+                        <span class="contribution-type">技术传播</span>
+                    </div>
+                    <div class="contribution-project">
+                        <i class="fas fa-folder"></i> KubeCon China 2024
+                    </div>
+                    <div class="contribution-desc">演讲：云原生时代的容器安全实践</div>
+                    <div class="contribution-context">
+                        <span class="contribution-context-label">影响范围：</span>
+                        1200人现场参会，5000+线上观看
+                    </div>
+                    <div class="contribution-metrics">
+                        <span class="metric">受众1200人</span>
+                        <span class="metric">评分4.8</span>
+                    </div>
+                    <div class="contribution-footer">
+                        <span>2024-10-15</span>
+                        <span class="verification-tag"><i class="fas fa-check-circle"></i> 活动记录关联</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Initiated Projects -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-rocket"></i>
+                    发起项目评估
+                </div>
+            </div>
+            <div class="project-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-name">cloud-native-runtime</div>
+                            <div class="project-desc">企业级云原生容器运行时解决方案</div>
+                            <div class="project-role"><i class="fas fa-crown"></i> Founder & Lead Maintainer</div>
+                        </div>
+                        <span class="project-version">v2.5.0</span>
+                    </div>
+
+                    <div class="project-basic-data">
+                        <div class="basic-data-header">
+                            <span class="basic-data-title"><i class="fas fa-database"></i> 项目基础数据</span>
+                            <a href="#" class="repo-link"><i class="fab fa-github"></i> 查看仓库</a>
+                        </div>
+                        <div class="basic-data-grid">
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">Stars</div>
+                                <div class="basic-data-value star">3,200</div>
+                            </div>
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">Forks</div>
+                                <div class="basic-data-value fork">456</div>
+                            </div>
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">贡献者</div>
+                                <div class="basic-data-value contributor">45</div>
+                            </div>
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">活跃贡献者</div>
+                                <div class="basic-data-value contributor">28</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Growth Trend - 新增 -->
+                    <div class="growth-trend">
+                        <div class="growth-trend-title">
+                            <i class="fas fa-chart-line"></i> 成长趋势（近1年）
+                        </div>
+                        <div class="growth-chart-container">
+                            <canvas id="growthChart1"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="radar-chart-container">
+                        <canvas id="radarChart1"></canvas>
+                    </div>
+                    <div class="dimension-scores">
+                        <div class="dimension-score">
+                            <div class="dimension-name">健康度</div>
+                            <div class="dimension-value">0.88</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">关键度</div>
+                            <div class="dimension-value">0.82</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">影响力</div>
+                            <div class="dimension-value">0.75</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">安全性</div>
+                            <div class="dimension-value">0.90</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">创新度</div>
+                            <div class="dimension-value">0.78</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-name">secure-container</div>
+                            <div class="project-desc">容器安全沙箱隔离组件</div>
+                            <div class="project-role"><i class="fas fa-shield-alt"></i> Co-founder & Security Lead</div>
+                        </div>
+                        <span class="project-version">v1.8.0</span>
+                    </div>
+
+                    <div class="project-basic-data">
+                        <div class="basic-data-header">
+                            <span class="basic-data-title"><i class="fas fa-database"></i> 项目基础数据</span>
+                            <a href="#" class="repo-link"><i class="fab fa-github"></i> 查看仓库</a>
+                        </div>
+                        <div class="basic-data-grid">
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">Stars</div>
+                                <div class="basic-data-value star">1,200</div>
+                            </div>
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">Forks</div>
+                                <div class="basic-data-value fork">180</div>
+                            </div>
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">贡献者</div>
+                                <div class="basic-data-value contributor">18</div>
+                            </div>
+                            <div class="basic-data-item">
+                                <div class="basic-data-label">活跃贡献者</div>
+                                <div class="basic-data-value contributor">12</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="growth-trend">
+                        <div class="growth-trend-title">
+                            <i class="fas fa-chart-line"></i> 成长趋势（近1年）
+                        </div>
+                        <div class="growth-chart-container">
+                            <canvas id="growthChart2"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="radar-chart-container">
+                        <canvas id="radarChart2"></canvas>
+                    </div>
+                    <div class="dimension-scores">
+                        <div class="dimension-score">
+                            <div class="dimension-name">健康度</div>
+                            <div class="dimension-value">0.85</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">关键度</div>
+                            <div class="dimension-value">0.76</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">影响力</div>
+                            <div class="dimension-value">0.68</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">安全性</div>
+                            <div class="dimension-value">0.95</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-name">创新度</div>
+                            <div class="dimension-value">0.82</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Participation -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-users"></i>
+                    参与项目记录
+                </div>
+            </div>
+            <div class="participation-list">
+                <div class="participation-card">
+                    <div class="part-project-header">
+                        <div class="part-project-info">
+                            <div class="participation-project">OpenEuler</div>
+                            <div class="part-community">OpenEuler Community</div>
+                            <div class="project-info-row">
+                                <span class="info-tag language"><i class="fas fa-code"></i> C</span>
+                                <span class="info-tag license"><i class="fas fa-scale-balanced"></i> Mulan PSL v2</span>
+                                <a href="#" class="repo-link"><i class="fab fa-github"></i> 查看仓库</a>
+                            </div>
+                        </div>
+                        <div class="participation-role">
+                            <i class="fas fa-user"></i> Committer
+                        </div>
+                    </div>
+
+                    <!-- Collaboration Time & Personal Impact - 新增 -->
+                    <div class="collab-impact-row">
+                        <div class="collab-time">
+                            <div class="collab-time-title">
+                                <i class="fas fa-clock"></i> 协作时间
+                            </div>
+                            <div class="collab-duration">1.5 <span>年</span></div>
+                        </div>
+                        <div class="personal-impact">
+                            <div class="impact-title">
+                                <i class="fas fa-chart-pie"></i> 个人影响
+                            </div>
+                            <div class="impact-stats">
+                                <div class="impact-stat">
+                                    <div class="impact-stat-value">Top 8%</div>
+                                    <div class="impact-stat-label">贡献者排名</div>
+                                </div>
+                                <div class="impact-stat">
+                                    <div class="impact-stat-value">2.3%</div>
+                                    <div class="impact-stat-label">代码占比</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="part-dimension-grid">
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">健康度</div>
+                            <div class="part-dimension-value health">0.92</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">关键度</div>
+                            <div class="part-dimension-value criticality">0.95</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">影响力</div>
+                            <div class="part-dimension-value impact">0.88</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">安全性</div>
+                            <div class="part-dimension-value security">0.85</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">创新度</div>
+                            <div class="part-dimension-value innovation">0.80</div>
+                        </div>
+                    </div>
+
+                    <div class="participation-summary">
+                        <div class="summary-item">
+                            <h5>技术贡献</h5>
+                            <p>优化基础设施自动化脚本，贡献代码1500+行</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>治理贡献</h5>
+                            <p>参与基础设施SIG的路线图规划</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>生态贡献</h5>
+                            <p>组织2场社区Meetup</p>
+                        </div>
+                    </div>
+                    <div class="honor-list">
+                        <span class="honor"><i class="fas fa-trophy"></i> 2024年度最佳贡献者</span>
+                    </div>
+                </div>
+
+                <div class="participation-card">
+                    <div class="part-project-header">
+                        <div class="part-project-info">
+                            <div class="participation-project">K3s</div>
+                            <div class="part-community">Rancher Labs</div>
+                            <div class="project-info-row">
+                                <span class="info-tag language"><i class="fas fa-code"></i> Go</span>
+                                <span class="info-tag license"><i class="fas fa-scale-balanced"></i> Apache-2.0</span>
+                                <a href="#" class="repo-link"><i class="fab fa-github"></i> 查看仓库</a>
+                            </div>
+                        </div>
+                        <div class="participation-role">
+                            <i class="fas fa-user"></i> Contributor
+                        </div>
+                    </div>
+
+                    <div class="collab-impact-row">
+                        <div class="collab-time">
+                            <div class="collab-time-title">
+                                <i class="fas fa-clock"></i> 协作时间
+                            </div>
+                            <div class="collab-duration">1.2 <span>年</span></div>
+                        </div>
+                        <div class="personal-impact">
+                            <div class="impact-title">
+                                <i class="fas fa-chart-pie"></i> 个人影响
+                            </div>
+                            <div class="impact-stats">
+                                <div class="impact-stat">
+                                    <div class="impact-stat-value">Top 15%</div>
+                                    <div class="impact-stat-label">贡献者排名</div>
+                                </div>
+                                <div class="impact-stat">
+                                    <div class="impact-stat-value">0.8%</div>
+                                    <div class="impact-stat-label">代码占比</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="part-dimension-grid">
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">健康度</div>
+                            <div class="part-dimension-value health">0.95</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">关键度</div>
+                            <div class="part-dimension-value criticality">0.88</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">影响力</div>
+                            <div class="part-dimension-value impact">0.92</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">安全性</div>
+                            <div class="part-dimension-value security">0.90</div>
+                        </div>
+                        <div class="part-dimension-item">
+                            <div class="part-dimension-name">创新度</div>
+                            <div class="part-dimension-value innovation">0.75</div>
+                        </div>
+                    </div>
+
+                    <div class="participation-summary">
+                        <div class="summary-item">
+                            <h5>技术贡献</h5>
+                            <p>修复关键Bug 5个，提交PR 12个</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>治理贡献</h5>
+                            <p>参与RFC评审</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>生态贡献</h5>
+                            <p>贡献技术文档</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Growth Record -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    成长记录
+                </div>
+            </div>
+            <div class="growth-grid">
+                <div class="growth-timeline-card">
+                    <div class="growth-card-title">
+                        <i class="fas fa-history"></i> 贡献历程时间线
+                    </div>
+                    <div class="growth-timeline-list">
+                        <div class="growth-timeline-item">
+                            <div class="growth-date">2024-12</div>
+                            <div class="growth-content">
+                                <div class="growth-event">个人贡献者面板上线</div>
+                                <span class="growth-type milestone">里程碑</span>
+                            </div>
+                        </div>
+                        <div class="growth-timeline-item">
+                            <div class="growth-date">2024-04</div>
+                            <div class="growth-content">
+                                <div class="growth-event">成立云原生安全工作组</div>
+                                <span class="growth-type governance">治理</span>
+                            </div>
+                        </div>
+                        <div class="growth-timeline-item">
+                            <div class="growth-date">2023-08</div>
+                            <div class="growth-content">
+                                <div class="growth-event">KubeCon首次演讲</div>
+                                <span class="growth-type ecosystem">生态</span>
+                            </div>
+                        </div>
+                        <div class="growth-timeline-item">
+                            <div class="growth-date">2023-03</div>
+                            <div class="growth-content">
+                                <div class="growth-event">发起secure-container项目</div>
+                                <span class="growth-type milestone">里程碑</span>
+                            </div>
+                        </div>
+                        <div class="growth-timeline-item">
+                            <div class="growth-date">2022-06</div>
+                            <div class="growth-content">
+                                <div class="growth-event">担任CloudNative SIG Leader</div>
+                                <span class="growth-type role_change">角色变更</span>
+                            </div>
+                        </div>
+                        <div class="growth-timeline-item">
+                            <div class="growth-date">2022-01</div>
+                            <div class="growth-content">
+                                <div class="growth-event">发起cloud-native-runtime项目</div>
+                                <span class="growth-type milestone">里程碑</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="growth-trend-card">
+                    <div class="growth-card-title">
+                        <i class="fas fa-chart-area"></i> 贡献趋势分析
+                    </div>
+                    <div class="trend-chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="platform-usage-card">
+                    <div class="growth-card-title">
+                        <i class="fas fa-globe"></i> 平台使用分布
+                    </div>
+                    <div class="platform-usage-grid">
+                        <div class="platform-usage-item">
+                            <div class="platform-icon github"><i class="fab fa-github"></i></div>
+                            <div class="platform-contribs">156</div>
+                            <div class="platform-label">GitHub</div>
+                        </div>
+                        <div class="platform-usage-item">
+                            <div class="platform-icon gitee"><i class="fab fa-linux"></i></div>
+                            <div class="platform-contribs">89</div>
+                            <div class="platform-label">Gitee</div>
+                        </div>
+                        <div class="platform-usage-item">
+                            <div class="platform-icon atomgit"><i class="fas fa-code"></i></div>
+                            <div class="platform-contribs">42</div>
+                            <div class="platform-label">AtomGit</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Radar Chart Options
+        const radarOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        stepSize: 0.2,
+                        color: '#94a3b8',
+                        backdropColor: 'transparent'
+                    },
+                    grid: { color: '#334155' },
+                    angleLines: { color: '#334155' },
+                    pointLabels: {
+                        color: '#f1f5f9',
+                        font: { size: 11 }
+                    }
+                }
+            },
+            plugins: { legend: { display: false } }
+        };
+
+        // Project 1 Radar Chart
+        new Chart(document.getElementById('radarChart1'), {
+            type: 'radar',
+            data: {
+                labels: ['健康度', '关键度', '影响力', '安全性', '创新度'],
+                datasets: [{
+                    data: [0.88, 0.82, 0.75, 0.90, 0.78],
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                    borderColor: '#2563eb',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#2563eb'
+                }]
+            },
+            options: radarOptions
+        });
+
+        // Project 2 Radar Chart
+        new Chart(document.getElementById('radarChart2'), {
+            type: 'radar',
+            data: {
+                labels: ['健康度', '关键度', '影响力', '安全性', '创新度'],
+                datasets: [{
+                    data: [0.85, 0.76, 0.68, 0.95, 0.82],
+                    backgroundColor: 'rgba(124, 58, 237, 0.2)',
+                    borderColor: '#8b5cf6',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#8b5cf6'
+                }]
+            },
+            options: radarOptions
+        });
+
+        // Growth Trend Charts
+        new Chart(document.getElementById('growthChart1'), {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                datasets: [{
+                    data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { display: false }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('growthChart2'), {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                datasets: [{
+                    data: [5, 8, 12, 10, 15, 18, 20, 22, 25, 28, 30, 35],
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { display: false }
+                }
+            }
+        });
+
+        // Trend Chart
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: ['2021', '2022', '2023', '2024'],
+                datasets: [
+                    {
+                        label: '技术贡献',
+                        data: [45, 78, 120, 156],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: '治理贡献',
+                        data: [10, 25, 45, 68],
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: '生态贡献',
+                        data: [5, 15, 32, 48],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#f1f5f9', padding: 15, usePointStyle: true }
+                    }
+                },
+                scales: {
+                    x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+
+        // Contribution Filter
+        function filterContributions(type) {
+            const cards = document.querySelectorAll('.contribution-card');
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            cards.forEach(card => {
+                if (type === 'all' || card.dataset.type === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国家级基金会贡献者态势面板 V1.2</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 24px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h2 {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-left: 12px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Level Tabs */
+        .level-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: var(--bg-card);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .level-tab {
+            flex: 1;
+            padding: 16px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .level-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .level-tab:hover:not(.active) {
+            background: var(--border);
+        }
+
+        /* Section */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .kpi-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .kpi-change {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kpi-change.positive {
+            color: var(--success);
+        }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Ranking List */
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .ranking-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .ranking-number {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .ranking-number.top-3 {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+        }
+
+        .ranking-number.other {
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-name {
+            font-weight: 500;
+        }
+
+        .ranking-type {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .ranking-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Priority Badge */
+        .priority-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .priority-A {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .priority-B {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .priority-C {
+            background: rgba(107, 114, 128, 0.2);
+            color: #9ca3af;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Heatmap */
+        .heatmap-container {
+            padding: 20px;
+        }
+
+        .heatmap {
+            display: grid;
+            gap: 4px;
+        }
+
+        .heatmap-cell {
+            padding: 12px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+        }
+
+        .heatmap-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        /* Flow Visualization */
+        .flow-container {
+            position: relative;
+            height: 350px;
+            padding: 20px;
+        }
+
+        .flow-source {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .flow-source-item {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .flow-source-item.university {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .flow-source-item.enterprise {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .flow-source-item.community {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .flow-target {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .flow-target-item {
+            padding: 10px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .flow-lines {
+            position: absolute;
+            left: 120px;
+            right: 140px;
+            top: 0;
+            bottom: 0;
+        }
+
+        .flow-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-light), transparent);
+            transform-origin: left center;
+            opacity: 0.6;
+        }
+
+        /* Strategic Stats */
+        .strategic-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .strategic-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .strategic-stat {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .strategic-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .strategic-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Project Table */
+        .project-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .project-table th,
+        .project-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .project-table th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .project-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .filter-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-tab:hover:not(.active) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Attribution Legend */
+        .attribution-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-building-columns"></i>
+                国家级基金会贡献者态势面板
+                <span class="version-badge">V1.2</span>
+            </h1>
+            <h2>基于CID的开源贡献者生态监测与国家重点战略领域贡献分析</h2>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Level Tabs -->
+        <div class="level-tabs">
+            <button class="level-tab active" onclick="showLevel('l1')">
+                <i class="fas fa-user-cog"></i> L1: 账户与部署态势
+            </button>
+            <button class="level-tab" onclick="showLevel('l2')">
+                <i class="fas fa-globe"></i> L2: 贡献者生态态势
+            </button>
+            <button class="level-tab" onclick="showLevel('strategic')">
+                <i class="fas fa-bullseye"></i> L2-战略模块
+            </button>
+        </div>
+
+        <!-- L1 Section -->
+        <div id="l1" class="section active">
+            <div class="info-box">
+                <div class="info-box-title">
+                    <i class="fas fa-info-circle"></i> L1 设计目标
+                </div>
+                <p>展示贡献者面板在全国范围内的部署情况及账户规模，提供组织绑定及面板使用情况概览，不涉及项目贡献分析和技术领域分析。</p>
+            </div>
+
+            <!-- Account Metrics -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">156,780</div>
+                    <div class="kpi-label">注册账户数</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 较去年 +35%
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">45,620</div>
+                    <div class="kpi-label">活跃账户数</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 较去年 +28%
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">89,200</div>
+                    <div class="kpi-label">绑定组织账户数</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 较去年 +42%
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">2,070</div>
+                    <div class="kpi-label">组织数量</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 较去年 +18%
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">328</div>
+                    <div class="kpi-label">部署实例数</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 较去年 +22%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deployment & Organization -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-server"></i> 面板部署类型分布</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="deploymentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-building"></i> 组织接入类型分布</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="orgTypeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Identity Distribution -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-users"></i> 账户身份来源结构</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="identityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-trophy"></i> 组织面板绑定贡献者排名</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="ranking-list" id="orgRanking"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- L2 Section -->
+        <div id="l2" class="section">
+            <div class="info-box">
+                <div class="info-box-title">
+                    <i class="fas fa-info-circle"></i> L2 设计目标
+                </div>
+                <p>分析全国开源贡献者行为与生态结构，回答四个国家级核心问题：每年新增多少贡献者？哪个组织贡献最大？活跃情况如何？是否获得回报？</p>
+            </div>
+
+            <!-- Core Questions -->
+            <div class="strategic-stats">
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">156,780</div>
+                    <div class="strategic-stat-label">年度新增贡献者</div>
+                </div>
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">清华大学</div>
+                    <div class="strategic-stat-label">培养贡献最大来源</div>
+                </div>
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">58%</div>
+                    <div class="strategic-stat-label">年度活跃率</div>
+                </div>
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">8,920</div>
+                    <div class="strategic-stat-label">获得协作回报人数</div>
+                </div>
+            </div>
+
+            <!-- Contributor Growth -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-chart-line"></i> 贡献者规模与新增趋势</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="growthChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-chart-pie"></i> 人才培养来源占比</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="sourceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Talent Sources Ranking -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-award"></i> 人才培养来源排行榜</h3>
+                </div>
+                <div class="card-body">
+                    <div class="ranking-list" id="talentRanking"></div>
+                </div>
+            </div>
+
+            <!-- Activity & Retention -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-heartbeat"></i> 活跃度与留存分析</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="retentionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-handshake"></i> 协作资本回报分布</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="roiChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategic Section -->
+        <div id="strategic" class="section">
+            <div class="info-box">
+                <div class="info-box-title">
+                    <i class="fas fa-bullseye"></i> L2-战略模块：国家重点战略领域贡献分析
+                </div>
+                <p>回答问题：开源贡献者如何支持国家重点战略领域和关键项目？量化贡献者在关键技术、关键项目、战略领域的参与情况，支撑政策决策和战略项目评估。</p>
+            </div>
+
+            <!-- Strategic Overview -->
+            <div class="strategic-stats">
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">28,650</div>
+                    <div class="strategic-stat-label">战略项目参与人数</div>
+                </div>
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">568,920</div>
+                    <div class="strategic-stat-label">战略贡献行为数</div>
+                </div>
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">186</div>
+                    <div class="strategic-stat-label">战略项目数量</div>
+                </div>
+                <div class="strategic-stat">
+                    <div class="strategic-stat-value">68.5%</div>
+                    <div class="strategic-stat-label">战略领域覆盖率</div>
+                </div>
+            </div>
+
+            <!-- Strategic Projects -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-project-diagram"></i> 战略项目参与概览</h3>
+                </div>
+                <div class="card-body">
+                    <table class="project-table">
+                        <thead>
+                            <tr>
+                                <th>项目名称</th>
+                                <th>战略领域</th>
+                                <th>优先级</th>
+                                <th>参与人数</th>
+                                <th>贡献行为数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="strategicProjects"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Strategic Fields Heatmap & Growth -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-th"></i> 战略领域覆盖热力图</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="heatmapChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-chart-line"></i> 战略贡献者年度增长</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="strategicGrowthChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contributor Ranking -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-crown"></i> 贡献者战略贡献排行榜</h3>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active">全部</button>
+                        <button class="filter-tab">高校</button>
+                        <button class="filter-tab">企业</button>
+                        <button class="filter-tab">社区</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="ranking-list" id="strategicContributorRanking"></div>
+                </div>
+            </div>
+
+            <!-- Organization Ranking -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-building"></i> 组织战略贡献排名</h3>
+                </div>
+                <div class="card-body">
+                    <div class="ranking-list" id="strategicOrgRanking"></div>
+                </div>
+            </div>
+
+            <!-- Flow Visualization -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-random"></i> 贡献者流向战略项目路径</h3>
+                </div>
+                <div class="card-body">
+                    <div class="flow-container">
+                        <div class="flow-source">
+                            <div class="flow-source-item university">高校</div>
+                            <div class="flow-source-item enterprise">企业</div>
+                            <div class="flow-source-item community">社区</div>
+                        </div>
+                        <div class="flow-lines" id="flowLines"></div>
+                        <div class="flow-target" id="flowTarget"></div>
+                    </div>
+                    <div class="attribution-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #3b82f6;"></div>
+                            <span>高校来源</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #10b981;"></div>
+                            <span>企业来源</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #8b5cf6;"></div>
+                            <span>社区来源</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const data = {
+            l1: {
+                deployment: { foundation: 86, private: 168, hybrid: 74 },
+                orgTypes: { universities: 328, enterprises: 486, communities: 1256 },
+                identity: { individual: 68230, university: 28650, enterprise: 45620, community: 14300 },
+                ranking: [
+                    { name: "清华大学", type: "university", value: 2560 },
+                    { name: "华为技术有限公司", type: "enterprise", value: 2180 },
+                    { name: "北京大学", type: "university", value: 1890 },
+                    { name: "阿里云计算", type: "enterprise", value: 1650 },
+                    { name: "OpenHarmony社区", type: "community", value: 1420 },
+                    { name: "腾讯科技", type: "enterprise", value: 1280 },
+                    { name: "浙江大学", type: "university", value: 1150 },
+                    { name: "上海交通大学", type: "university", value: 980 }
+                ]
+            },
+            l2: {
+                growth: [
+                    { year: "2020", new: 28500, total: 28500 },
+                    { year: "2021", new: 45600, total: 74100 },
+                    { year: "2022", new: 78200, total: 152300 },
+                    { year: "2023", new: 115600, total: 267900 },
+                    { year: "2024", new: 156780, total: 424680 }
+                ],
+                sources: { universities: 28650, enterprises: 45620, communities: 68230, events: 14280 },
+                retention: [
+                    { period: "1年", rate: 58 },
+                    { period: "2年", rate: 45 },
+                    { period: "3年", rate: 38 },
+                    { period: "5年+", rate: 25 }
+                ],
+                roi: { university_enterprise: 2850, community_enterprise: 3680, event_enterprise: 1420, maintainer: 8920, award: 5680, recognition: 1256 },
+                talentRanking: [
+                    { name: "清华大学", type: "高校", value: 2560, weight: 0.4 },
+                    { name: "华为技术有限公司", type: "企业", value: 2180, weight: 0.35 },
+                    { name: "OpenHarmony黑客松", type: "活动", value: 1850, weight: 0.3 },
+                    { name: "北京大学", type: "高校", value: 1680, weight: 0.4 },
+                    { name: "阿里云高校计划", type: "活动", value: 1420, weight: 0.25 },
+                    { name: "openEuler社区", type: "社区", value: 1280, weight: 0.3 }
+                ]
+            },
+            strategic: {
+                overview: {
+                    total: 28650,
+                    contributions: 568920,
+                    projects: 186,
+                    coverage: 68.5
+                },
+                projects: [
+                    { name: "OpenHarmony", field: "操作系统", contributors: 5680, contributions: 45680, priority: "A" },
+                    { name: "openEuler", field: "操作系统", contributors: 3890, contributions: 28900, priority: "A" },
+                    { name: "OpenKubeOS", field: "云计算", contributors: 2560, contributions: 18200, priority: "A" },
+                    { name: "OpenSentinel", field: "网络安全", contributors: 1890, contributions: 12560, priority: "B" },
+                    { name: "AI-Framework", field: "人工智能", contributors: 3250, contributions: 28650, priority: "A" },
+                    { name: "Chip-Design-OS", field: "半导体", contributors: 1280, contributions: 8960, priority: "A" },
+                    { name: "NewEnergy-Grid", field: "新能源", contributors: 980, contributions: 5680, priority: "B" },
+                    { name: "OpenCAD", field: "工业软件", contributors: 720, contributions: 4280, priority: "B" },
+                    { name: "Bio-Compute", field: "生物计算", contributors: 560, contributions: 3200, priority: "C" },
+                    { name: "Quantum-Sim", field: "量子计算", contributors: 420, contributions: 2100, priority: "C" }
+                ],
+                fields: {
+                    labels: ["操作系统", "云计算", "人工智能", "半导体", "网络安全", "新能源", "工业软件", "生物计算", "量子计算"],
+                    contributors: [8920, 5680, 4560, 3250, 2890, 1560, 1280, 680, 420],
+                    coverage: [85, 72, 68, 52, 48, 35, 28, 18, 12]
+                },
+                yearly: [
+                    { year: "2020", contributors: 5200, contributions: 28500 },
+                    { year: "2021", contributors: 8560, contributions: 56200 },
+                    { year: "2022", contributors: 12890, contributions: 125600 },
+                    { year: "2023", contributors: 19850, contributions: 198500 },
+                    { year: "2024", contributors: 28650, contributions: 286500 }
+                ],
+                contributorRanking: [
+                    { name: "张伟", organization: "华为技术有限公司", field: "操作系统", contributions: 1256, projects: 5 },
+                    { name: "李明", organization: "阿里云计算", field: "云计算", contributions: 1089, projects: 4 },
+                    { name: "王芳", organization: "清华大学", field: "人工智能", contributions: 956, projects: 3 },
+                    { name: "陈强", organization: "华为技术有限公司", field: "半导体", contributions: 892, projects: 4 },
+                    { name: "刘洋", organization: "北京大学", field: "人工智能", contributions: 856, projects: 3 },
+                    { name: "赵磊", organization: "字节跳动", field: "云计算", contributions: 798, projects: 3 },
+                    { name: "周敏", organization: "百度", field: "人工智能", contributions: 765, projects: 2 },
+                    { name: "吴霞", organization: "中国科学院", field: "量子计算", contributions: 712, projects: 2 }
+                ],
+                orgRanking: [
+                    { name: "华为技术有限公司", type: "enterprise", contributors: 5680, projects: 12 },
+                    { name: "清华大学", type: "university", contributors: 3250, projects: 8 },
+                    { name: "阿里云计算", type: "enterprise", contributors: 2890, projects: 10 },
+                    { name: "北京大学", type: "university", contributors: 2180, projects: 6 },
+                    { name: "腾讯科技", type: "enterprise", contributors: 1850, projects: 8 },
+                    { name: "浙江大学", type: "university", contributors: 1560, projects: 5 },
+                    { name: "百度", type: "enterprise", contributors: 1280, projects: 6 },
+                    { name: "中国科学院", type: "university", contributors: 980, projects: 4 }
+                ],
+                flow: {
+                    sources: ["高校", "企业", "社区"],
+                    targets: ["操作系统", "云计算", "人工智能", "半导体", "网络安全"],
+                    matrix: [
+                        [1250, 890, 650, 420, 280],
+                        [2180, 1560, 1280, 860, 520],
+                        [980, 720, 580, 320, 180]
+                    ]
+                }
+            }
+        };
+
+        // Tab Navigation
+        function showLevel(level) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(level).classList.add('active');
+            event.target.closest('.level-tab').classList.add('active');
+
+            if (level === 'l1') initL1Charts();
+            if (level === 'l2') initL2Charts();
+            if (level === 'strategic') initStrategicCharts();
+        }
+
+        // L1 Charts
+        let l1ChartsInitialized = false;
+        function initL1Charts() {
+            if (l1ChartsInitialized) return;
+            l1ChartsInitialized = true;
+
+            new Chart(document.getElementById('deploymentChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['基金会托管', '私有部署', '混合模式'],
+                    datasets: [{ data: [86, 168, 74], backgroundColor: ['#2563eb', '#10b981', '#f59e0b'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#94a3b8' } } } }
+            });
+
+            new Chart(document.getElementById('orgTypeChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['高校', '企业', '社区'],
+                    datasets: [{ data: [328, 486, 1256], backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#94a3b8' } } } }
+            });
+
+            new Chart(document.getElementById('identityChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['个人开发者', '高校', '企业', '社区'],
+                    datasets: [{ label: '账户数量', data: [68230, 28650, 45620, 14300], backgroundColor: ['#6b7280', '#3b82f6', '#10b981', '#8b5cf6'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }, y: { ticks: { color: '#94a3b8' }, grid: { display: false } } } }
+            });
+
+            const rankingHtml = data.l1.ranking.map((item, i) => `
+                <div class="ranking-item">
+                    <div class="ranking-number ${i < 3 ? 'top-3' : 'other'}">${i + 1}</div>
+                    <div class="ranking-info">
+                        <div class="ranking-name">${item.name}</div>
+                        <div class="ranking-type">${item.type === 'university' ? '高校' : item.type === 'enterprise' ? '企业' : '社区'}</div>
+                    </div>
+                    <div class="ranking-value">${item.value.toLocaleString()}</div>
+                </div>
+            `).join('');
+            document.getElementById('orgRanking').innerHTML = rankingHtml;
+        }
+
+        // L2 Charts
+        let l2ChartsInitialized = false;
+        function initL2Charts() {
+            if (l2ChartsInitialized) return;
+            l2ChartsInitialized = true;
+
+            new Chart(document.getElementById('growthChart'), {
+                type: 'line',
+                data: {
+                    labels: data.l2.growth.map(d => d.year),
+                    datasets: [
+                        { label: '新增贡献者', data: data.l2.growth.map(d => d.new), borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', fill: true, tension: 0.4 },
+                        { label: '累计贡献者', data: data.l2.growth.map(d => d.total), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } } }
+            });
+
+            new Chart(document.getElementById('sourceChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['高校', '企业', '社区', '活动'],
+                    datasets: [{ data: [28650, 45620, 68230, 14280], backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#94a3b8' } } } }
+            });
+
+            new Chart(document.getElementById('retentionChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.l2.retention.map(d => d.period),
+                    datasets: [{ label: '留存率', data: data.l2.retention.map(d => d.rate), backgroundColor: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' }, max: 100 } } }
+            });
+
+            new Chart(document.getElementById('roiChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['高校→企业', '社区→企业', '活动→企业', 'Maintainer', '活动获奖', '基金会认证'],
+                    datasets: [{ label: '协作资本回报', data: [2850, 3680, 1420, 8920, 5680, 1256], backgroundColor: 'rgba(37, 99, 235, 0.2)', borderColor: '#2563eb', pointBackgroundColor: '#2563eb' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' }, pointLabels: { color: '#94a3b8' } } } }
+            });
+
+            const talentHtml = data.l2.talentRanking.map((item, i) => `
+                <div class="ranking-item">
+                    <div class="ranking-number ${i < 3 ? 'top-3' : 'other'}">${i + 1}</div>
+                    <div class="ranking-info">
+                        <div class="ranking-name">${item.name}</div>
+                        <div class="ranking-type">${item.type} | 权重: ${item.weight}</div>
+                    </div>
+                    <div class="ranking-value">${item.value.toLocaleString()}</div>
+                </div>
+            `).join('');
+            document.getElementById('talentRanking').innerHTML = talentHtml;
+        }
+
+        // Strategic Charts
+        let strategicChartsInitialized = false;
+        function initStrategicCharts() {
+            if (strategicChartsInitialized) return;
+            strategicChartsInitialized = true;
+
+            // Strategic Projects Table
+            const projectsHtml = data.strategic.projects.map(p => `
+                <tr>
+                    <td>${p.name}</td>
+                    <td>${p.field}</td>
+                    <td><span class="priority-badge priority-${p.priority}">${p.priority === 'A' ? 'A级' : p.priority === 'B' ? 'B级' : 'C级'}</span></td>
+                    <td>${p.contributors.toLocaleString()}</td>
+                    <td>${p.contributions.toLocaleString()}</td>
+                </tr>
+            `).join('');
+            document.getElementById('strategicProjects').innerHTML = projectsHtml;
+
+            // Heatmap Chart
+            new Chart(document.getElementById('heatmapChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.strategic.fields.labels,
+                    datasets: [
+                        { label: '参与人数', data: data.strategic.fields.contributors, backgroundColor: '#2563eb' },
+                        { label: '覆盖率%', data: data.strategic.fields.coverage, backgroundColor: '#10b981' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                    }
+                }
+            });
+
+            // Strategic Growth Chart
+            new Chart(document.getElementById('strategicGrowthChart'), {
+                type: 'line',
+                data: {
+                    labels: data.strategic.yearly.map(d => d.year),
+                    datasets: [
+                        { label: '参与人数', data: data.strategic.yearly.map(d => d.contributors), borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', fill: true, tension: 0.4, yAxisID: 'y' },
+                        { label: '贡献行为数', data: data.strategic.yearly.map(d => d.contributions), borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true, tension: 0.4, yAxisID: 'y1' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                        y: { type: 'linear', position: 'left', ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                        y1: { type: 'linear', position: 'right', ticks: { color: '#94a3b8' }, grid: { display: false } }
+                    }
+                }
+            });
+
+            // Contributor Ranking
+            const contribRankingHtml = data.strategic.contributorRanking.map((item, i) => `
+                <div class="ranking-item">
+                    <div class="ranking-number ${i < 3 ? 'top-3' : 'other'}">${i + 1}</div>
+                    <div class="ranking-info">
+                        <div class="ranking-name">${item.name}</div>
+                        <div class="ranking-type">${item.organization} | ${item.field}</div>
+                    </div>
+                    <div class="ranking-value">${item.contributions.toLocaleString()} <span style="font-size: 0.7rem; color: #94a3b8;">(${item.projects}个项目)</span></div>
+                </div>
+            `).join('');
+            document.getElementById('strategicContributorRanking').innerHTML = contribRankingHtml;
+
+            // Organization Ranking
+            const orgRankingHtml = data.strategic.orgRanking.map((item, i) => `
+                <div class="ranking-item">
+                    <div class="ranking-number ${i < 3 ? 'top-3' : 'other'}">${i + 1}</div>
+                    <div class="ranking-info">
+                        <div class="ranking-name">${item.name}</div>
+                        <div class="ranking-type">${item.type === 'university' ? '高校' : '企业'}</div>
+                    </div>
+                    <div class="ranking-value">${item.contributors.toLocaleString()} <span style="font-size: 0.7rem; color: #94a3b8;">(${item.projects}个项目)</span></div>
+                </div>
+            `).join('');
+            document.getElementById('strategicOrgRanking').innerHTML = orgRankingHtml;
+
+            // Flow Visualization
+            initFlowVisualization();
+        }
+
+        function initFlowVisualization() {
+            const flowData = data.strategic.flow;
+            const targetContainer = document.getElementById('flowTarget');
+            const linesContainer = document.getElementById('flowLines');
+
+            // Targets
+            const targetHtml = flowData.targets.map(t => `<div class="flow-target-item">${t}</div>`).join('');
+            targetContainer.innerHTML = targetHtml;
+
+            // Lines
+            const colors = ['#3b82f6', '#10b981', '#8b5cf6'];
+            const sources = ['高校', '企业', '社区'];
+
+            flowData.matrix.forEach((row, sourceIdx) => {
+                row.forEach((value, targetIdx) => {
+                    if (value > 0) {
+                        const line = document.createElement('div');
+                        line.className = 'flow-line';
+                        const height = Math.max(2, value / 50);
+                        line.style.height = `${height}px`;
+                        line.style.top = `${(sourceIdx / 3) * 100}%`;
+                        line.style.left = `${(targetIdx / 5) * 100}%`;
+                        line.style.width = `${100 - (targetIdx / 5) * 100}%`;
+                        line.style.background = `linear-gradient(90deg, ${colors[sourceIdx]}, transparent)`;
+                        linesContainer.appendChild(line);
+                    }
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initL1Charts();
+        });
+    </script>
+</body>
+</html>

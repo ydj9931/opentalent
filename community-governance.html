@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社区开源贡献者治理面板 - CANN异构计算社区</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #7c3aed 100%);
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-radius: 0 0 24px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .community-info h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .community-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        .community-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .header-stat {
+            text-align: center;
+        }
+
+        .header-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: var(--bg-card);
+            padding: 8px;
+            border-radius: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: var(--bg-hover);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .kpi-icon.blue { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .kpi-icon.green { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .kpi-icon.purple { background: rgba(124, 92, 246, 0.2); color: #8b5cf6; }
+        .kpi-icon.orange { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .kpi-icon.red { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .kpi-icon.cyan { background: rgba(6, 182, 212, 0.2); color: #06b6d4; }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Health Score Card */
+        .health-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .health-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .health-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .health-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .health-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-hover);
+            border-radius: 12px;
+        }
+
+        .health-item-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .health-item-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .charts-grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .chart-container {
+            height: 250px;
+        }
+
+        .half-chart {
+            height: 180px;
+        }
+
+        /* Risk Card */
+        .risk-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .risk-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .risk-radar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .risk-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 12px;
+        }
+
+        .risk-item-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .risk-item-value.high { color: var(--danger); }
+        .risk-item-value.medium { color: var(--warning); }
+        .risk-item-value.low { color: var(--success); }
+
+        .risk-item-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Funnel */
+        .funnel-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .funnel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .funnel-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .funnel-step {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            flex: 1;
+        }
+
+        .funnel-step:nth-child(1) { background: rgba(59, 130, 246, 0.2); }
+        .funnel-step:nth-child(3) { background: rgba(124, 92, 246, 0.2); }
+        .funnel-step:nth-child(5) { background: rgba(16, 185, 129, 0.2); }
+        .funnel-step:nth-child(7) { background: rgba(245, 158, 11, 0.2); }
+
+        .funnel-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .funnel-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .funnel-arrow {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Tables */
+        .table-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        .table td {
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table tr:hover {
+            background: var(--bg-hover);
+        }
+
+        /* Organization Tags */
+        .org-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .org-tag.enterprise { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .org-tag.university { background: rgba(124, 92, 246, 0.15); color: #8b5cf6; }
+        .org-tag.other { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
+
+        /* Trend Tags */
+        .trend-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .trend-tag.up { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .trend-tag.down { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .trend-tag.stable { background: rgba(107, 114, 128, 0.15); color: var(--text-secondary); }
+
+        /* Role Tags */
+        .role-tag {
+            display: inline-flex;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+
+        .role-tag.maintainer { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .role-tag.reviewer { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .role-tag.contributor { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
+
+        /* Risk Level Tags */
+        .risk-level-tag {
+            display: inline-flex;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+
+        .risk-level-tag.high { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .risk-level-tag.medium { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .risk-level-tag.low { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+
+        /* Avatar */
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .contributor-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Lifecycle Tags */
+        .lifecycle-tag {
+            display: inline-flex;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+
+        .lifecycle-tag.new { background: rgba(6, 182, 212, 0.15); color: #06b6d4; }
+        .lifecycle-tag.growing { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .lifecycle-tag.stable { background: rgba(124, 92, 246, 0.15); color: #8b5cf6; }
+        .lifecycle-tag.core { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-hover);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* Score Badge */
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .score-badge.high { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .score-badge.medium { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .score-badge.low { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .kpi-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .charts-grid, .charts-grid-3col {
+                grid-template-columns: 1fr;
+            }
+
+            .health-grid, .risk-radar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .funnel-steps {
+                flex-direction: column;
+            }
+
+            .funnel-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="community-info">
+                    <h1><i class="fas fa-network-wired"></i> CANN异构计算社区</h1>
+                    <div class="community-meta">
+                        <span><i class="fas fa-globe"></i> 华为昇腾CANN异构计算生态</span>
+                        <span><i class="fas fa-calendar"></i> 成立于 2022年</span>
+                        <span><i class="fas fa-users"></i> 268 名贡献者</span>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="header-stat">
+                        <div class="header-stat-value">15</div>
+                        <div class="header-stat-label">活跃项目</div>
+                    </div>
+                    <div class="header-stat">
+                        <div class="header-stat-value">4,567</div>
+                        <div class="header-stat-label">PR 总数</div>
+                    </div>
+                    <div class="header-stat">
+                        <div class="header-stat-value">85</div>
+                        <div class="header-stat-label">健康评分</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showPage('dashboard')">
+                <i class="fas fa-chart-line"></i> 仪表盘
+            </button>
+            <button class="nav-tab" onclick="showPage('contributors')">
+                <i class="fas fa-users"></i> 贡献者
+            </button>
+            <button class="nav-tab" onclick="showPage('organizations')">
+                <i class="fas fa-building"></i> 组织
+            </button>
+            <button class="nav-tab" onclick="showPage('lifecycle')">
+                <i class="fas fa-user-clock"></i> 生命周期
+            </button>
+            <button class="nav-tab" onclick="showPage('projects')">
+                <i class="fas fa-folder"></i> 项目健康
+            </button>
+            <button class="nav-tab" onclick="showPage('risks')">
+                <i class="fas fa-shield-alt"></i> 风险分析
+            </button>
+            <button class="nav-tab" onclick="showPage('reports')">
+                <i class="fas fa-file-alt"></i> 报告中心
+            </button>
+        </div>
+
+        <!-- Page 1: Dashboard -->
+        <div class="page-section active fade-in" id="page-dashboard">
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon blue"><i class="fas fa-users"></i></div>
+                    </div>
+                    <div class="kpi-value">268</div>
+                    <div class="kpi-label">总贡献者</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon green"><i class="fas fa-user-plus"></i></div>
+                    </div>
+                    <div class="kpi-value">89</div>
+                    <div class="kpi-label">活跃贡献者(30天)</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon purple"><i class="fas fa-user-minus"></i></div>
+                    </div>
+                    <div class="kpi-value">45</div>
+                    <div class="kpi-label">新增贡献者</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon orange"><i class="fas fa-code-branch"></i></div>
+                    </div>
+                    <div class="kpi-value">4,567</div>
+                    <div class="kpi-label">PR 总数</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon cyan"><i class="fas fa-building"></i></div>
+                    </div>
+                    <div class="kpi-value">28</div>
+                    <div class="kpi-label">组织数量</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon red"><i class="fas fa-exclamation-triangle"></i></div>
+                    </div>
+                    <div class="kpi-value">12</div>
+                    <div class="kpi-label">流失风险</div>
+                </div>
+            </div>
+
+            <!-- Health Score -->
+            <div class="health-card">
+                <div class="health-header">
+                    <div class="health-title"><i class="fas fa-heartbeat"></i> 社区健康评分</div>
+                    <div class="health-score">85</div>
+                </div>
+                <div class="health-grid">
+                    <div class="health-item">
+                        <div class="health-item-value" style="color: #3b82f6;">88</div>
+                        <div class="health-item-label">贡献质量</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-item-value" style="color: #8b5cf6;">82</div>
+                        <div class="health-item-label">活跃度</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-item-value" style="color: #10b981;">80</div>
+                        <div class="health-item-label">留存率</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-item-value" style="color: #f59e0b;">85</div>
+                        <div class="health-item-label">协作度</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-item-value" style="color: #ef4444;">90</div>
+                        <div class="health-item-label">安全性</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-area"></i> 贡献趋势（2024年）</div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-pie"></i> 贡献类型分布</div>
+                    <div class="chart-container half-chart">
+                        <canvas id="typeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Overview -->
+            <div class="risk-card">
+                <div class="risk-header">
+                    <div class="risk-title">
+                        <i class="fas fa-radar"></i> 风险雷达
+                    </div>
+                </div>
+                <div class="risk-radar">
+                    <div class="risk-item">
+                        <div class="risk-item-value medium">35%</div>
+                        <div class="risk-item-label">依赖风险</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-item-value low">25%</div>
+                        <div class="risk-item-label">留存风险</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-item-value low">15%</div>
+                        <div class="risk-item-label">安全风险</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-item-value low">20%</div>
+                        <div class="risk-item-label">项目风险</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: Contributors -->
+        <div class="page-section fade-in" id="page-contributors">
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title"><i class="fas fa-users"></i> 贡献者列表</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>贡献者</th>
+                            <th>组织</th>
+                            <th>角色</th>
+                            <th>贡献数</th>
+                            <th>PR</th>
+                            <th>Issue</th>
+                            <th>生命周期</th>
+                            <th>风险等级</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="contributor-cell">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWei" class="avatar">
+                                    <strong>张伟</strong>
+                                </div>
+                            </td>
+                            <td><span class="org-tag enterprise">华为技术有限公司</span></td>
+                            <td><span class="role-tag maintainer">Maintainer</span></td>
+                            <td>156</td>
+                            <td>89</td>
+                            <td>45</td>
+                            <td><span class="lifecycle-tag core">核心</span></td>
+                            <td><span class="risk-level-tag low">低风险</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="contributor-cell">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ChenMing" class="avatar">
+                                    <strong>陈明</strong>
+                                </div>
+                            </td>
+                            <td><span class="org-tag university">清华大学</span></td>
+                            <td><span class="role-tag reviewer">Reviewer</span></td>
+                            <td>89</td>
+                            <td>45</td>
+                            <td>32</td>
+                            <td><span class="lifecycle-tag growing">成长期</span></td>
+                            <td><span class="risk-level-tag low">低风险</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="contributor-cell">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiuFang" class="avatar">
+                                    <strong>刘芳</strong>
+                                </div>
+                            </td>
+                            <td><span class="org-tag enterprise">阿里巴巴</span></td>
+                            <td><span class="role-tag maintainer">Maintainer</span></td>
+                            <td>123</td>
+                            <td>67</td>
+                            <td>34</td>
+                            <td><span class="lifecycle-tag core">核心</span></td>
+                            <td><span class="risk-level-tag low">低风险</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="contributor-cell">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiQiang" class="avatar">
+                                    <strong>李强</strong>
+                                </div>
+                            </td>
+                            <td><span class="org-tag university">北京大学</span></td>
+                            <td><span class="role-tag contributor">Contributor</span></td>
+                            <td>45</td>
+                            <td>28</td>
+                            <td>15</td>
+                            <td><span class="lifecycle-tag new">新手</span></td>
+                            <td><span class="risk-level-tag high">高风险</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="contributor-cell">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=WangFang" class="avatar">
+                                    <strong>王芳</strong>
+                                </div>
+                            </td>
+                            <td><span class="org-tag enterprise">麒麟软件</span></td>
+                            <td><span class="role-tag reviewer">Reviewer</span></td>
+                            <td>67</td>
+                            <td>38</td>
+                            <td>22</td>
+                            <td><span class="lifecycle-tag stable">稳定期</span></td>
+                            <td><span class="risk-level-tag medium">中风险</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Page 3: Organizations -->
+        <div class="page-section fade-in" id="page-organizations">
+            <div class="charts-grid" style="margin-bottom: 24px;">
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-bar"></i> 组织贡献排名</div>
+                    <div class="chart-container">
+                        <canvas id="orgChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-pie"></i> 组织贡献占比</div>
+                    <div class="chart-container half-chart">
+                        <canvas id="orgPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title"><i class="fas fa-building"></i> 组织列表</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>组织名称</th>
+                            <th>类型</th>
+                            <th>贡献者</th>
+                            <th>贡献占比</th>
+                            <th>PR数量</th>
+                            <th>Maintainer</th>
+                            <th>留存率</th>
+                            <th>趋势</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>华为技术有限公司</strong></td>
+                            <td><span class="org-tag enterprise">企业</span></td>
+                            <td>68</td>
+                            <td>25.4%</td>
+                            <td>1,156</td>
+                            <td>5</td>
+                            <td>92%</td>
+                            <td><span class="trend-tag stable"><i class="fas fa-minus"></i> 稳定</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>清华大学</strong></td>
+                            <td><span class="org-tag university">高校</span></td>
+                            <td>45</td>
+                            <td>16.8%</td>
+                            <td>780</td>
+                            <td>3</td>
+                            <td>88%</td>
+                            <td><span class="trend-tag up"><i class="fas fa-arrow-up"></i> 上升</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>阿里巴巴</strong></td>
+                            <td><span class="org-tag enterprise">企业</span></td>
+                            <td>38</td>
+                            <td>14.2%</td>
+                            <td>650</td>
+                            <td>2</td>
+                            <td>85%</td>
+                            <td><span class="trend-tag up"><i class="fas fa-arrow-up"></i> 上升</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>北京大学</strong></td>
+                            <td><span class="org-tag university">高校</span></td>
+                            <td>32</td>
+                            <td>11.9%</td>
+                            <td>540</td>
+                            <td>2</td>
+                            <td>90%</td>
+                            <td><span class="trend-tag stable"><i class="fas fa-minus"></i> 稳定</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>麒麟软件</strong></td>
+                            <td><span class="org-tag enterprise">企业</span></td>
+                            <td>28</td>
+                            <td>10.4%</td>
+                            <td>478</td>
+                            <td>1</td>
+                            <td>78%</td>
+                            <td><span class="trend-tag down"><i class="fas fa-arrow-down"></i> 下降</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Page 4: Lifecycle -->
+        <div class="page-section fade-in" id="page-lifecycle">
+            <!-- Funnel -->
+            <div class="funnel-card">
+                <div class="funnel-title"><i class="fas fa-filter"></i> 贡献者转化漏斗</div>
+                <div class="funnel-steps">
+                    <div class="funnel-step">
+                        <div class="funnel-value">120</div>
+                        <div class="funnel-label">新贡献者</div>
+                    </div>
+                    <div class="funnel-arrow">→</div>
+                    <div class="funnel-step">
+                        <div class="funnel-value">89</div>
+                        <div class="funnel-label">活跃30天</div>
+                    </div>
+                    <div class="funnel-arrow">→</div>
+                    <div class="funnel-step">
+                        <div class="funnel-value">56</div>
+                        <div class="funnel-label">活跃90天</div>
+                    </div>
+                    <div class="funnel-arrow">→</div>
+                    <div class="funnel-step">
+                        <div class="funnel-value">22</div>
+                        <div class="funnel-label">核心贡献者</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-line"></i> 留存率趋势</div>
+                    <div class="chart-container">
+                        <canvas id="retentionChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title"><i class="fas fa-chart-pie"></i> 生命周期分布</div>
+                    <div class="chart-container half-chart">
+                        <canvas id="lifecycleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="risk-card">
+                <div class="risk-header">
+                    <div class="risk-title"><i class="fas fa-user-slash"></i> 流失风险贡献者</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>风险等级</th>
+                            <th>数量</th>
+                            <th>贡献者</th>
+                            <th>最后活跃</th>
+                            <th>历史贡献</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="risk-level-tag high">高风险</span></td>
+                            <td>12</td>
+                            <td>张伟、李四、王五...</td>
+                            <td>45天前</td>
+                            <td>156+</td>
+                        </tr>
+                        <tr>
+                            <td><span class="risk-level-tag medium">中风险</span></td>
+                            <td>28</td>
+                            <td>-</td>
+                            <td>30天前</td>
+                            <td>50-100</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Page 5: Project Health -->
+        <div class="page-section fade-in" id="page-projects">
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title"><i class="fas fa-folder"></i> 项目健康状态</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>项目名称</th>
+                            <th>贡献者</th>
+                            <th>PR</th>
+                            <th>合并率</th>
+                            <th>平均PR时间</th>
+                            <th>平均Issue时间</th>
+                            <th>健康评分</th>
+                            <th>最后活跃</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>cloud-native-runtime</strong></td>
+                            <td>68</td>
+                            <td>1,234</td>
+                            <td>95%</td>
+                            <td>1.2天</td>
+                            <td>2.5天</td>
+                            <td><span class="score-badge high">88</span></td>
+                            <td>2024-12-20</td>
+                        </tr>
+                        <tr>
+                            <td><strong>container-security</strong></td>
+                            <td>32</td>
+                            <td>456</td>
+                            <td>92%</td>
+                            <td>1.8天</td>
+                            <td>3.2天</td>
+                            <td><span class="score-badge high">82</span></td>
+                            <td>2024-12-18</td>
+                        </tr>
+                        <tr>
+                            <td><strong>k8s-operator</strong></td>
+                            <td>45</td>
+                            <td>678</td>
+                            <td>89%</td>
+                            <td>2.1天</td>
+                            <td>4.0天</td>
+                            <td><span class="score-badge medium">78</span></td>
+                            <td>2024-12-15</td>
+                        </tr>
+                        <tr>
+                            <td><strong>service-mesh</strong></td>
+                            <td>28</td>
+                            <td>234</td>
+                            <td>85%</td>
+                            <td>3.5天</td>
+                            <td>5.2天</td>
+                            <td><span class="score-badge low">68</span></td>
+                            <td>2024-12-10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Page 6: Risk Analysis -->
+        <div class="page-section fade-in" id="page-risks">
+            <div class="risk-card">
+                <div class="risk-header">
+                    <div class="risk-title"><i class="fas fa-radar"></i> 综合风险评估</div>
+                </div>
+                <div class="risk-radar">
+                    <div class="risk-item">
+                        <div class="risk-item-value medium">35%</div>
+                        <div class="risk-item-label">依赖风险</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-item-value low">25%</div>
+                        <div class="risk-item-label">留存风险</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-item-value low">15%</div>
+                        <div class="risk-item-label">安全风险</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-item-value low">20%</div>
+                        <div class="risk-item-label">项目风险</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title"><i class="fas fa-exclamation-triangle"></i> 风险警示列表</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>风险类型</th>
+                            <th>描述</th>
+                            <th>影响范围</th>
+                            <th>风险等级</th>
+                            <th>建议措施</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="risk-level-tag medium">组织依赖</span></td>
+                            <td>华为技术有限公司贡献占比过高</td>
+                            <td>25.4%</td>
+                            <td><span class="risk-level-tag medium">中</span></td>
+                            <td>建议发展多元化组织贡献</td>
+                        </tr>
+                        <tr>
+                            <td><span class="risk-level-tag high">安全漏洞</span></td>
+                            <td>存在3个已知漏洞</td>
+                            <td>container-security, k8s-operator</td>
+                            <td><span class="risk-level-tag medium">中</span></td>
+                            <td>建议及时修复漏洞</td>
+                        </tr>
+                        <tr>
+                            <td><span class="risk-level-tag high">贡献者流失</span></td>
+                            <td>12名高价值贡献者流失风险</td>
+                            <td>历史贡献100+</td>
+                            <td><span class="risk-level-tag high">高</span></td>
+                            <td>建议关注并沟通挽留</td>
+                        </tr>
+                        <tr>
+                            <td><span class="risk-level-tag low">项目不活跃</span></td>
+                            <td>old-module项目长期无更新</td>
+                            <td>3名贡献者</td>
+                            <td><span class="risk-level-tag low">低</span></td>
+                            <td>建议评估项目存续</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Page 7: Reports -->
+        <div class="page-section fade-in" id="page-reports">
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title"><i class="fas fa-file-alt"></i> 报告中心</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>报告名称</th>
+                            <th>类型</th>
+                            <th>生成时间</th>
+                            <th>周期</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>2024年度社区健康报告</strong></td>
+                            <td>年度报告</td>
+                            <td>2024-12-15</td>
+                            <td>2024全年</td>
+                            <td><span class="status-badge completed">已完成</span></td>
+                            <td><button style="padding: 6px 12px; background: var(--primary); border: none; border-radius: 4px; color: white; cursor: pointer;">下载</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Q4贡献者留存分析</strong></td>
+                            <td>季度报告</td>
+                            <td>2024-12-01</td>
+                            <td>Q4 2024</td>
+                            <td><span class="status-badge completed">已完成</span></td>
+                            <td><button style="padding: 6px 12px; background: var(--primary); border: none; border-radius: 4px; color: white; cursor: pointer;">下载</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>组织依赖风险评估</strong></td>
+                            <td>风险报告</td>
+                            <td>2024-12-10</td>
+                            <td>2024全年</td>
+                            <td><span class="status-badge in_progress">进行中</span></td>
+                            <td><button style="padding: 6px 12px; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 4px; color: var(--text-primary); cursor: pointer;">查看</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById('page-' + pageId).classList.add('active');
+            event.target.closest('.nav-tab').classList.add('active');
+        }
+
+        // Dashboard Trend Chart
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                datasets: [
+                    {
+                        label: '贡献者',
+                        data: [180, 195, 210, 225, 238, 245, 250, 255, 258, 262, 265, 268],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'PR',
+                        data: [320, 350, 380, 420, 450, 480, 510, 535, 560, 590, 620, 650],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#f1f5f9', padding: 20, usePointStyle: true }
+                    }
+                },
+                scales: {
+                    x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+
+        // Contribution Type Chart
+        new Chart(document.getElementById('typeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['代码PR', '文档PR', 'Issue', '代码评审', '评论'],
+                datasets: [{
+                    data: [3200, 890, 2345, 4567, 12340],
+                    backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#06b6d4'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#f1f5f9', padding: 10, usePointStyle: true, font: { size: 10 } }
+                    }
+                }
+            }
+        });
+
+        // Organization Chart
+        new Chart(document.getElementById('orgChart'), {
+            type: 'bar',
+            data: {
+                labels: ['华为', '清华', '阿里', '北大', '麒麟', '其他'],
+                datasets: [{
+                    data: [1156, 780, 650, 540, 478, 963],
+                    backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#6b7280'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+
+        // Organization Pie Chart
+        new Chart(document.getElementById('orgPieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['华为', '清华', '阿里', '北大', '麒麟', '其他'],
+                datasets: [{
+                    data: [25.4, 16.8, 14.2, 11.9, 10.4, 21.3],
+                    backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#6b7280'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#f1f5f9', padding: 10, usePointStyle: true, font: { size: 10 } }
+                    }
+                }
+            }
+        });
+
+        // Retention Chart
+        new Chart(document.getElementById('retentionChart'), {
+            type: 'line',
+            data: {
+                labels: ['23-Q1', '23-Q2', '23-Q3', '23-Q4', '24-Q1', '24-Q2'],
+                datasets: [{
+                    label: '留存率',
+                    data: [72, 75, 78, 80, 82, 85],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, min: 60, max: 100 }
+                }
+            }
+        });
+
+        // Lifecycle Chart
+        new Chart(document.getElementById('lifecycleChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['新手(<3月)', '成长期(3-12月)', '稳定期(1-2年)', '核心(>2年)'],
+                datasets: [{
+                    data: [31.7, 38.1, 19.4, 10.8],
+                    backgroundColor: ['#06b6d4', '#3b82f6', '#8b5cf6', '#f59e0b'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#f1f5f9', padding: 10, usePointStyle: true, font: { size: 10 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
