@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>开源贡献者面板 - 让每一份开源贡献被看见</title>
         <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
         />
         <link
@@ -14,20 +14,21 @@
         />
         <style>
             :root {
-                --primary: #3b82f6;
-                --primary-dark: #2563eb;
-                --secondary: #8b5cf6;
-                --success: #10b981;
-                --warning: #f59e0b;
-                --danger: #ef4444;
-                --bg-dark: #0a0f1c;
-                --bg-card: #111827;
-                --bg-card-hover: #1f2937;
-                --text-primary: #f9fafb;
-                --text-secondary: #9ca3af;
-                --border: #374151;
-                --gradient-start: #1e3a8a;
-                --gradient-end: #3b82f6;
+                /* Colors - Light Mode Flat Design */
+                --bg-page: #FFFFFF;
+                --bg-gray: #F3F4F6;
+                --bg-blue: #EFF6FF;
+                --bg-green: #ECFDF5;
+                --bg-amber: #FFFBEB;
+                --bg-purple: #F5F3FF;
+                --text-primary: #111827;
+                --text-secondary: #6B7280;
+                --text-muted: #9CA3AF;
+                --primary: #3B82F6;
+                --primary-dark: #2563EB;
+                --secondary: #10B981;
+                --accent: #F59E0B;
+                --border: #E5E7EB;
             }
 
             * {
@@ -37,14 +38,14 @@
             }
 
             body {
-                font-family: "Noto Sans SC", sans-serif;
-                background: var(--bg-dark);
+                font-family: "Outfit", sans-serif;
+                background: var(--bg-page);
                 color: var(--text-primary);
                 line-height: 1.6;
                 min-height: 100vh;
             }
 
-            /* Background Pattern */
+            /* Background Decoration - Geometric Shapes */
             body::before {
                 content: "";
                 position: fixed;
@@ -52,30 +53,48 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background:
-                    radial-gradient(
-                        ellipse at 20% 20%,
-                        rgba(59, 130, 246, 0.15) 0%,
-                        transparent 50%
-                    ),
-                    radial-gradient(
-                        ellipse at 80% 80%,
-                        rgba(139, 92, 246, 0.1) 0%,
-                        transparent 50%
-                    ),
-                    radial-gradient(
-                        ellipse at 50% 50%,
-                        rgba(16, 185, 129, 0.05) 0%,
-                        transparent 70%
-                    );
                 pointer-events: none;
                 z-index: 0;
+                overflow: hidden;
+            }
+
+            .hero-decoration {
+                position: absolute;
+                top: -200px;
+                right: -200px;
+                width: 600px;
+                height: 600px;
+                background: #EFF6FF;
+                border-radius: 50%;
+                opacity: 0.5;
+            }
+
+            .hero-decoration-2 {
+                position: absolute;
+                bottom: 100px;
+                left: -100px;
+                width: 400px;
+                height: 400px;
+                background: #F5F3FF;
+                border-radius: 50%;
+                opacity: 0.5;
+            }
+
+            .hero-decoration-3 {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 800px;
+                height: 800px;
+                background: radial-gradient(circle, #F3F4F6 0%, transparent 70%);
+                opacity: 0.5;
             }
 
             .container {
-                max-width: 1400px;
+                max-width: 1280px;
                 margin: 0 auto;
-                padding: 0 24px;
+                padding: 0 32px;
                 position: relative;
                 z-index: 1;
             }
@@ -83,56 +102,55 @@
             /* Hero Section */
             .hero {
                 text-align: center;
-                padding: 100px 0 80px;
+                padding: 120px 0 100px;
+                position: relative;
+                background: var(--bg-page);
             }
 
             .hero-badge {
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                background: linear-gradient(
-                    135deg,
-                    rgba(59, 130, 246, 0.2),
-                    rgba(139, 92, 246, 0.2)
-                );
-                border: 1px solid rgba(59, 130, 246, 0.3);
-                padding: 8px 20px;
-                border-radius: 50px;
+                background: var(--bg-blue);
+                border: 2px solid var(--primary);
+                padding: 10px 24px;
+                border-radius: 6px;
                 font-size: 0.875rem;
+                font-weight: 600;
                 color: var(--primary);
                 margin-bottom: 32px;
-                animation: fadeInDown 0.6s ease-out;
+                letter-spacing: 0.02em;
+                transition: all 0.2s ease;
+            }
+
+            .hero-badge:hover {
+                background: var(--primary);
+                color: white;
+                transform: scale(1.02);
             }
 
             .hero h1 {
-                font-size: 4rem;
+                font-size: 4.5rem;
                 font-weight: 800;
-                background: linear-gradient(
-                    135deg,
-                    #fff 0%,
-                    #93c5fd 50%,
-                    #c4b5fd 100%
-                );
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 20px;
-                letter-spacing: -1px;
+                color: var(--text-primary);
+                margin-bottom: 24px;
+                letter-spacing: -0.03em;
+                line-height: 1.1;
                 animation: fadeInUp 0.6s ease-out 0.1s both;
             }
 
             .hero .subtitle {
                 font-size: 1.5rem;
                 color: var(--text-secondary);
-                max-width: 700px;
-                margin: 0 auto 50px;
+                max-width: 640px;
+                margin: 0 auto 56px;
                 animation: fadeInUp 0.6s ease-out 0.2s both;
             }
 
             .hero-stats {
                 display: flex;
                 justify-content: center;
-                gap: 80px;
+                gap: 48px;
                 animation: fadeInUp 0.6s ease-out 0.3s both;
             }
 
@@ -141,24 +159,36 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 8px;
+                gap: 12px;
+                padding: 24px 32px;
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                min-width: 160px;
+                transition: all 0.2s ease;
+            }
+
+            .stat-item:hover {
+                border-color: var(--primary);
+                transform: translateY(-4px);
             }
 
             .stat-icon {
                 width: 48px;
                 height: 48px;
-                border-radius: 12px;
+                border-radius: 6px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-size: 1.25rem;
-                background: linear-gradient(
-                    135deg,
-                    var(--primary),
-                    var(--secondary)
-                );
-                color: white;
+                background: var(--bg-blue);
+                color: var(--primary);
             }
+
+            .stat-item:nth-child(2) .stat-icon { background: var(--bg-green); color: var(--secondary); }
+            .stat-item:nth-child(3) .stat-icon { background: var(--bg-amber); color: var(--accent); }
+            .stat-item:nth-child(4) .stat-icon { background: var(--bg-purple); color: #8B5CF6; }
+            .stat-item:nth-child(5) .stat-icon { background: var(--bg-green); color: var(--secondary); }
 
             .stat-value {
                 font-size: 2.5rem;
@@ -166,137 +196,142 @@
                 color: var(--text-primary);
             }
 
+            .stat-item:nth-child(1) .stat-value { color: var(--primary); }
+            .stat-item:nth-child(2) .stat-value { color: var(--secondary); }
+            .stat-item:nth-child(3) .stat-value { color: var(--accent); }
+            .stat-item:nth-child(4) .stat-value { color: #8B5CF6; }
+
             .stat-label {
                 font-size: 0.9rem;
                 color: var(--text-secondary);
+                font-weight: 500;
             }
 
             /* Section */
             .section {
-                padding: 60px 0;
+                padding: 80px 0;
+            }
+
+            .section-gray {
+                background: var(--bg-gray);
+            }
+
+            .section-blue {
+                background: var(--bg-blue);
             }
 
             .section-title {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 12px;
-                margin-bottom: 48px;
-                font-size: 1.75rem;
-                font-weight: 600;
+                gap: 16px;
+                margin-bottom: 56px;
+                font-size: 2rem;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                color: var(--text-primary);
             }
 
             .section-title i {
-                color: var(--primary);
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--primary);
+                color: white;
+                border-radius: 6px;
+                font-size: 1.25rem;
             }
 
             /* Grid */
             .grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                grid-template-columns: repeat(4, 1fr);
                 gap: 24px;
-                margin-bottom: 40px;
             }
 
-            /* Cards */
+            /* Cards - Flat Design Color Blocks */
             .card {
-                background: var(--bg-card);
-                border: 1px solid var(--border);
-                border-radius: 16px;
-                padding: 28px;
-                transition: all 0.3s ease;
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 32px;
+                transition: all 0.2s ease;
                 text-decoration: none;
                 display: block;
                 position: relative;
                 overflow: hidden;
             }
 
-            .card::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 3px;
-                background: linear-gradient(
-                    90deg,
-                    var(--card-color, var(--primary)),
-                    var(--card-color-secondary, var(--secondary))
-                );
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-
             .card:hover {
-                transform: translateY(-4px);
+                transform: scale(1.02);
                 border-color: var(--card-color, var(--primary));
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             }
 
-            .card:hover::before {
-                opacity: 1;
+            .card:hover .card-icon {
+                transform: scale(1.1);
             }
 
             .card-header {
                 display: flex;
                 align-items: flex-start;
                 justify-content: space-between;
-                margin-bottom: 16px;
+                margin-bottom: 20px;
             }
 
             .card-icon {
-                width: 52px;
-                height: 52px;
-                border-radius: 12px;
+                width: 56px;
+                height: 56px;
+                border-radius: 6px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-size: 1.5rem;
-                background: linear-gradient(
-                    135deg,
-                    var(--card-color, var(--primary)),
-                    var(--card-color-secondary, var(--secondary))
-                );
-                color: white;
+                background: var(--card-bg, var(--bg-blue));
+                color: var(--card-color, var(--primary));
+                transition: all 0.2s ease;
             }
 
             .card-badge {
                 font-size: 0.75rem;
-                padding: 4px 10px;
-                border-radius: 20px;
-                background: rgba(255, 255, 255, 0.1);
+                padding: 6px 12px;
+                border-radius: 4px;
+                background: var(--bg-gray);
                 color: var(--text-secondary);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
             }
 
             .card h3 {
                 font-size: 1.25rem;
-                font-weight: 600;
-                margin-bottom: 8px;
+                font-weight: 700;
+                margin-bottom: 12px;
                 color: var(--text-primary);
+                letter-spacing: -0.01em;
             }
 
             .card p {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
                 color: var(--text-secondary);
-                margin-bottom: 20px;
+                margin-bottom: 24px;
                 line-height: 1.6;
             }
 
             .card-btn {
                 display: inline-flex;
                 align-items: center;
+                justify-content: center;
                 gap: 8px;
-                padding: 10px 20px;
-                background: linear-gradient(
-                    135deg,
-                    var(--card-color, var(--primary)),
-                    var(--card-color-secondary, var(--secondary))
-                );
+                padding: 14px 28px;
+                background: var(--card-color, var(--primary));
                 color: white;
-                border-radius: 8px;
+                border-radius: 6px;
                 font-size: 0.9rem;
-                font-weight: 500;
-                transition: all 0.3s ease;
+                font-weight: 600;
+                transition: all 0.2s ease;
+                width: 100%;
             }
 
             .card:hover .card-btn {
@@ -304,57 +339,36 @@
             }
 
             /* Color Variants */
-            .card-developer {
-                --card-color: #3b82f6;
-                --card-color-secondary: #8b5cf6;
-            }
-            .card-university {
-                --card-color: #06b6d4;
-                --card-color-secondary: #0ea5e9;
-            }
-            .card-enterprise {
-                --card-color: #f59e0b;
-                --card-color-secondary: #eab308;
-            }
-            .card-government {
-                --card-color: #10b981;
-                --card-color-secondary: #059669;
-            }
-            .card-foundation {
-                --card-color: #ec4899;
-                --card-color-secondary: #8b5cf6;
-            }
-            .card-community {
-                --card-color: #f97316;
-                --card-color-secondary: #ea580c;
-            }
-            .card-activity {
-                --card-color: #6366f1;
-                --card-color-secondary: #8b5cf6;
-            }
+            .card-developer { --card-color: #3B82F6; --card-bg: #EFF6FF; }
+            .card-activity { --card-color: #8B5CF6; --card-bg: #F5F3FF; }
+            .card-university { --card-color: #06B6D4; --card-bg: #ECFEFF; }
+            .card-community { --card-color: #F97316; --card-bg: #FFF7ED; }
+            .card-enterprise { --card-color: #F59E0B; --card-bg: #FFFBEB; }
+            .card-government { --card-color: #10B981; --card-bg: #ECFDF5; }
+            .card-foundation { --card-color: #EC4899; --card-bg: #FDF2F8; }
 
             /* Partners Section */
             .partners-grid {
                 display: grid;
                 grid-template-columns: repeat(6, 1fr);
-                gap: 24px;
+                gap: 16px;
             }
 
             .partner-logo {
-                background: var(--bg-card);
-                border: 1px solid var(--border);
-                border-radius: 12px;
-                padding: 24px;
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 28px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                height: 80px;
-                transition: all 0.3s ease;
+                height: 100px;
+                transition: all 0.2s ease;
             }
 
             .partner-logo:hover {
                 border-color: var(--primary);
-                background: var(--bg-card-hover);
+                transform: scale(1.02);
             }
 
             .partner-logo i {
@@ -362,17 +376,21 @@
                 color: var(--text-secondary);
             }
 
+            .partner-logo:hover i {
+                color: var(--primary);
+            }
+
             /* Users Section */
             .users-section {
-                background: var(--bg-card);
-                border-radius: 24px;
-                padding: 48px;
-                border: 1px solid var(--border);
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 56px;
             }
 
             .users-intro {
                 text-align: center;
-                margin-bottom: 40px;
+                margin-bottom: 48px;
             }
 
             .users-intro p {
@@ -388,18 +406,32 @@
 
             .user-category h4 {
                 font-size: 1rem;
-                font-weight: 600;
-                margin-bottom: 16px;
+                font-weight: 700;
+                margin-bottom: 20px;
                 color: var(--text-primary);
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                font-size: 0.8rem;
+            }
+
+            .user-category h4 i {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--bg-blue);
+                color: var(--primary);
+                border-radius: 4px;
             }
 
             .user-list {
                 display: flex;
                 flex-direction: column;
-                gap: 12px;
+                gap: 14px;
             }
 
             .user-item {
@@ -407,33 +439,36 @@
                 align-items: center;
                 gap: 12px;
                 color: var(--text-secondary);
-                font-size: 0.9rem;
+                font-size: 0.95rem;
+                font-weight: 500;
             }
 
             .user-item i {
-                color: var(--primary);
+                color: var(--secondary);
+                font-size: 0.9rem;
             }
 
             /* Footer */
             .footer {
-                background: var(--bg-card);
-                border-top: 1px solid var(--border);
-                padding: 60px 0 30px;
-                margin-top: 40px;
+                background: #111827;
+                color: white;
+                padding: 80px 0 32px;
             }
 
             .footer-grid {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
-                gap: 40px;
-                margin-bottom: 40px;
+                gap: 48px;
+                margin-bottom: 48px;
             }
 
             .footer-col h4 {
                 font-size: 1rem;
-                font-weight: 600;
-                margin-bottom: 20px;
-                color: var(--text-primary);
+                font-weight: 700;
+                margin-bottom: 24px;
+                color: white;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
             }
 
             .footer-col ul {
@@ -441,30 +476,31 @@
             }
 
             .footer-col li {
-                margin-bottom: 12px;
+                margin-bottom: 14px;
             }
 
             .footer-col a {
-                color: var(--text-secondary);
+                color: #9CA3AF;
                 text-decoration: none;
-                font-size: 0.9rem;
-                transition: color 0.3s ease;
+                font-size: 0.95rem;
+                font-weight: 500;
+                transition: color 0.2s ease;
             }
 
             .footer-col a:hover {
-                color: var(--primary);
+                color: white;
             }
 
             .footer-bottom {
                 text-align: center;
-                padding-top: 30px;
-                border-top: 1px solid var(--border);
-                color: var(--text-secondary);
+                padding-top: 32px;
+                border-top: 1px solid #374151;
+                color: #9CA3AF;
                 font-size: 0.875rem;
             }
 
             .footer-bottom a {
-                color: var(--primary);
+                color: #60A5FA;
                 text-decoration: none;
             }
 
@@ -493,6 +529,12 @@
 
             /* Responsive */
             @media (max-width: 1024px) {
+                .hero h1 {
+                    font-size: 3.5rem;
+                }
+                .grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
                 .partners-grid {
                     grid-template-columns: repeat(3, 1fr);
                 }
@@ -506,11 +548,12 @@
                     font-size: 2.5rem;
                 }
                 .hero-stats {
-                    gap: 30px;
+                    gap: 16px;
                     flex-wrap: wrap;
                 }
-                .stat-value {
-                    font-size: 2rem;
+                .stat-item {
+                    min-width: 140px;
+                    padding: 16px 20px;
                 }
                 .grid {
                     grid-template-columns: 1fr;
@@ -524,13 +567,19 @@
                 .footer-grid {
                     grid-template-columns: repeat(2, 1fr);
                 }
+                .section-title {
+                    font-size: 1.5rem;
+                }
             }
         </style>
     </head>
     <body>
         <!-- Hero Section -->
-        <div class="container">
-            <div class="hero">
+        <div class="hero">
+            <div class="hero-decoration"></div>
+            <div class="hero-decoration-2"></div>
+            <div class="hero-decoration-3"></div>
+            <div class="container">
                 <div class="hero-badge">
                     <i class="fas fa-heart"></i>
                     OpenAtom 贡献者面板
@@ -561,7 +610,7 @@
                     </div>
                     <div class="stat-item">
                         <div class="stat-icon">
-                            <i class="fas fa-graduation-cap"></i>
+                            <i class="fas fa-building"></i>
                         </div>
                         <span class="stat-value">40+</span>
                         <span class="stat-label">企业</span>
@@ -578,19 +627,15 @@
         </div>
 
         <!-- 用户入口 Section -->
-        <div class="container">
-            <div class="section">
+        <div class="section section-gray">
+            <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-door-open"></i>
                     选择您的入口
                 </h2>
-
                 <div class="grid">
                     <!-- 开发者贡献面板 -->
-                    <a
-                        href="contributor-profile-v3.html"
-                        class="card card-developer"
-                    >
+                    <a href="contributor-profile-v3.html" class="card card-developer">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-code"></i>
@@ -615,16 +660,12 @@
                         <h3>活动贡献面板</h3>
                         <p>记录活动贡献，识别优秀贡献者</p>
                         <span class="card-btn">
-                            为活动创建贡献面板
-                            <i class="fas fa-arrow-right"></i>
+                            为活动创建贡献面板 <i class="fas fa-arrow-right"></i>
                         </span>
                     </a>
 
                     <!-- 高校贡献面板 -->
-                    <a
-                        href="university-profile-v2.html"
-                        class="card card-university"
-                    >
+                    <a href="university-profile-v2.html" class="card card-university">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-graduation-cap"></i>
@@ -634,16 +675,12 @@
                         <h3>高校贡献面板</h3>
                         <p>追踪学生开源成长，培养未来技术人才</p>
                         <span class="card-btn">
-                            为高校创建贡献面板
-                            <i class="fas fa-arrow-right"></i>
+                            为高校创建贡献面板 <i class="fas fa-arrow-right"></i>
                         </span>
                     </a>
 
                     <!-- 社区贡献面板 -->
-                    <a
-                        href="community-governance.html"
-                        class="card card-community"
-                    >
+                    <a href="community-governance.html" class="card card-community">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-users-rectangle"></i>
@@ -653,16 +690,12 @@
                         <h3>社区贡献面板</h3>
                         <p>洞察社区贡献生态，治理开源贡献者</p>
                         <span class="card-btn">
-                            为社区创建贡献面板
-                            <i class="fas fa-arrow-right"></i>
+                            为社区创建贡献面板 <i class="fas fa-arrow-right"></i>
                         </span>
                     </a>
 
                     <!-- 企业贡献面板 -->
-                    <a
-                        href="enterprise-profile.html"
-                        class="card card-enterprise"
-                    >
+                    <a href="enterprise-profile.html" class="card card-enterprise">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-building"></i>
@@ -672,16 +705,12 @@
                         <h3>企业贡献面板</h3>
                         <p>管理企业开源贡献，打造技术影响力</p>
                         <span class="card-btn">
-                            为企业创建贡献面板
-                            <i class="fas fa-arrow-right"></i>
+                            为企业创建贡献面板 <i class="fas fa-arrow-right"></i>
                         </span>
                     </a>
 
                     <!-- 地方政府贡献面板 -->
-                    <a
-                        href="government-profile.html"
-                        class="card card-government"
-                    >
+                    <a href="government-profile.html" class="card card-government">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-landmark"></i>
@@ -696,10 +725,7 @@
                     </a>
 
                     <!-- 基金会贡献面板 -->
-                    <a
-                        href="national-foundation-v1.2.html"
-                        class="card card-foundation"
-                    >
+                    <a href="national-foundation-v1.2.html" class="card card-foundation">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-flag"></i>
@@ -709,8 +735,7 @@
                         <h3>基金会贡献面板</h3>
                         <p>掌握开源生态态势，推动协作创新</p>
                         <span class="card-btn">
-                            查看基金会生态面板
-                            <i class="fas fa-arrow-right"></i>
+                            查看基金会生态面板 <i class="fas fa-arrow-right"></i>
                         </span>
                     </a>
                 </div>
@@ -718,8 +743,8 @@
         </div>
 
         <!-- 合作伙伴 Section -->
-        <div class="container">
-            <div class="section">
+        <div class="section">
+            <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-handshake"></i>
                     合作伙伴
@@ -728,7 +753,7 @@
                     <div class="partner-logo" title="OpenAtom 基金会">
                         <i class="fas fa-atom"></i>
                     </div>
-                    <div class="partner-logo" title="Linux 基金会">
+                    <div class="partner-logo" title="CSDN">
                         <i class="fab fa-linux"></i>
                     </div>
                     <div class="partner-logo" title="Apache 软件基金会">
@@ -766,8 +791,8 @@
         </div>
 
         <!-- 用户 Section -->
-        <div class="container">
-            <div class="section">
+        <div class="section section-gray">
+            <div class="container">
                 <div class="users-section">
                     <div class="users-intro">
                         <h2 class="section-title" style="margin-bottom: 16px">
@@ -781,17 +806,16 @@
                             <h4><i class="fas fa-graduation-cap"></i> 高校</h4>
                             <div class="user-list">
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 清华大学
+                                    <i class="fas fa-check"></i> 清华大学
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 北京大学
+                                    <i class="fas fa-check"></i> 北京大学
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    上海交通大学
+                                    <i class="fas fa-check"></i> 上海交通大学
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 浙江大学
+                                    <i class="fas fa-check"></i> 浙江大学
                                 </div>
                             </div>
                         </div>
@@ -799,18 +823,16 @@
                             <h4><i class="fas fa-code-branch"></i> 开源社区</h4>
                             <div class="user-list">
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> OpenAtom
+                                    <i class="fas fa-check"></i> OpenAtom
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> Apache
-                                    APISIX
+                                    <i class="fas fa-check"></i> Apache APISIX
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> TiDB
+                                    <i class="fas fa-check"></i> TiDB
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    OceanBase
+                                    <i class="fas fa-check"></i> OceanBase
                                 </div>
                             </div>
                         </div>
@@ -818,16 +840,16 @@
                             <h4><i class="fas fa-building"></i> 企业</h4>
                             <div class="user-list">
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 华为
+                                    <i class="fas fa-check"></i> 华为
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 阿里巴巴
+                                    <i class="fas fa-check"></i> 阿里巴巴
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 腾讯
+                                    <i class="fas fa-check"></i> 腾讯
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 字节跳动
+                                    <i class="fas fa-check"></i> 字节跳动
                                 </div>
                             </div>
                         </div>
@@ -835,17 +857,16 @@
                             <h4><i class="fas fa-cogs"></i> 技术组织</h4>
                             <div class="user-list">
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> Linux
-                                    基金会
+                                    <i class="fas fa-check"></i> CSDN
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> CNCF
+                                    <i class="fas fa-check"></i> CNCF
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> 开源中国
+                                    <i class="fas fa-check"></i> 开源中国
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> InfoQ
+                                    <i class="fas fa-check"></i> InfoQ
                                 </div>
                             </div>
                         </div>
@@ -853,19 +874,16 @@
                             <h4><i class="fas fa-calendar"></i> 开源活动</h4>
                             <div class="user-list">
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> KubeCon
+                                    <i class="fas fa-check"></i> KubeCon
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    OpenSource Summit
+                                    <i class="fas fa-check"></i> OpenSource Summit
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    中国开源年会
+                                    <i class="fas fa-check"></i> 中国开源年会
                                 </div>
                                 <div class="user-item">
-                                    <i class="fas fa-check-circle"></i> GDG
-                                    开发者大会
+                                    <i class="fas fa-check"></i> GDG 开发者大会
                                 </div>
                             </div>
                         </div>
@@ -889,20 +907,9 @@
                     <div class="footer-col">
                         <h4>资源</h4>
                         <ul>
-                            <li>
-                                <a href="#"
-                                    ><i class="fas fa-code-branch"></i>
-                                    AtomGit</a
-                                >
-                            </li>
-                            <li>
-                                <a href="#"
-                                    ><i class="fas fa-book"></i> 开发文档</a
-                                >
-                            </li>
-                            <li>
-                                <a href="#"><i class="fas fa-plug"></i> API</a>
-                            </li>
+                            <li><a href="#"><i class="fas fa-code-branch"></i> AtomGit</a></li>
+                            <li><a href="#"><i class="fas fa-book"></i> 开发文档</a></li>
+                            <li><a href="#"><i class="fas fa-plug"></i> API</a></li>
                         </ul>
                     </div>
                     <div class="footer-col">
@@ -917,26 +924,14 @@
                         <h4>联系</h4>
                         <ul>
                             <li><a href="#">联系我们</a></li>
-                            <li>
-                                <a href="#"
-                                    ><i class="fas fa-envelope"></i> 邮件</a
-                                >
-                            </li>
-                            <li>
-                                <a href="#"
-                                    ><i class="fas fa-comments"></i> 社区</a
-                                >
-                            </li>
+                            <li><a href="#"><i class="fas fa-envelope"></i> 邮件</a></li>
+                            <li><a href="#"><i class="fas fa-comments"></i> 社区</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>
-                        基于 <a href="#">开源贡献评估规范</a> 构建 | 版本 v1.0
-                    </p>
-                    <p style="margin-top: 8px; opacity: 0.7">
-                        OpenAtom Contributors Profile 2026
-                    </p>
+                    <p>基于 <a href="#">开源贡献评估规范</a> 构建 | 版本 v1.0</p>
+                    <p style="margin-top: 8px; opacity: 0.7">OpenAtom Contributors Profile 2026</p>
                 </div>
             </div>
         </footer>

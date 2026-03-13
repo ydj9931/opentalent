@@ -4,24 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>活动视角贡献者面板 - 2024 OpenAtom 开源黑客松</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #f97316;
-            --primary-dark: #ea580c;
-            --secondary: #8b5cf6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --bg-hover: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border: #334155;
+            /* Colors - Light Mode Flat Design */
+            --bg-page: #FFFFFF;
+            --bg-gray: #F3F4F6;
+            --bg-blue: #EFF6FF;
+            --bg-green: #ECFDF5;
+            --bg-amber: #FFFBEB;
+            --bg-purple: #F5F3FF;
+            --bg-orange: #FFF7ED;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --primary: #F97316;
+            --primary-dark: #EA580C;
+            --secondary: #8B5CF6;
+            --success: #10B981;
+            --accent: #F59E0B;
+            --border: #E5E7EB;
         }
 
         * {
@@ -31,45 +35,83 @@
         }
 
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background: var(--bg-dark);
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-page);
             color: var(--text-primary);
             line-height: 1.6;
         }
 
+        /* Background Decoration */
+        .page-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .page-decoration::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: var(--bg-orange);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
         .container {
-            max-width: 1600px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 32px;
+            position: relative;
+            z-index: 1;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #8b5cf6 100%);
-            padding: 40px 0;
-            margin-bottom: 30px;
-            border-radius: 0 0 24px 24px;
+            background: var(--bg-orange);
+            padding: 48px 0;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: rgba(249, 115, 22, 0.1);
+            border-radius: 50%;
         }
 
         .header-content {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
+            letter-spacing: -0.02em;
         }
 
         .header .activity-meta {
             display: flex;
-            gap: 20px;
+            gap: 24px;
             flex-wrap: wrap;
-            margin-top: 15px;
         }
 
         .header .meta-item {
@@ -77,23 +119,25 @@
             align-items: center;
             gap: 8px;
             font-size: 0.95rem;
-            color: rgba(255,255,255,0.9);
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
         .status-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 16px;
         }
 
         .status-badge.completed {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid #10b981;
+            background: var(--bg-green);
+            color: var(--success);
+            border: 2px solid var(--success);
         }
 
         /* Navigation */
@@ -102,28 +146,29 @@
             gap: 8px;
             margin-bottom: 24px;
             flex-wrap: wrap;
-            background: var(--bg-card);
+            background: var(--bg-gray);
             padding: 8px;
-            border-radius: 12px;
+            border-radius: 8px;
         }
 
         .nav-tab {
-            padding: 12px 20px;
+            padding: 12px 24px;
             border: none;
             background: transparent;
             color: var(--text-secondary);
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            border-radius: 6px;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-family: 'Outfit', sans-serif;
         }
 
         .nav-tab:hover {
-            background: var(--bg-hover);
+            background: var(--bg-page);
             color: var(--text-primary);
         }
 
@@ -132,78 +177,96 @@
             color: white;
         }
 
-        /* Cards */
+        /* Cards - Flat Design */
         .card {
-            background: var(--bg-card);
-            border-radius: 16px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 24px;
             margin-bottom: 24px;
-            border: 1px solid var(--border);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
         }
 
         .card-title {
             font-size: 1.25rem;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            letter-spacing: -0.01em;
         }
 
         .card-title i {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-orange);
             color: var(--primary);
+            border-radius: 6px;
         }
 
         /* KPI Grid */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
             margin-bottom: 24px;
         }
 
         .kpi-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .kpi-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
         }
 
-        .kpi-icon.teams { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-        .kpi-icon.participants { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .kpi-icon.projects { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-        .kpi-icon.prs { background: rgba(249, 115, 22, 0.2); color: #f97316; }
-        .kpi-icon.issues { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-        .kpi-icon.commits { background: rgba(236, 72, 153, 0.2); color: #ec4899; }
+        .kpi-icon.teams { background: var(--bg-blue); color: #3B82F6; }
+        .kpi-icon.participants { background: var(--bg-green); color: var(--success); }
+        .kpi-icon.projects { background: var(--bg-purple); color: var(--secondary); }
+        .kpi-icon.prs { background: var(--bg-orange); color: var(--primary); }
+        .kpi-icon.issues { background: var(--bg-amber); color: var(--accent); }
+        .kpi-icon.commits { background: #FDF2F8; color: #EC4899; }
 
         .kpi-content h3 {
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            color: var(--text-primary);
         }
 
         .kpi-content p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
         /* Timeline */
@@ -224,7 +287,7 @@
 
         .timeline-item {
             position: relative;
-            padding-bottom: 24px;
+            padding-bottom: 28px;
         }
 
         .timeline-item::before {
@@ -232,11 +295,11 @@
             position: absolute;
             left: -26px;
             top: 4px;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background: var(--bg-card);
-            border: 3px solid var(--primary);
+            background: var(--bg-page);
+            border: 3px solid var(--border);
         }
 
         .timeline-item.completed::before {
@@ -245,31 +308,33 @@
         }
 
         .timeline-item.completed .phase-status {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
+            background: var(--bg-green);
+            color: var(--success);
         }
 
         .timeline-content h4 {
             font-size: 1rem;
+            font-weight: 600;
             margin-bottom: 4px;
         }
 
         .timeline-content .time {
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-bottom: 6px;
+            font-size: 0.875rem;
+            margin-bottom: 8px;
         }
 
         .phase-status {
             display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
+            padding: 4px 12px;
+            border-radius: 4px;
             font-size: 0.75rem;
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
+            font-weight: 600;
+            background: var(--bg-amber);
+            color: var(--accent);
         }
 
-        /* Leaderboard */
+        /* Leaderboard Table */
         .leaderboard-table {
             width: 100%;
             border-collapse: collapse;
@@ -279,19 +344,20 @@
         .leaderboard-table td {
             padding: 14px 16px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 2px solid var(--border);
         }
 
         .leaderboard-table th {
             color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 0.85rem;
+            font-weight: 600;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
+            background: var(--bg-gray);
         }
 
         .leaderboard-table tr:hover {
-            background: var(--bg-hover);
+            background: var(--bg-gray);
         }
 
         .rank-badge {
@@ -300,15 +366,15 @@
             justify-content: center;
             width: 32px;
             height: 32px;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 700;
             font-size: 0.9rem;
         }
 
-        .rank-badge.gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b4b; }
-        .rank-badge.silver { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #1e293b; }
-        .rank-badge.bronze { background: linear-gradient(135deg, #fdba74, #ea580c); color: #1e1b4b; }
-        .rank-badge.normal { background: var(--bg-hover); color: var(--text-secondary); }
+        .rank-badge.gold { background: #FEF3C7; color: #D97706; }
+        .rank-badge.silver { background: #F3F4F6; color: #6B7280; }
+        .rank-badge.bronze { background: #FED7AA; color: #C2410C; }
+        .rank-badge.normal { background: var(--bg-gray); color: var(--text-secondary); }
 
         .contributor-info {
             display: flex;
@@ -319,8 +385,8 @@
         .contributor-avatar {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            background: var(--bg-hover);
+            border-radius: 6px;
+            background: var(--bg-gray);
         }
 
         .contributor-name {
@@ -334,39 +400,61 @@
         }
 
         .skill-tag {
-            padding: 3px 10px;
-            background: rgba(59, 130, 246, 0.15);
-            color: #60a5fa;
-            border-radius: 12px;
+            padding: 4px 10px;
+            background: var(--bg-blue);
+            color: #3B82F6;
+            border-radius: 4px;
             font-size: 0.75rem;
+            font-weight: 600;
         }
 
-        /* Team Leaderboard */
+        /* Team Card */
         .team-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .team-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.01);
+        }
+
+        .team-card:first-child {
+            background: #FEF3C7;
+            border-color: #FCD34D;
         }
 
         .team-rank {
             font-size: 1.5rem;
             font-weight: 700;
-            width: 50px;
+            width: 40px;
+            color: var(--text-secondary);
         }
 
+        .team-card:first-child .team-rank { color: #D97706; }
+
         .team-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
+            background: var(--bg-gray);
+            color: var(--text-secondary);
+        }
+
+        .team-card:first-child .team-icon {
+            background: #FCD34D;
+            color: #92400E;
         }
 
         .team-info {
@@ -375,12 +463,13 @@
 
         .team-info h4 {
             font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 4px;
         }
 
         .team-info p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.875rem;
         }
 
         .team-stats {
@@ -395,21 +484,32 @@
 
         .team-prs {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.875rem;
         }
 
         /* Project Cards */
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
 
         .project-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border);
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 0.2s ease;
+        }
+
+        .project-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .project-card:first-child {
+            border-color: #FCD34D;
+            background: #FFFBEB;
         }
 
         .project-header {
@@ -421,12 +521,12 @@
 
         .project-name {
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .project-team {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             margin-bottom: 8px;
         }
 
@@ -445,13 +545,13 @@
         .score-item {
             flex: 1;
             text-align: center;
-            padding: 10px;
-            background: var(--bg-hover);
-            border-radius: 8px;
+            padding: 12px;
+            background: var(--bg-gray);
+            border-radius: 6px;
         }
 
         .score-value {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--primary);
         }
@@ -466,7 +566,7 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 12px;
-            border-top: 1px solid var(--border);
+            border-top: 2px solid var(--border);
         }
 
         .project-stats {
@@ -478,23 +578,23 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             color: var(--text-secondary);
         }
 
         .project-status {
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 6px 14px;
+            border-radius: 4px;
             font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 700;
         }
 
-        .project-status.first { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
-        .project-status.second { background: rgba(156, 163, 175, 0.2); color: #9ca3af; }
-        .project-status.third { background: rgba(180, 83, 9, 0.2); color: #cd7f32; }
-        .project-status.honor { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .project-status.first { background: #FEF3C7; color: #D97706; }
+        .project-status.second { background: #F3F4F6; color: #6B7280; }
+        .project-status.third { background: #FED7AA; color: #C2410C; }
+        .project-status.honor { background: var(--bg-purple); color: var(--secondary); }
 
-        /* Skills */
+        /* Skills Cloud */
         .skills-cloud {
             display: flex;
             flex-wrap: wrap;
@@ -505,40 +605,47 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: var(--bg-hover);
-            border-radius: 20px;
+            padding: 10px 18px;
+            background: var(--bg-gray);
+            border-radius: 6px;
             font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .skill-item:hover {
+            background: var(--bg-blue);
+            color: #3B82F6;
         }
 
         .skill-count {
             background: var(--primary);
             color: white;
             padding: 2px 8px;
-            border-radius: 10px;
+            border-radius: 4px;
             font-size: 0.75rem;
-        }
-
-        /* Collaboration Network */
-        .network-container {
-            height: 400px;
-            position: relative;
+            font-weight: 600;
         }
 
         /* Milestones */
         .milestone-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
         }
 
         .milestone-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .milestone-card:hover {
+            border-color: var(--primary);
         }
 
         .milestone-card::before {
@@ -548,7 +655,7 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            background: var(--primary);
+            background: var(--accent);
         }
 
         .milestone-card.completed::before {
@@ -557,8 +664,9 @@
 
         .milestone-time {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .milestone-title {
@@ -575,33 +683,41 @@
         /* Achievements */
         .achievement-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(6, 1fr);
             gap: 16px;
         }
 
         .achievement-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
             text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .achievement-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .achievement-icon {
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             margin: 0 auto 12px;
-            border-radius: 50%;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--bg-orange);
+            color: var(--primary);
         }
 
         .achievement-name {
             font-weight: 600;
             margin-bottom: 4px;
+            font-size: 0.9rem;
         }
 
         .achievement-count {
@@ -612,19 +728,24 @@
         /* Summary */
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
         }
 
         .summary-item {
-            background: var(--bg-hover);
-            border-radius: 12px;
-            padding: 20px;
+            background: var(--bg-gray);
+            border-radius: 8px;
+            padding: 24px;
             text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .summary-item:hover {
+            background: var(--bg-blue);
         }
 
         .summary-value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 8px;
@@ -633,6 +754,7 @@
         .summary-label {
             color: var(--text-secondary);
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
         /* Charts */
@@ -648,48 +770,25 @@
             gap: 24px;
         }
 
-        @media (max-width: 768px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-        }
-
         /* Tracks */
         .tracks {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .track-tag {
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            background: rgba(249, 115, 22, 0.15);
-            color: #fb923c;
-            border: 1px solid rgba(249, 115, 22, 0.3);
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            background: var(--bg-orange);
+            color: var(--primary);
+            border: 2px solid rgba(249, 115, 22, 0.3);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .kpi-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .leaderboard-table {
-                font-size: 0.85rem;
-            }
-
-            .nav-tabs {
-                overflow-x: auto;
-            }
-        }
-
+        /* Section */
         .section {
             display: none;
         }
@@ -697,18 +796,100 @@
         .section.active {
             display: block;
         }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--bg-gray);
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .kpi-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            .milestone-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .achievement-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .milestone-grid {
+                grid-template-columns: 1fr;
+            }
+            .achievement-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .nav-tabs {
+                overflow-x: auto;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="page-decoration"></div>
+
     <div class="header">
-        <div class="header-content">
-            <span class="status-badge completed"><i class="fas fa-check-circle"></i> 已结束</span>
-            <h1><i class="fas fa-laptop-code"></i> 2024 OpenAtom 开源黑客松</h1>
-            <div class="activity-meta">
-                <div class="meta-item"><i class="fas fa-calendar"></i> 2024-12-14 ~ 2024-12-16</div>
-                <div class="meta-item"><i class="fas fa-clock"></i> 48小时</div>
-                <div class="meta-item"><i class="fas fa-map-marker-alt"></i> 线上 + 北京线下</div>
-                <div class="meta-item"><i class="fas fa-users"></i> 156人 / 32团队</div>
+        <div class="container">
+            <div class="header-content">
+                <span class="status-badge completed"><i class="fas fa-check-circle"></i> 已结束</span>
+                <h1><i class="fas fa-laptop-code"></i> 2024 OpenAtom 开源黑客松</h1>
+                <div class="activity-meta">
+                    <div class="meta-item"><i class="fas fa-calendar"></i> 2024-12-14 ~ 2024-12-16</div>
+                    <div class="meta-item"><i class="fas fa-clock"></i> 48小时</div>
+                    <div class="meta-item"><i class="fas fa-map-marker-alt"></i> 线上 + 北京线下</div>
+                    <div class="meta-item"><i class="fas fa-users"></i> 156人 / 32团队</div>
+                </div>
             </div>
         </div>
     </div>
@@ -944,9 +1125,9 @@
                     <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-users"></i> 团队贡献排行</h3>
                     </div>
-                    <div class="team-card" style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));">
-                        <div class="team-rank" style="color: #fbbf24;">1</div>
-                        <div class="team-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b4b;"><i class="fas fa-crown"></i></div>
+                    <div class="team-card">
+                        <div class="team-rank">1</div>
+                        <div class="team-icon"><i class="fas fa-crown"></i></div>
                         <div class="team-info">
                             <h4>AI先锋队</h4>
                             <p>5人 · AI代码助手</p>
@@ -957,8 +1138,8 @@
                         </div>
                     </div>
                     <div class="team-card">
-                        <div class="team-rank" style="color: #9ca3af;">2</div>
-                        <div class="team-icon" style="background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #1e293b;"><i class="fas fa-medal"></i></div>
+                        <div class="team-rank">2</div>
+                        <div class="team-icon"><i class="fas fa-medal"></i></div>
                         <div class="team-info">
                             <h4>安全卫士</h4>
                             <p>4人 · 漏洞扫描工具</p>
@@ -969,8 +1150,8 @@
                         </div>
                     </div>
                     <div class="team-card">
-                        <div class="team-rank" style="color: #cd7f32;">3</div>
-                        <div class="team-icon" style="background: linear-gradient(135deg, #fdba74, #ea580c); color: #1e1b4b;"><i class="fas fa-award"></i></div>
+                        <div class="team-rank">3</div>
+                        <div class="team-icon"><i class="fas fa-award"></i></div>
                         <div class="team-info">
                             <h4>云端探索者</h4>
                             <p>5人 · 云原生监控平台</p>
@@ -982,7 +1163,7 @@
                     </div>
                     <div class="team-card">
                         <div class="team-rank">4</div>
-                        <div class="team-icon" style="background: var(--bg-hover);"><i class="fas fa-code"></i></div>
+                        <div class="team-icon"><i class="fas fa-code"></i></div>
                         <div class="team-info">
                             <h4>教育创新</h4>
                             <p>4人 · 在线编程教育平台</p>
@@ -994,7 +1175,7 @@
                     </div>
                     <div class="team-card">
                         <div class="team-rank">5</div>
-                        <div class="team-icon" style="background: var(--bg-hover);"><i class="fas fa-code"></i></div>
+                        <div class="team-icon"><i class="fas fa-code"></i></div>
                         <div class="team-info">
                             <h4>创新之星</h4>
                             <p>5人 · 开源社区助手</p>
@@ -1015,7 +1196,7 @@
                     <h3 class="card-title"><i class="fas fa-trophy"></i> 获奖项目</h3>
                 </div>
                 <div class="project-grid">
-                    <div class="project-card" style="border-color: #fbbf24;">
+                    <div class="project-card">
                         <div class="project-header">
                             <div>
                                 <div class="project-name">AI代码助手</div>
@@ -1047,7 +1228,7 @@
                         </div>
                     </div>
 
-                    <div class="project-card" style="border-color: #9ca3af;">
+                    <div class="project-card">
                         <div class="project-header">
                             <div>
                                 <div class="project-name">漏洞扫描工具</div>
@@ -1079,7 +1260,7 @@
                         </div>
                     </div>
 
-                    <div class="project-card" style="border-color: #9ca3af;">
+                    <div class="project-card">
                         <div class="project-header">
                             <div>
                                 <div class="project-name">云原生监控平台</div>
@@ -1139,38 +1320,6 @@
                                 <span class="project-stat"><i class="fas fa-code-branch"></i> 45</span>
                                 <span class="project-stat"><i class="fas fa-bug"></i> 12</span>
                                 <span class="project-stat"><i class="fas fa-star"></i> 45</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-header">
-                            <div>
-                                <div class="project-name">开源社区助手</div>
-                                <div class="project-team">创新之星 · AI创新赛道</div>
-                            </div>
-                            <span class="project-status honor">优秀奖</span>
-                        </div>
-                        <p class="project-desc">基于AI的开源项目贡献引导工具</p>
-                        <div class="project-scores">
-                            <div class="score-item">
-                                <div class="score-value">78</div>
-                                <div class="score-label">创新性</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">75</div>
-                                <div class="score-label">复杂度</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">77</div>
-                                <div class="score-label">技术性</div>
-                            </div>
-                        </div>
-                        <div class="project-footer">
-                            <div class="project-stats">
-                                <span class="project-stat"><i class="fas fa-code-branch"></i> 38</span>
-                                <span class="project-stat"><i class="fas fa-bug"></i> 10</span>
-                                <span class="project-stat"><i class="fas fa-star"></i> 32</span>
                             </div>
                         </div>
                     </div>
@@ -1330,27 +1479,27 @@
                         <div class="achievement-count">145 人获得</div>
                     </div>
                     <div class="achievement-card">
-                        <div class="achievement-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="fas fa-bug"></i></div>
+                        <div class="achievement-icon" style="background: #FEE2E2; color: #DC2626;"><i class="fas fa-bug"></i></div>
                         <div class="achievement-name">Bug猎人</div>
                         <div class="achievement-count">67 人获得</div>
                     </div>
                     <div class="achievement-card">
-                        <div class="achievement-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fas fa-users"></i></div>
+                        <div class="achievement-icon" style="background: var(--bg-blue); color: #3B82F6;"><i class="fas fa-users"></i></div>
                         <div class="achievement-name">团队协作</div>
                         <div class="achievement-count">89 人获得</div>
                     </div>
                     <div class="achievement-card">
-                        <div class="achievement-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-eye"></i></div>
+                        <div class="achievement-icon" style="background: var(--bg-green); color: #059669;"><i class="fas fa-eye"></i></div>
                         <div class="achievement-name">代码审查</div>
                         <div class="achievement-count">123 人获得</div>
                     </div>
                     <div class="achievement-card">
-                        <div class="achievement-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"><i class="fas fa-file-alt"></i></div>
+                        <div class="achievement-icon" style="background: var(--bg-purple); color: #7C3AED;"><i class="fas fa-file-alt"></i></div>
                         <div class="achievement-name">文档贡献</div>
                         <div class="achievement-count">45 人获得</div>
                     </div>
                     <div class="achievement-card">
-                        <div class="achievement-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-lightbulb"></i></div>
+                        <div class="achievement-icon" style="background: var(--bg-amber); color: #D97706;"><i class="fas fa-lightbulb"></i></div>
                         <div class="achievement-name">创新之星</div>
                         <div class="achievement-count">28 人获得</div>
                     </div>
@@ -1415,12 +1564,12 @@
                         <h3 class="card-title"><i class="fas fa-download"></i> 导出报告</h3>
                     </div>
                     <div style="text-align: center; padding: 40px 0;">
-                        <p style="color: var(--text-secondary); margin-bottom: 20px;">导出活动数据用于进一步分析</p>
-                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                            <button style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">
+                        <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 1rem;">导出活动数据用于进一步分析</p>
+                        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                            <button class="btn btn-primary">
                                 <i class="fas fa-file-pdf"></i> 导出 PDF 报告
                             </button>
-                            <button style="padding: 12px 24px; background: var(--bg-hover); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 1rem;">
+                            <button class="btn btn-secondary">
                                 <i class="fas fa-file-csv"></i> 导出 CSV 数据
                             </button>
                         </div>
@@ -1438,7 +1587,6 @@
             document.getElementById(sectionId).classList.add('active');
             event.target.closest('.nav-tab').classList.add('active');
 
-            // Initialize charts when section is shown
             if (sectionId === 'overview') initOverviewCharts();
             if (sectionId === 'skills') initSkillsChart();
             if (sectionId === 'network') initNetworkChart();
@@ -1451,7 +1599,6 @@
             if (overviewChartsInitialized) return;
             overviewChartsInitialized = true;
 
-            // Contribution Trend Chart
             const trendCtx = document.getElementById('contributionTrend');
             if (trendCtx) {
                 new Chart(trendCtx, {
@@ -1461,14 +1608,14 @@
                         datasets: [{
                             label: 'PR提交',
                             data: [12, 35, 48, 78, 102, 125, 156, 180],
-                            borderColor: '#f97316',
+                            borderColor: '#F97316',
                             backgroundColor: 'rgba(249, 115, 22, 0.1)',
                             fill: true,
                             tension: 0.4
                         }, {
                             label: 'Issue提交',
                             data: [5, 15, 22, 38, 52, 65, 78, 89],
-                            borderColor: '#3b82f6',
+                            borderColor: '#3B82F6',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             fill: true,
                             tension: 0.4
@@ -1478,11 +1625,11 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { labels: { color: '#94a3b8' } }
+                            legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } }
                         },
                         scales: {
-                            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                            x: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } },
+                            y: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } }
                         }
                     }
                 });
@@ -1503,8 +1650,8 @@
                         datasets: [{
                             data: [68, 45, 32, 18, 28, 35, 38, 42, 22, 15],
                             backgroundColor: [
-                                '#3b82f6', '#10b981', '#f97316', '#8b5cf6', '#ec4899',
-                                '#06b6d4', '#f59e0b', '#ef4444', '#14b8a6', '#6366f1'
+                                '#3B82F6', '#10B981', '#F97316', '#8B5CF6', '#EC4899',
+                                '#06B6D4', '#F59E0B', '#EF4444', '#14B8A6', '#6366F1'
                             ]
                         }]
                     },
@@ -1512,7 +1659,7 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { position: 'right', labels: { color: '#94a3b8' } }
+                            legend: { position: 'right', labels: { color: '#6B7280', font: { family: 'Outfit' } } }
                         }
                     }
                 });
@@ -1534,27 +1681,27 @@
                             label: '团队贡献',
                             data: [268, 245, 232, 218, 195],
                             backgroundColor: 'rgba(249, 115, 22, 0.2)',
-                            borderColor: '#f97316',
-                            pointBackgroundColor: '#f97316'
+                            borderColor: '#F97316',
+                            pointBackgroundColor: '#F97316'
                         }, {
                             label: '团队协作',
                             data: [180, 200, 220, 190, 160],
                             backgroundColor: 'rgba(139, 92, 246, 0.2)',
-                            borderColor: '#8b5cf6',
-                            pointBackgroundColor: '#8b5cf6'
+                            borderColor: '#8B5CF6',
+                            pointBackgroundColor: '#8B5CF6'
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { labels: { color: '#94a3b8' } }
+                            legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } }
                         },
                         scales: {
                             r: {
-                                angleLines: { color: '#334155' },
-                                grid: { color: '#334155' },
-                                pointLabels: { color: '#f1f5f9', font: { size: 14 } },
+                                angleLines: { color: '#E5E7EB' },
+                                grid: { color: '#E5E7EB' },
+                                pointLabels: { color: '#111827', font: { size: 14, family: 'Outfit' } },
                                 ticks: { display: false }
                             }
                         }
@@ -1577,25 +1724,24 @@
                         datasets: [{
                             label: '团队数',
                             data: [12, 8, 6, 6],
-                            backgroundColor: ['#3b82f6', '#10b981', '#f97316', '#8b5cf6']
+                            backgroundColor: ['#3B82F6', '#10B981', '#F97316', '#8B5CF6']
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { labels: { color: '#94a3b8' } }
+                            legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } }
                         },
                         scales: {
-                            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                            x: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } },
+                            y: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } }
                         }
                     }
                 });
             }
         }
 
-        // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
             initOverviewCharts();
         });

@@ -4,23 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>地方政府视角开源贡献者面板 - 深圳市</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
-            --secondary: #6366f1;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --bg-hover: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border: #334155;
+            --bg-page: #FFFFFF;
+            --bg-gray: #F3F4F6;
+            --bg-hover: #E5E7EB;
+            --primary: #3B82F6;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --border-dark: #D1D5DB;
         }
 
         * {
@@ -30,45 +29,100 @@
         }
 
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background: var(--bg-dark);
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-page);
             color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Geometric Background Decorations */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 50%;
+            z-index: -1;
         }
 
         .container {
             max-width: 1600px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #6366f1 100%);
-            padding: 40px 0;
-            margin-bottom: 30px;
-            border-radius: 0 0 24px 24px;
+            background: var(--primary);
+            padding: 48px 0;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
         }
 
         .header-content {
             max-width: 1600px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
+            color: #FFFFFF;
         }
 
         .header .region-meta {
             display: flex;
-            gap: 20px;
+            gap: 24px;
             flex-wrap: wrap;
-            margin-top: 15px;
+            margin-top: 16px;
         }
 
         .header .meta-item {
@@ -82,12 +136,12 @@
         /* Navigation */
         .nav-tabs {
             display: flex;
-            gap: 8px;
+            gap: 4px;
             margin-bottom: 24px;
             flex-wrap: wrap;
-            background: var(--bg-card);
-            padding: 8px;
-            border-radius: 12px;
+            background: var(--bg-gray);
+            padding: 4px;
+            border-radius: 8px;
         }
 
         .nav-tab {
@@ -97,31 +151,39 @@
             color: var(--text-secondary);
             font-size: 0.95rem;
             font-weight: 500;
+            font-family: 'Outfit', sans-serif;
             cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            border-radius: 6px;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .nav-tab:hover {
-            background: var(--bg-hover);
+            background: var(--bg-page);
             color: var(--text-primary);
         }
 
         .nav-tab.active {
-            background: var(--primary);
-            color: white;
+            background: var(--bg-page);
+            color: var(--primary);
+            border: 2px solid var(--border);
+            border-bottom-color: var(--bg-page);
         }
 
         /* Cards */
         .card {
-            background: var(--bg-card);
-            border-radius: 16px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 24px;
             margin-bottom: 24px;
-            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
         }
 
         .card-header {
@@ -129,6 +191,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
         }
 
         .card-title {
@@ -146,47 +210,66 @@
         /* KPI Grid */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
             margin-bottom: 24px;
         }
 
+        @media (max-width: 1200px) {
+            .kpi-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         .kpi-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
         }
 
         .kpi-icon {
             width: 56px;
             height: 56px;
-            border-radius: 12px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            border: 2px solid;
         }
 
-        .kpi-icon.contributors { background: rgba(14, 165, 233, 0.2); color: #0ea5e9; }
-        .kpi-icon.active { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .kpi-icon.core { background: rgba(99, 102, 241, 0.2); color: #6366f1; }
-        .kpi-icon.orgs { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-        .kpi-icon.projects { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-        .kpi-icon.prs { background: rgba(236, 72, 153, 0.2); color: #ec4899; }
+        .kpi-icon.contributors { background: rgba(59, 130, 246, 0.1); color: #3B82F6; border-color: #3B82F6; }
+        .kpi-icon.active { background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: #10B981; }
+        .kpi-icon.core { background: rgba(139, 92, 246, 0.1); color: #8B5CF6; border-color: #8B5CF6; }
+        .kpi-icon.orgs { background: rgba(245, 158, 11, 0.1); color: #F59E0B; border-color: #F59E0B; }
+        .kpi-icon.projects { background: rgba(236, 72, 153, 0.1); color: #EC4899; border-color: #EC4899; }
+        .kpi-icon.prs { background: rgba(14, 165, 233, 0.1); color: #0EA5E9; border-color: #0EA5E9; }
 
         .kpi-content h3 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             margin-bottom: 4px;
         }
 
         .kpi-content p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* Charts Grid */
@@ -211,6 +294,7 @@
         .chart-container {
             height: 300px;
             margin-top: 16px;
+            position: relative;
         }
 
         /* Organization Distribution */
@@ -221,22 +305,22 @@
             margin-bottom: 24px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .org-type-cards {
                 grid-template-columns: 1fr;
             }
         }
 
         .org-type-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
         }
 
-        .org-type-card.university { border-top: 4px solid #3b82f6; }
-        .org-type-card.enterprise { border-top: 4px solid #10b981; }
-        .org-type-card.independent { border-top: 4px solid #f59e0b; }
+        .org-type-card.university { border-top: 4px solid #3B82F6; }
+        .org-type-card.enterprise { border-top: 4px solid #10B981; }
+        .org-type-card.independent { border-top: 4px solid #F59E0B; }
 
         .org-type-header {
             display: flex;
@@ -246,18 +330,19 @@
         }
 
         .org-type-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            border: 2px solid;
         }
 
-        .university .org-type-icon { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-        .enterprise .org-type-icon { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .independent .org-type-icon { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .university .org-type-icon { background: rgba(59, 130, 246, 0.1); color: #3B82F6; border-color: #3B82F6; }
+        .enterprise .org-type-icon { background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: #10B981; }
+        .independent .org-type-icon { background: rgba(245, 158, 11, 0.1); color: #F59E0B; border-color: #F59E0B; }
 
         .org-type-title {
             font-size: 1.1rem;
@@ -273,6 +358,9 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 12px;
+            padding: 12px;
+            background: var(--bg-gray);
+            border-radius: 6px;
         }
 
         .org-stat {
@@ -293,7 +381,7 @@
         .top-orgs {
             margin-top: 16px;
             padding-top: 16px;
-            border-top: 1px solid var(--border);
+            border-top: 2px solid var(--border);
         }
 
         .top-orgs-title {
@@ -337,16 +425,17 @@
 
         .domain-bar-container {
             flex: 1;
-            height: 28px;
-            background: var(--bg-hover);
-            border-radius: 14px;
+            height: 32px;
+            background: var(--bg-gray);
+            border-radius: 4px;
             overflow: hidden;
             position: relative;
+            border: 2px solid var(--border);
         }
 
         .domain-bar {
             height: 100%;
-            border-radius: 14px;
+            border-radius: 2px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
@@ -356,33 +445,33 @@
             transition: width 0.5s ease;
         }
 
-        .domain-bar.ai { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-        .domain-bar.cloud { background: linear-gradient(90deg, #10b981, #34d399); }
-        .domain-bar.iot { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-        .domain-bar.blockchain { background: linear-gradient(90deg, #ef4444, #f87171); }
-        .domain-bar.bigdata { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
-        .domain-bar.security { background: linear-gradient(90deg, #ec4899, #f472b6); }
-        .domain-bar.embedded { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
-        .domain-bar.frontend { background: linear-gradient(90deg, #6366f1, #818cf8); }
-        .domain-bar.database { background: linear-gradient(90deg, #84cc16, #a3e635); }
-        .domain-bar.devops { background: linear-gradient(90deg, #f97316, #fb923c); }
+        .domain-bar.ai { background: #3B82F6; color: #FFFFFF; }
+        .domain-bar.cloud { background: #10B981; color: #FFFFFF; }
+        .domain-bar.iot { background: #F59E0B; color: #FFFFFF; }
+        .domain-bar.blockchain { background: #EF4444; color: #FFFFFF; }
+        .domain-bar.bigdata { background: #8B5CF6; color: #FFFFFF; }
+        .domain-bar.security { background: #EC4899; color: #FFFFFF; }
+        .domain-bar.embedded { background: #06B6D4; color: #FFFFFF; }
+        .domain-bar.frontend { background: #6366F1; color: #FFFFFF; }
+        .domain-bar.database { background: #84CC16; color: #FFFFFF; }
+        .domain-bar.devops { background: #F97316; color: #FFFFFF; }
 
         .domain-meta {
-            width: 80px;
+            width: 100px;
             text-align: right;
+            font-size: 0.8rem;
         }
 
         .domain-active {
-            font-size: 0.8rem;
-            color: var(--success);
+            color: var(--secondary);
+            font-weight: 500;
         }
 
         .domain-trend {
-            font-size: 0.8rem;
             margin-left: 8px;
         }
 
-        .domain-trend.up { color: var(--success); }
+        .domain-trend.up { color: var(--secondary); }
         .domain-trend.down { color: var(--danger); }
         .domain-trend.stable { color: var(--text-secondary); }
 
@@ -400,13 +489,13 @@
         }
 
         .sw-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
         }
 
-        .sw-card.advantage { border-left: 4px solid var(--success); }
+        .sw-card.advantage { border-left: 4px solid var(--secondary); }
         .sw-card.weakness { border-left: 4px solid var(--danger); }
 
         .sw-title {
@@ -418,7 +507,7 @@
             gap: 8px;
         }
 
-        .advantage .sw-title { color: var(--success); }
+        .advantage .sw-title { color: var(--secondary); }
         .weakness .sw-title { color: var(--danger); }
 
         .sw-list {
@@ -429,8 +518,9 @@
 
         .sw-tag {
             padding: 8px 16px;
-            background: var(--bg-hover);
-            border-radius: 20px;
+            background: var(--bg-gray);
+            border: 2px solid var(--border);
+            border-radius: 4px;
             font-size: 0.9rem;
         }
 
@@ -444,19 +534,20 @@
         .talent-table td {
             padding: 14px 16px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 2px solid var(--border);
         }
 
         .talent-table th {
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            background: var(--bg-gray);
         }
 
         .talent-table tr:hover {
-            background: var(--bg-hover);
+            background: var(--bg-gray);
         }
 
         .talent-info {
@@ -469,7 +560,8 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--bg-hover);
+            background: var(--bg-gray);
+            border: 2px solid var(--border);
         }
 
         .talent-name {
@@ -486,13 +578,14 @@
             align-items: center;
             gap: 4px;
             padding: 4px 10px;
-            border-radius: 12px;
+            border-radius: 4px;
             font-size: 0.75rem;
+            border: 2px solid;
         }
 
-        .org-badge.university { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-        .org-badge.enterprise { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-        .org-badge.independent { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .org-badge.university { background: rgba(59, 130, 246, 0.1); color: #3B82F6; border-color: #3B82F6; }
+        .org-badge.enterprise { background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: #10B981; }
+        .org-badge.independent { background: rgba(245, 158, 11, 0.1); color: #F59E0B; border-color: #F59E0B; }
 
         .influence-score {
             display: flex;
@@ -502,10 +595,11 @@
 
         .score-bar {
             width: 60px;
-            height: 6px;
-            background: var(--bg-hover);
-            border-radius: 3px;
+            height: 8px;
+            background: var(--bg-gray);
+            border-radius: 4px;
             overflow: hidden;
+            border: 1px solid var(--border);
         }
 
         .score-fill {
@@ -522,24 +616,37 @@
 
         .skill-tag {
             padding: 3px 10px;
-            background: rgba(14, 165, 233, 0.15);
-            color: #38bdf8;
-            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+            border-radius: 4px;
             font-size: 0.75rem;
+            border: 1px solid #3B82F6;
         }
 
         /* Projects */
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
 
+        @media (max-width: 1024px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .project-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-page);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .project-card:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
         }
 
         .project-header {
@@ -576,8 +683,9 @@
             flex: 1;
             text-align: center;
             padding: 10px;
-            background: var(--bg-hover);
-            border-radius: 8px;
+            background: var(--bg-gray);
+            border-radius: 4px;
+            border: 2px solid var(--border);
         }
 
         .score-value {
@@ -596,7 +704,7 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 12px;
-            border-top: 1px solid var(--border);
+            border-top: 2px solid var(--border);
         }
 
         .project-stats {
@@ -615,7 +723,7 @@
         .total-score {
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--success);
+            color: var(--secondary);
         }
 
         /* Network */
@@ -626,27 +734,35 @@
         /* Summary */
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
 
+        @media (max-width: 1024px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         .summary-item {
-            background: var(--bg-hover);
-            border-radius: 12px;
+            background: var(--bg-gray);
+            border: 2px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
             text-align: center;
         }
 
         .summary-value {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 8px;
         }
 
         .summary-label {
-            color: var(--text-secondary);
+            color: var(--text-primary);
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .summary-year {
@@ -911,7 +1027,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong style="color: #fbbf24;">1</strong></td>
+                            <td><strong style="color: #F59E0B;">1</strong></td>
                             <td>
                                 <div class="talent-info">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWeiSZ" class="talent-avatar" alt="avatar">
@@ -938,7 +1054,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><strong style="color: #94a3b8;">2</strong></td>
+                            <td><strong style="color: #6B7280;">2</strong></td>
                             <td>
                                 <div class="talent-info">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiMingSZ" class="talent-avatar" alt="avatar">
@@ -965,7 +1081,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><strong style="color: #cd7f32;">3</strong></td>
+                            <td><strong style="color: #CD7F32;">3</strong></td>
                             <td>
                                 <div class="talent-info">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=WangFangSZ" class="talent-avatar" alt="avatar">
@@ -1057,7 +1173,7 @@
                     <h3 class="card-title"><i class="fas fa-trophy"></i> 关键项目影响力评估</h3>
                 </div>
                 <div class="project-grid">
-                    <div class="project-card" style="border-color: #fbbf24;">
+                    <div class="project-card" style="border-color: #F59E0B;">
                         <div class="project-header">
                             <div>
                                 <div class="project-name">OpenHarmony</div>
@@ -1352,7 +1468,7 @@
                     <div class="domain-item">
                         <span class="domain-name">数据库</span>
                         <div class="domain-bar-container">
-                            <div class="domain-bar" style="width: 32%; background: linear-gradient(90deg, #84cc16, #a3e635);">156人</div>
+                            <div class="domain-bar database" style="width: 32%;">156人</div>
                         </div>
                         <div class="domain-meta">
                             <span class="domain-active">55%活跃</span>
@@ -1452,17 +1568,17 @@
                             {
                                 label: '核心贡献者',
                                 data: [180, 245, 320, 398, 456],
-                                backgroundColor: '#6366f1'
+                                backgroundColor: '#8B5CF6'
                             },
                             {
                                 label: '活跃贡献者',
                                 data: [450, 620, 850, 1080, 1280],
-                                backgroundColor: '#0ea5e9'
+                                backgroundColor: '#3B82F6'
                             },
                             {
                                 label: '总贡献者',
                                 data: [820, 1150, 1680, 2250, 2850],
-                                backgroundColor: '#334155'
+                                backgroundColor: '#E5E7EB'
                             }
                         ]
                     },
@@ -1470,11 +1586,11 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { labels: { color: '#94a3b8' } }
+                            legend: { labels: { color: '#6B7280' } }
                         },
                         scales: {
-                            x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                            y: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                            x: { stacked: true, ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } },
+                            y: { stacked: true, ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } }
                         }
                     }
                 });
@@ -1489,14 +1605,16 @@
                         labels: ['企业 (51%)', '高校 (30%)', '独立开发者 (19%)'],
                         datasets: [{
                             data: [51, 30, 19],
-                            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b']
+                            backgroundColor: ['#10B981', '#3B82F6', '#F59E0B'],
+                            borderWidth: 2,
+                            borderColor: '#FFFFFF'
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { position: 'right', labels: { color: '#94a3b8' } }
+                            legend: { position: 'right', labels: { color: '#6B7280' } }
                         }
                     }
                 });
@@ -1524,28 +1642,30 @@
                         datasets: [{
                             label: '核心贡献者',
                             data: [78, 62, 52, 45, 32, 22],
-                            backgroundColor: 'rgba(14, 165, 233, 0.2)',
-                            borderColor: '#0ea5e9',
-                            pointBackgroundColor: '#0ea5e9'
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderColor: '#3B82F6',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#3B82F6'
                         }, {
                             label: '项目数',
                             data: [68, 52, 45, 38, 28, 18],
-                            backgroundColor: 'rgba(99, 102, 241, 0.2)',
-                            borderColor: '#6366f1',
-                            pointBackgroundColor: '#6366f1'
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            borderColor: '#8B5CF6',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#8B5CF6'
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { labels: { color: '#94a3b8' } }
+                            legend: { labels: { color: '#6B7280' } }
                         },
                         scales: {
                             r: {
-                                angleLines: { color: '#334155' },
-                                grid: { color: '#334155' },
-                                pointLabels: { color: '#f1f5f9', font: { size: 12 } },
+                                angleLines: { color: '#E5E7EB' },
+                                grid: { color: '#E5E7EB' },
+                                pointLabels: { color: '#111827', font: { size: 12 } },
                                 ticks: { display: false }
                             }
                         }
