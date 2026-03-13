@@ -1,0 +1,319 @@
+{
+  "community": {
+    "id": "comm-001",
+    "name": "CANN异构计算社区",
+    "description": "华为昇腾CANN异构计算生态",
+    "type": "Foundation SIG",
+    "established": "2022-01-01",
+    "website": "https://www.huawei.com/cann"
+  },
+  "dashboard": {
+    "overview": {
+      "total_contributors": 268,
+      "active_contributors_30d": 89,
+      "active_contributors_90d": 156,
+      "active_contributors_180d": 198,
+      "new_contributors": 45,
+      "lost_contributors": 12,
+      "total_organizations": 28,
+      "active_projects": 15,
+      "total_prs": 4567,
+      "total_issues": 2345,
+      "total_commits": 12345
+    },
+    "contribution_trend": [
+      {"month": "2024-01", "contributors": 180, "prs": 320, "issues": 180},
+      {"month": "2024-02", "contributors": 195, "prs": 350, "issues": 195},
+      {"month": "2024-03", "contributors": 210, "prs": 380, "issues": 220},
+      {"month": "2024-04", "contributors": 225, "prs": 420, "issues": 240},
+      {"month": "2024-05", "contributors": 238, "prs": 450, "issues": 265},
+      {"month": "2024-06", "contributors": 245, "prs": 480, "issues": 280},
+      {"month": "2024-07", "contributors": 250, "prs": 510, "issues": 295},
+      {"month": "2024-08", "contributors": 255, "prs": 535, "issues": 310},
+      {"month": "2024-09", "contributors": 258, "prs": 560, "issues": 325},
+      {"month": "2024-10", "contributors": 262, "prs": 590, "issues": 345},
+      {"month": "2024-11", "contributors": 265, "prs": 620, "issues": 360},
+      {"month": "2024-12", "contributors": 268, "prs": 650, "issues": 380}
+    ],
+    "contribution_types": {
+      "code_prs": 3200,
+      "docs_prs": 890,
+      "issues": 2345,
+      "reviews": 4567,
+      "comments": 12340
+    },
+    "health_score": {
+      "total": 85,
+      "contribution": 88,
+      "activity": 82,
+      "retention": 80,
+      "collaboration": 85,
+      "security": 90
+    },
+    "risk_indicators": {
+      "dependency_risk": 35,
+      "retention_risk": 25,
+      "security_risk": 15,
+      "project_risk": 20
+    }
+  },
+  "organizations": [
+    {
+      "id": "org-001",
+      "name": "华为技术有限公司",
+      "type": "企业",
+      "contributors": 68,
+      "contribution_ratio": 25.4,
+      "prs": 1156,
+      "maintainers": 5,
+      "retention_rate": 92,
+      "trend": "stable"
+    },
+    {
+      "id": "org-002",
+      "name": "清华大学",
+      "type": "高校",
+      "contributors": 45,
+      "contribution_ratio": 16.8,
+      "prs": 780,
+      "maintainers": 3,
+      "retention_rate": 88,
+      "trend": "up"
+    },
+    {
+      "id": "org-003",
+      "name": "阿里巴巴",
+      "type": "企业",
+      "contributors": 38,
+      "contribution_ratio": 14.2,
+      "prs": 650,
+      "maintainers": 2,
+      "retention_rate": 85,
+      "trend": "up"
+    },
+    {
+      "id": "org-004",
+      "name": "北京大学",
+      "type": "高校",
+      "contributors": 32,
+      "contribution_ratio": 11.9,
+      "prs": 540,
+      "maintainers": 2,
+      "retention_rate": 90,
+      "trend": "stable"
+    },
+    {
+      "id": "org-005",
+      "name": "麒麟软件",
+      "type": "企业",
+      "contributors": 28,
+      "contribution_ratio": 10.4,
+      "prs": 478,
+      "maintainers": 1,
+      "retention_rate": 78,
+      "trend": "down"
+    },
+    {
+      "id": "org-006",
+      "name": "其他",
+      "type": "其他",
+      "contributors": 57,
+      "contribution_ratio": 21.3,
+      "prs": 963,
+      "maintainers": 3,
+      "retention_rate": 72,
+      "trend": "stable"
+    }
+  ],
+  "contributor_lifecycle": {
+    "funnel": {
+      "new_contributors": 120,
+      "active_30d": 89,
+      "active_90d": 56,
+      "active_180d": 38,
+      "core_contributors": 22
+    },
+    "retention_by_quarter": [
+      {"quarter": "2023-Q1", "rate": 72},
+      {"quarter": "2023-Q2", "rate": 75},
+      {"quarter": "2023-Q3", "rate": 78},
+      {"quarter": "2023-Q4", "rate": 80},
+      {"quarter": "2024-Q1", "rate": 82},
+      {"quarter": "2024-Q2", "rate": 85}
+    ],
+    "lifecycle_distribution": [
+      {"stage": "新手(<3月)", "count": 85, "percentage": 31.7},
+      {"stage": "成长期(3-12月)", "count": 102, "percentage": 38.1},
+      {"stage": "稳定期(1-2年)", "count": 52, "percentage": 19.4},
+      {"stage": "核心(>2年)", "count": 29, "percentage": 10.8}
+    ],
+    "churn_risk": [
+      {"risk_level": "high", "count": 12, "contributors": ["张三", "李四", "王五"]},
+      {"risk_level": "medium", "count": 28, "contributors": []},
+      {"risk_level": "low", "count": 218, "contributors": []}
+    ]
+  },
+  "project_health": [
+    {
+      "id": "proj-001",
+      "name": "cloud-native-runtime",
+      "contributors": 68,
+      "prs": 1234,
+      "issues": 567,
+      "merge_rate": 95,
+      "avg_pr_time": "1.2天",
+      "avg_issue_time": "2.5天",
+      "health_score": 88,
+      "last_activity": "2024-12-20"
+    },
+    {
+      "id": "proj-002",
+      "name": "container-security",
+      "contributors": 32,
+      "prs": 456,
+      "issues": 234,
+      "merge_rate": 92,
+      "avg_pr_time": "1.8天",
+      "avg_issue_time": "3.2天",
+      "health_score": 82,
+      "last_activity": "2024-12-18"
+    },
+    {
+      "id": "proj-003",
+      "name": "k8s-operator",
+      "contributors": 45,
+      "prs": 678,
+      "issues": 345,
+      "merge_rate": 89,
+      "avg_pr_time": "2.1天",
+      "avg_issue_time": "4.0天",
+      "health_score": 78,
+      "last_activity": "2024-12-15"
+    },
+    {
+      "id": "proj-004",
+      "name": "service-mesh",
+      "contributors": 28,
+      "prs": 234,
+      "issues": 156,
+      "merge_rate": 85,
+      "avg_pr_time": "3.5天",
+      "avg_issue_time": "5.2天",
+      "health_score": 68,
+      "last_activity": "2024-12-10"
+    }
+  ],
+  "risk_analysis": {
+    "dependency_risks": [
+      {"org": "华为技术有限公司", "ratio": 25.4, "level": "medium", "suggestion": "建议发展多元化组织贡献"}
+    ],
+    "security_risks": [
+      {"type": "已知漏洞", "count": 3, "severity": "medium", "projects": ["container-security", "k8s-operator"]}
+    ],
+    "retention_risks": [
+      {"contributor": "张伟", "last_active": "2024-11-15", "risk": "high", "contributions": 156},
+      {"contributor": "李娜", "last_active": "2024-11-20", "risk": "medium", "contributions": 89}
+    ],
+    "inactive_projects": [
+      {"name": "old-module", "last_commit": "2024-06-15", "contributors": 3}
+    ]
+  },
+  "contributors": [
+    {
+      "id": "contrib-001",
+      "name": "张伟",
+      "organization": "华为技术有限公司",
+      "role": "Maintainer",
+      "contributions": 156,
+      "prs": 89,
+      "issues": 45,
+      "reviews": 123,
+      "first_contribution": "2022-03-15",
+      "last_active": "2024-12-20",
+      "lifecycle_stage": "核心",
+      "risk_level": "low"
+    },
+    {
+      "id": "contrib-002",
+      "name": "陈明",
+      "organization": "清华大学",
+      "role": "Reviewer",
+      "contributions": 89,
+      "prs": 45,
+      "issues": 32,
+      "reviews": 56,
+      "first_contribution": "2023-06-01",
+      "last_active": "2024-12-18",
+      "lifecycle_stage": "成长期",
+      "risk_level": "low"
+    },
+    {
+      "id": "contrib-003",
+      "name": "刘芳",
+      "organization": "阿里巴巴",
+      "role": "Maintainer",
+      "contributions": 123,
+      "prs": 67,
+      "issues": 34,
+      "reviews": 89,
+      "first_contribution": "2022-09-01",
+      "last_active": "2024-12-19",
+      "lifecycle_stage": "核心",
+      "risk_level": "low"
+    },
+    {
+      "id": "contrib-004",
+      "name": "李强",
+      "organization": "北京大学",
+      "role": "Contributor",
+      "contributions": 45,
+      "prs": 28,
+      "issues": 15,
+      "reviews": 12,
+      "first_contribution": "2024-01-15",
+      "last_active": "2024-11-15",
+      "lifecycle_stage": "新手",
+      "risk_level": "high"
+    },
+    {
+      "id": "contrib-005",
+      "name": "王芳",
+      "organization": "麒麟软件",
+      "role": "Reviewer",
+      "contributions": 67,
+      "prs": 38,
+      "issues": 22,
+      "reviews": 45,
+      "first_contribution": "2023-03-01",
+      "last_active": "2024-10-20",
+      "lifecycle_stage": "稳定期",
+      "risk_level": "medium"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report-001",
+      "name": "2024年度社区健康报告",
+      "type": "annual",
+      "created_at": "2024-12-15",
+      "period": "2024-01-01 ~ 2024-12-31",
+      "status": "completed"
+    },
+    {
+      "id": "report-002",
+      "name": "Q4贡献者留存分析",
+      "type": "quarterly",
+      "created_at": "2024-12-01",
+      "period": "2024-10-01 ~ 2024-12-31",
+      "status": "completed"
+    },
+    {
+      "id": "report-003",
+      "name": "组织依赖风险评估",
+      "type": "risk",
+      "created_at": "2024-12-10",
+      "period": "2024-01-01 ~ 2024-12-10",
+      "status": "in_progress"
+    }
+  ]
+}

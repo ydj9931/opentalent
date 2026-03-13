@@ -1,0 +1,169 @@
+{
+  "version": "1.2",
+  "l1_overview": {
+    "total_accounts": 156780,
+    "active_accounts": 45620,
+    "bound_accounts": 89200,
+    "organizations": 2070,
+    "deployments": 328,
+    "deployment_types": {
+      "foundation_hosted": 86,
+      "private": 168,
+      "hybrid": 74
+    },
+    "organization_types": {
+      "universities": 328,
+      "enterprises": 486,
+      "communities": 1256
+    },
+    "identity_distribution": {
+      "individual": 68230,
+      "university": 28650,
+      "enterprise": 45620,
+      "community": 14300
+    },
+    "organization_ranking": [
+      {"rank": 1, "name": "清华大学", "contributors": 2560, "type": "university"},
+      {"rank": 2, "name": "华为技术有限公司", "contributors": 2180, "type": "enterprise"},
+      {"rank": 3, "name": "北京大学", "contributors": 1890, "type": "university"},
+      {"rank": 4, "name": "阿里云计算", "contributors": 1650, "type": "enterprise"},
+      {"rank": 5, "name": "OpenHarmony社区", "contributors": 1420, "type": "community"},
+      {"rank": 6, "name": "腾讯科技", "contributors": 1280, "type": "enterprise"},
+      {"rank": 7, "name": "浙江大学", "contributors": 1150, "type": "university"},
+      {"rank": 8, "name": "上海交通大学", "contributors": 980, "type": "university"},
+      {"rank": 9, "name": "openEuler社区", "contributors": 860, "type": "community"},
+      {"rank": 10, "name": "字节跳动", "contributors": 720, "type": "enterprise"}
+    ]
+  },
+  "l2_ecology": {
+    "contributor_growth": [
+      {"year": "2020", "new_contributors": 28500, "total": 28500, "retention_rate": 72},
+      {"year": "2021", "new_contributors": 45600, "total": 74100, "retention_rate": 68},
+      {"year": "2022", "new_contributors": 78200, "total": 152300, "retention_rate": 65},
+      {"year": "2023", "new_contributors": 115600, "total": 267900, "retention_rate": 62},
+      {"year": "2024", "new_contributors": 156780, "total": 424680, "retention_rate": 58}
+    ],
+    "talent_sources": {
+      "universities": {"count": 28650, "percentage": 18.3, "growth": 22.5},
+      "enterprises": {"count": 45620, "percentage": 29.1, "growth": 28.3},
+      "communities": {"count": 68230, "percentage": 43.5, "growth": 32.1},
+      "events": {"count": 14280, "percentage": 9.1, "growth": 45.2}
+    },
+    "source_ranking": [
+      {"rank": 1, "name": "清华大学", "type": "university", "new_contributors": 2560, "weight": 0.4},
+      {"rank": 2, "name": "华为技术有限公司", "type": "enterprise", "new_contributors": 2180, "weight": 0.35},
+      {"rank": 3, "name": "OpenHarmony黑客松", "type": "event", "new_contributors": 1850, "weight": 0.3},
+      {"rank": 4, "name": "北京大学", "type": "university", "new_contributors": 1680, "weight": 0.4},
+      {"rank": 5, "name": "阿里云高校计划", "type": "event", "new_contributors": 1420, "weight": 0.25},
+      {"rank": 6, "name": "openEuler社区", "type": "community", "new_contributors": 1280, "weight": 0.3},
+      {"rank": 7, "name": "腾讯开源联盟", "type": "community", "new_contributors": 1150, "weight": 0.28},
+      {"rank": 8, "name": "浙江大学", "type": "university", "new_contributors": 980, "weight": 0.38}
+    ],
+    "activity_metrics": {
+      "annual_active_rate": 58,
+      "three_year_active_rate": 42,
+      "core_contributor_ratio": 5.7,
+      "new_to_existing_ratio": 0.35
+    },
+    "retention_analysis": [
+      {"period": "1年", "rate": 58},
+      {"period": "2年", "rate": 45},
+      {"period": "3年", "rate": 38},
+      {"period": "5年+", "rate": 25}
+    ],
+    "collaboration_roi": {
+      "university_to_enterprise": 2850,
+      "community_to_enterprise": 3680,
+      "event_to_enterprise": 1420,
+      "maintainer_count": 8920,
+      "event_award_count": 5680,
+      "foundation_recognition": 1256
+    },
+    "talent_flow_network": {
+      "nodes": [
+        {"id": "清华大学", "type": "university", "size": 2560},
+        {"id": "北京大学", "type": "university", "size": 1890},
+        {"id": "浙江大学", "type": "university", "size": 1150},
+        {"id": "华为技术", "type": "enterprise", "size": 2180},
+        {"id": "阿里云", "type": "enterprise", "size": 1650},
+        {"id": "腾讯科技", "type": "enterprise", "size": 1280},
+        {"id": "OpenHarmony", "type": "community", "size": 1420},
+        {"id": "openEuler", "type": "community", "size": 860},
+        {"id": "Apache ShenYu", "type": "community", "size": 420}
+      ],
+      "links": [
+        {"source": "清华大学", "target": "华为技术", "value": 680},
+        {"source": "清华大学", "target": "阿里云", "value": 520},
+        {"source": "北京大学", "target": "腾讯科技", "value": 480},
+        {"source": "浙江大学", "target": "阿里云", "value": 320},
+        {"source": "OpenHarmony", "target": "华为技术", "value": 850},
+        {"source": "OpenHarmony", "target": "阿里云", "value": 420},
+        {"source": "openEuler", "target": "华为技术", "value": 380},
+        {"source": "openEuler", "target": "腾讯科技", "value": 260}
+      ]
+    }
+  },
+  "l2_strategic": {
+    "overview": {
+      "total_strategic_contributors": 28650,
+      "total_contributions": 568920,
+      "new_strategic_contributors": 8560,
+      "strategic_projects_count": 186,
+      "coverage_rate": 68.5
+    },
+    "strategic_projects": [
+      {"name": "OpenHarmony", "field": "操作系统", "contributors": 5680, "contributions": 45680, "priority": "A"},
+      {"name": "openEuler", "field": "操作系统", "contributors": 3890, "contributions": 28900, "priority": "A"},
+      {"name": "OpenKubeOS", "field": "云计算", "contributors": 2560, "contributions": 18200, "priority": "A"},
+      {"name": "OpenSentinel", "field": "网络安全", "contributors": 1890, "contributions": 12560, "priority": "B"},
+      {"name": "AI-Framework", "field": "人工智能", "contributors": 3250, "contributions": 28650, "priority": "A"},
+      {"name": "Chip-Design-OS", "field": "半导体", "contributors": 1280, "contributions": 8960, "priority": "A"},
+      {"name": "NewEnergy-Grid", "field": "新能源", "contributors": 980, "contributions": 5680, "priority": "B"},
+      {"name": "OpenCAD", "field": "工业软件", "contributors": 720, "contributions": 4280, "priority": "B"},
+      {"name": "Bio-Compute", "field": "生物计算", "contributors": 560, "contributions": 3200, "priority": "C"},
+      {"name": "Quantum-Sim", "field": "量子计算", "contributors": 420, "contributions": 2100, "priority": "C"}
+    ],
+    "strategic_fields": {
+      "fields": ["操作系统", "云计算", "人工智能", "半导体", "网络安全", "新能源", "工业软件", "生物计算", "量子计算"],
+      "contributors": [8920, 5680, 4560, 3250, 2890, 1560, 1280, 680, 420],
+      "projects": [28, 22, 18, 15, 12, 8, 6, 4, 3],
+      "coverage": [85, 72, 68, 52, 48, 35, 28, 18, 12]
+    },
+    "contributor_ranking": [
+      {"rank": 1, "name": "张伟", "organization": "华为技术有限公司", "field": "操作系统", "contributions": 1256, "strategic_projects": 5},
+      {"rank": 2, "name": "李明", "organization": "阿里云计算", "field": "云计算", "contributions": 1089, "strategic_projects": 4},
+      {"rank": 3, "name": "王芳", "organization": "清华大学", "field": "人工智能", "contributions": 956, "strategic_projects": 3},
+      {"rank": 4, "name": "陈强", "organization": "华为技术有限公司", "field": "半导体", "contributions": 892, "strategic_projects": 4},
+      {"rank": 5, "name": "刘洋", "organization": "北京大学", "field": "人工智能", "contributions": 856, "strategic_projects": 3},
+      {"rank": 6, "name": "赵磊", "organization": "字节跳动", "field": "云计算", "contributions": 798, "strategic_projects": 3},
+      {"rank": 7, "name": "周敏", "organization": "百度", "field": "人工智能", "contributions": 765, "strategic_projects": 2},
+      {"rank": 8, "name": "吴霞", "organization": "中国科学院", "field": "量子计算", "contributions": 712, "strategic_projects": 2}
+    ],
+    "organization_ranking": [
+      {"rank": 1, "name": "华为技术有限公司", "type": "enterprise", "contributors": 5680, "projects": 12},
+      {"rank": 2, "name": "清华大学", "type": "university", "contributors": 3250, "projects": 8},
+      {"rank": 3, "name": "阿里云计算", "type": "enterprise", "contributors": 2890, "projects": 10},
+      {"rank": 4, "name": "北京大学", "type": "university", "contributors": 2180, "projects": 6},
+      {"rank": 5, "name": "腾讯科技", "type": "enterprise", "contributors": 1850, "projects": 8},
+      {"rank": 6, "name": "浙江大学", "type": "university", "contributors": 1560, "projects": 5},
+      {"rank": 7, "name": "百度", "type": "enterprise", "contributors": 1280, "projects": 6},
+      {"rank": 8, "name": "中国科学院", "type": "university", "contributors": 980, "projects": 4}
+    ],
+    "yearly_growth": [
+      {"year": "2020", "contributors": 5200, "contributions": 28500},
+      {"year": "2021", "contributors": 8560, "contributions": 56200},
+      {"year": "2022", "contributors": 12890, "contributions": 125600},
+      {"year": "2023", "contributors": 19850, "contributions": 198500},
+      {"year": "2024", "contributions": 28650, "contributions": 286500}
+    ],
+    "flow_data": {
+      "sources": ["高校", "企业", "社区"],
+      "targets": ["操作系统", "云计算", "人工智能", "半导体", "网络安全"],
+      "matrix": [
+        [1250, 890, 650, 420, 280],
+        [2180, 1560, 1280, 860, 520],
+        [980, 720, 580, 320, 180]
+      ]
+    }
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "organization": {
+    "id": "org-001",
+    "name": "深圳技术大学",
+    "code": "Fudan-AI",
+    "type": "高校学院",
+    "established": "2019-09-01",
+    "description": "专注于人工智能领域的教学与科研，培养具有开源精神的下一代AI人才"
+  },
+  "dashboard": {
+    "overview_metrics": {
+      "total_projects": 28,
+      "total_contributors": 156,
+      "total_prs": 1234,
+      "total_issues": 567,
+      "total_commits": 4567,
+      "active_contributors": 89,
+      "active_projects": 18,
+      "maintainers": 12,
+      "initiated_projects": 8,
+      "core_roles": 15,
+      "valid_contributions": 892,
+      "core_seats": 15,
+      "l1_projects": 3,
+      "l2_projects": 5,
+      "l3_projects": 20
+    },
+    "contribution_trend": [
+      {"month": "2024-01", "prs": 45, "issues": 23, "commits": 180},
+      {"month": "2024-02", "prs": 52, "issues": 28, "commits": 210},
+      {"month": "2024-03", "prs": 68, "issues": 35, "commits": 280},
+      {"month": "2024-04", "prs": 72, "issues": 42, "commits": 320},
+      {"month": "2024-05", "prs": 85, "issues": 48, "commits": 380},
+      {"month": "2024-06", "prs": 95, "issues": 52, "commits": 420},
+      {"month": "2024-07", "prs": 78, "issues": 40, "commits": 350},
+      {"month": "2024-08", "prs": 88, "issues": 45, "commits": 390},
+      {"month": "2024-09", "prs": 102, "issues": 58, "commits": 450},
+      {"month": "2024-10", "prs": 115, "issues": 62, "commits": 520},
+      {"month": "2024-11", "prs": 128, "issues": 70, "commits": 580},
+      {"month": "2024-12", "prs": 142, "issues": 78, "commits": 650}
+    ],
+    "project_distribution": {
+      "teaching": 12,
+      "ecosystem": 16
+    },
+    "project_tier": {
+      "l1": {"count": 3, "name": "战略级", "examples": ["OpenHarmony", "openEuler", "Linux"]},
+      "l2": {"count": 5, "name": "行业级", "examples": ["MindSpore", "PaddlePaddle"]},
+      "l3": {"count": 20, "name": "基础级", "examples": ["课程项目"]}
+    },
+    "contributor_roles": {
+      "contributor": 98,
+      "reviewer": 32,
+      "maintainer": 12,
+      "sig_leader": 8
+    },
+    "contributor_quality": {
+      "basic_total": 4567,
+      "valid_contributions": 3420,
+      "core_seats": 20
+    },
+    "reservoir": {
+      "description": "教学项目 → 生态项目转化漏斗",
+      "teaching_students": 120,
+      "teaching_active": 85,
+      "ecosystem_joined": 42,
+      "ecosystem_active": 28,
+      "conversion_rate": "35%",
+      "by_grade": {
+        "2021": {"teaching": 35, "ecosystem": 18, "conversion": "51%"},
+        "2022": {"teaching": 45, "ecosystem": 15, "conversion": "33%"},
+        "2023": {"teaching": 40, "ecosystem": 9, "conversion": "23%"},
+        "2024": {"teaching": 0, "ecosystem": 0, "conversion": "0%"}
+      }
+    },
+    "milestones": [
+      {
+        "id": "ms-001",
+        "title": "OpenHarmony SIG 成立",
+        "date": "2023-06-15",
+        "type": "project_promotion",
+        "description": "学院首个国家级开源项目SIG成立"
+      },
+      {
+        "id": "ms-002",
+        "title": "张伟同学当选OpenHarmony SIG Leader",
+        "date": "2024-03-20",
+        "type": "honor",
+        "description": "学生获得顶级社区核心角色"
+      },
+      {
+        "id": "ms-003",
+        "title": "与华为建立开源联合实验室",
+        "date": "2024-09-01",
+        "type": "lab_establishment",
+        "description": "校企合作深化开源人才培养"
+      },
+      {
+        "id": "ms-004",
+        "title": "年度贡献突破1000 PR",
+        "date": "2024-11-15",
+        "type": "achievement",
+        "description": "学院年度PR贡献量达到1024"
+      }
+    ],
+    "yearly_growth": {
+      "2022": {"contributors": 45, "projects": 8, "prs": 320},
+      "2023": {"contributors": 89, "projects": 15, "prs": 680},
+      "2024": {"contributors": 156, "projects": 28, "prs": 1234}
+    }
+  },
+  "projects": [
+    {
+      "id": "proj-001",
+      "name": "AI开源实践课程",
+      "type": "teaching",
+      "tier": "L3",
+      "display_type": "🟦 教学项目",
+      "display_tier": "基础级",
+      "organization": "深圳技术大学",
+      "repository": "https://github.com/fudan-ai/ai-open-course",
+      "start_time": "2024-02-01",
+      "end_time": "2024-06-30",
+      "participants_count": 68,
+      "students_count": 62,
+      "teachers_count": 6,
+      "pr_count": 156,
+      "issue_count": 89,
+      "commit_count": 423,
+      "valid_pr_count": 142,
+      "maintainers": ["张教授", "李老师"],
+      "community_name": "课程内部项目",
+      "metrics": {
+        "merge_rate": "92%",
+        "avg_response_time": "2.5天",
+        "active_contributors": 52
+      }
+    },
+    {
+      "id": "proj-002",
+      "name": "操作系统开源实践",
+      "type": "teaching",
+      "tier": "L3",
+      "display_type": "🟦 教学项目",
+      "display_tier": "基础级",
+      "organization": "深圳技术大学",
+      "repository": "https://gitee.com/fudan-os/course-project",
+      "start_time": "2024-09-01",
+      "end_time": "2025-01-15",
+      "participants_count": 45,
+      "students_count": 42,
+      "teachers_count": 3,
+      "pr_count": 89,
+      "issue_count": 45,
+      "commit_count": 234,
+      "valid_pr_count": 78,
+      "maintainers": ["王老师"],
+      "community_name": "课程内部项目",
+      "metrics": {
+        "merge_rate": "88%",
+        "avg_response_time": "3天",
+        "active_contributors": 38
+      }
+    },
+    {
+      "id": "proj-003",
+      "name": "OpenHarmony 应用开发",
+      "type": "ecosystem",
+      "tier": "L1",
+      "display_type": "🟩 生态项目",
+      "display_tier": "⭐ 战略级",
+      "organization": "深圳技术大学",
+      "repository": "https://gitee.com/openharmony/fudan-apps",
+      "start_time": "2023-06-01",
+      "participants_count": 28,
+      "students_count": 24,
+      "teachers_count": 4,
+      "pr_count": 234,
+      "issue_count": 123,
+      "commit_count": 567,
+      "valid_pr_count": 220,
+      "maintainers": ["张教授", "陈同学", "刘同学"],
+      "community_name": "OpenHarmony SIG",
+      "metrics": {
+        "merge_rate": "95%",
+        "avg_response_time": "1.2天",
+        "active_contributors": 22
+      }
+    },
+    {
+      "id": "proj-004",
+      "name": "openEuler 基础设施",
+      "type": "ecosystem",
+      "tier": "L1",
+      "display_type": "🟩 生态项目",
+      "display_tier": "⭐ 战略级",
+      "organization": "深圳技术大学",
+      "repository": "https://gitee.com/openeuler/infrastructure",
+      "start_time": "2023-09-01",
+      "participants_count": 18,
+      "students_count": 15,
+      "teachers_count": 3,
+      "pr_count": 156,
+      "issue_count": 78,
+      "commit_count": 389,
+      "valid_pr_count": 145,
+      "maintainers": ["李老师", "赵同学"],
+      "community_name": "OpenEuler Infrastructure SIG",
+      "metrics": {
+        "merge_rate": "91%",
+        "avg_response_time": "1.8天",
+        "active_contributors": 14
+      }
+    },
+    {
+      "id": "proj-005",
+      "name": "MindSpore 模型优化",
+      "type": "ecosystem",
+      "tier": "L2",
+      "display_type": "🟩 生态项目",
+      "display_tier": "🏭 行业级",
+      "organization": "深圳技术大学",
+      "repository": "https://gitee.com/mindspore/fudan-models",
+      "start_time": "2024-01-01",
+      "participants_count": 22,
+      "students_count": 19,
+      "teachers_count": 3,
+      "pr_count": 89,
+      "issue_count": 45,
+      "commit_count": 234,
+      "valid_pr_count": 82,
+      "maintainers": ["张教授"],
+      "community_name": "MindSpore SIG",
+      "metrics": {
+        "merge_rate": "94%",
+        "avg_response_time": "2天",
+        "active_contributors": 18
+      }
+    }
+  ],
+  "contributors": [
+    {
+      "id": "contrib-001",
+      "name": "陈明",
+      "student_id": "2021XXXX001",
+      "role": "学生",
+      "grade": "2021级",
+      "organization": "深圳技术大学",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ChenMing",
+      "projects": ["AI开源实践课程", "OpenHarmony 应用开发", "openEuler 基础设施"],
+      "pr_count": 89,
+      "issue_count": 45,
+      "commit_count": 234,
+      "valid_pr_count": 82,
+      "role_in_project": "Maintainer",
+      "community_roles": ["OpenHarmony SIG Reviewer", "OpenEuler Contributor"],
+      "skills": ["Python", "Go", "Rust", "Machine Learning"],
+      "joined_date": "2023-03-15"
+    },
+    {
+      "id": "contrib-002",
+      "name": "刘芳",
+      "student_id": "2022XXXX015",
+      "role": "学生",
+      "grade": "2022级",
+      "organization": "深圳技术大学",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiuFang",
+      "projects": ["AI开源实践课程", "MindSpore 模型优化"],
+      "pr_count": 56,
+      "issue_count": 32,
+      "commit_count": 145,
+      "valid_pr_count": 48,
+      "role_in_project": "Reviewer",
+      "community_roles": ["MindSpore Contributor"],
+      "skills": ["Python", "PyTorch", "Model Optimization"],
+      "joined_date": "2023-09-01"
+    },
+    {
+      "id": "contrib-003",
+      "name": "张伟",
+      "student_id": "2020XXXX008",
+      "role": "学生",
+      "grade": "2020级",
+      "organization": "深圳技术大学",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?id=ZhangWei2",
+      "projects": ["OpenHarmony 应用开发", "openEuler 基础设施"],
+      "pr_count": 123,
+      "issue_count": 67,
+      "commit_count": 312,
+      "valid_pr_count": 115,
+      "role_in_project": "Maintainer",
+      "community_roles": ["OpenHarmony SIG Leader", "OpenEuler Committer"],
+      "skills": ["C++", "Rust", "Operating Systems", "Distributed Systems"],
+      "joined_date": "2022-06-01"
+    },
+    {
+      "id": "contrib-004",
+      "name": "李娜",
+      "student_id": "2023XXXX022",
+      "role": "学生",
+      "grade": "2023级",
+      "organization": "深圳技术大学",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiNa",
+      "projects": ["AI开源实践课程", "操作系统开源实践"],
+      "pr_count": 34,
+      "issue_count": 18,
+      "commit_count": 89,
+      "valid_pr_count": 28,
+      "role_in_project": "Contributor",
+      "community_roles": [],
+      "skills": ["C", "Python", "Linux"],
+      "joined_date": "2024-02-01"
+    },
+    {
+      "id": "contrib-005",
+      "name": "王强",
+      "teacher_id": "PROF001",
+      "role": "教师",
+      "organization": "深圳技术大学",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=WangQiang",
+      "projects": ["AI开源实践课程", "OpenHarmony 应用开发", "MindSpore 模型优化"],
+      "pr_count": 45,
+      "issue_count": 28,
+      "commit_count": 156,
+      "valid_pr_count": 42,
+      "role_in_project": "Maintainer",
+      "community_roles": ["OpenHarmony SIG Tech Lead", "MindSpore PMC"],
+      "skills": ["Machine Learning", "System Architecture", "Python", "Go"],
+      "joined_date": "2019-09-01"
+    }
+  ],
+  "talent_evaluations": [
+    {
+      "id": "eval-001",
+      "name": "2024春季学期开源实践评价",
+      "batch": "2024春季",
+      "start_time": "2024-06-01",
+      "end_time": "2024-06-30",
+      "status": "completed",
+      "participants_count": 68,
+      "candidate_count": 45,
+      "final_selected": 15,
+      "description": "针对AI开源实践课程学生的开源贡献评价"
+    },
+    {
+      "id": "eval-002",
+      "name": "2024年度开源贡献者评选",
+      "batch": "2024年度",
+      "start_time": "2024-12-01",
+      "end_time": "2024-12-20",
+      "status": "in_progress",
+      "participants_count": 156,
+      "candidate_count": 30,
+      "final_selected": 0,
+      "description": "年度开源贡献者评选，表彰优秀开源贡献学生"
+    },
+    {
+      "id": "eval-003",
+      "name": "2025届毕业生开源能力评价",
+      "batch": "2025届毕业",
+      "start_time": "2025-01-10",
+      "end_time": "2025-01-25",
+      "status": "pending",
+      "participants_count": 0,
+      "candidate_count": 0,
+      "final_selected": 0,
+      "description": "针对2025届毕业生的开源能力综合评价"
+    }
+  ],
+  "evaluation_details": [
+    {
+      "evaluation_id": "eval-001",
+      "ranking": [
+        {"rank": 1, "contributor_id": "contrib-003", "name": "张伟", "grade": "2020级", "score": 95, "prs": 45, "issues": 28, "commits": 120, "valid_prs": 42},
+        {"rank": 2, "contributor_id": "contrib-001", "name": "陈明", "grade": "2021级", "score": 92, "prs": 42, "issues": 22, "commits": 98, "valid_prs": 38},
+        {"rank": 3, "contributor_id": "contrib-002", "name": "刘芳", "grade": "2022级", "score": 88, "prs": 35, "issues": 18, "commits": 78, "valid_prs": 30},
+        {"rank": 4, "contributor_id": "contrib-004", "name": "李娜", "grade": "2023级", "score": 82, "prs": 28, "issues": 12, "commits": 56, "valid_prs": 22},
+        {"rank": 5, "contributor_id": "contrib-xxx", "name": "孙磊", "grade": "2021级", "score": 79, "prs": 24, "issues": 15, "commits": 52, "valid_prs": 20}
+      ],
+      "final_result": [
+        "张伟", "陈明", "刘芳", "李娜", "王涛", "赵敏", "刘洋", "周杰", "吴霞", "郑凯",
+        "钱蕾", "孙磊", "林峰", "黄娟", "徐鹏"
+      ]
+    }
+  ]
+}

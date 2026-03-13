@@ -1,0 +1,213 @@
+{
+  "activity": {
+    "id": "act-001",
+    "name": "2024 OpenAtom 开源黑客松",
+    "type": "黑客松",
+    "description": "为期48小时的开源创新挑战赛，旨在推动开源生态发展",
+    "start_time": "2024-12-14",
+    "end_time": "2024-12-16",
+    "location": "线上 + 北京线下",
+    "organizer": "开源原子基金会",
+    "website": "https://www.openatom.org/hackathon/2024",
+    "status": "completed",
+    "cover_image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800"
+  },
+  "overview": {
+    "total_teams": 32,
+    "total_participants": 156,
+    "total_projects": 38,
+    "total_prs": 245,
+    "total_issues": 89,
+    "total_commits": 567,
+    "duration": "48小时",
+    "tracks": ["AI创新", "云原生", "安全工具", "教育科技"]
+  },
+  "timeline": [
+    {"phase": "报名阶段", "start": "2024-11-01", "end": "2024-12-10", "status": "completed"},
+    {"phase": "初赛评审", "start": "2024-12-14", "end": "2024-12-15", "status": "completed"},
+    {"phase": "决赛路演", "start": "2024-12-16", "end": "2024-12-16", "status": "completed"},
+    {"phase": "颁奖典礼", "start": "2024-12-16", "end": "2024-12-16", "status": "completed"}
+  ],
+  "leaderboard": {
+    "individual": [
+      {"rank": 1, "name": "张伟", "team": "AI先锋队", "score": 95, "prs": 28, "issues": 12, "commits": 45, "skills": ["Python", "AI/ML", "FastAPI"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWei"},
+      {"rank": 2, "name": "李娜", "team": "云端探索者", "score": 92, "prs": 24, "issues": 15, "commits": 38, "skills": ["Kubernetes", "Go", "DevOps"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiNa"},
+      {"rank": 3, "name": "王强", "team": "安全卫士", "score": 89, "prs": 22, "issues": 18, "commits": 35, "skills": ["Rust", "Security", "Cryptography"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=WangQiang"},
+      {"rank": 4, "name": "陈明", "team": "教育创新", "score": 86, "prs": 20, "issues": 10, "commits": 32, "skills": ["React", "Node.js", "Education"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ChenMing"},
+      {"rank": 5, "name": "刘芳", "team": "AI先锋队", "score": 84, "prs": 18, "issues": 8, "commits": 28, "skills": ["Python", "TensorFlow", "Data Analysis"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiuFang"},
+      {"rank": 6, "name": "赵磊", "team": "云原生先锋", "score": 82, "prs": 16, "issues": 12, "commits": 25, "skills": ["Docker", "Kubernetes", "Python"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhaoLei"},
+      {"rank": 7, "name": "孙娟", "team": "创新之星", "score": 80, "prs": 15, "issues": 9, "commits": 22, "skills": ["Vue.js", "UI/UX", "Frontend"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=SunJuan"},
+      {"rank": 8, "name": "周杰", "team": "安全卫士", "score": 78, "prs": 14, "issues": 11, "commits": 20, "skills": ["Go", "Security", "Network"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhouJie"},
+      {"rank": 9, "name": "吴霞", "team": "教育创新", "score": 76, "prs": 12, "issues": 7, "commits": 18, "skills": ["Python", "Django", "Documentation"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=WuXia"},
+      {"rank": 10, "name": "郑凯", "team": "云端探索者", "score": 74, "prs": 11, "issues": 6, "commits": 15, "skills": ["Microservices", "Spring Boot", "Java"], "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhengKai"}
+    ],
+    "team": [
+      {"rank": 1, "name": "AI先锋队", "members": 5, "score": 268, "prs": 68, "project": "AI代码助手"},
+      {"rank": 2, "name": "安全卫士", "members": 4, "score": 245, "prs": 56, "project": "漏洞扫描工具"},
+      {"rank": 3, "name": "云端探索者", "members": 5, "score": 232, "prs": 52, "project": "云原生监控平台"},
+      {"rank": 4, "name": "教育创新", "members": 4, "score": 218, "prs": 45, "project": "在线编程教育平台"},
+      {"rank": 5, "name": "创新之星", "members": 5, "score": 195, "prs": 38, "project": "开源社区助手"}
+    ]
+  },
+  "projects": [
+    {
+      "id": "proj-001",
+      "name": "AI代码助手",
+      "team": "AI先锋队",
+      "track": "AI创新",
+      "description": "基于大语言模型的智能代码补全与重构工具",
+      "innovation_score": 95,
+      "complexity_score": 88,
+      "technical_score": 92,
+      "prs": 68,
+      "issues": 25,
+      "commits": 120,
+      "stars": 156,
+      "status": "一等奖"
+    },
+    {
+      "id": "proj-002",
+      "name": "漏洞扫描工具",
+      "team": "安全卫士",
+      "track": "安全工具",
+      "description": "自动化开源依赖漏洞检测与修复建议工具",
+      "innovation_score": 88,
+      "complexity_score": 90,
+      "technical_score": 85,
+      "prs": 56,
+      "issues": 18,
+      "commits": 95,
+      "stars": 89,
+      "status": "二等奖"
+    },
+    {
+      "id": "proj-003",
+      "name": "云原生监控平台",
+      "team": "云端探索者",
+      "track": "云原生",
+      "description": "面向Kubernetes的多维度可视化监控系统",
+      "innovation_score": 82,
+      "complexity_score": 85,
+      "technical_score": 88,
+      "prs": 52,
+      "issues": 15,
+      "commits": 88,
+      "stars": 67,
+      "status": "二等奖"
+    },
+    {
+      "id": "proj-004",
+      "name": "在线编程教育平台",
+      "team": "教育创新",
+      "track": "教育科技",
+      "description": "互动式编程学习与实践平台",
+      "innovation_score": 85,
+      "complexity_score": 78,
+      "technical_score": 80,
+      "prs": 45,
+      "issues": 12,
+      "commits": 72,
+      "stars": 45,
+      "status": "三等奖"
+    },
+    {
+      "id": "proj-005",
+      "name": "开源社区助手",
+      "team": "创新之星",
+      "track": "AI创新",
+      "description": "基于AI的开源项目贡献引导工具",
+      "innovation_score": 78,
+      "complexity_score": 75,
+      "technical_score": 77,
+      "prs": 38,
+      "issues": 10,
+      "commits": 58,
+      "stars": 32,
+      "status": "优秀奖"
+    }
+  ],
+  "skills_distribution": [
+    {"skill": "Python", "count": 68, "percentage": 43.6},
+    {"skill": "JavaScript", "count": 45, "percentage": 28.8},
+    {"skill": "Go", "count": 32, "percentage": 20.5},
+    {"skill": "Rust", "count": 18, "percentage": 11.5},
+    {"skill": "Kubernetes", "count": 28, "percentage": 17.9},
+    {"skill": "AI/ML", "count": 35, "percentage": 22.4},
+    {"skill": "Security", "count": 15, "percentage": 9.6},
+    {"skill": "DevOps", "count": 22, "percentage": 14.1},
+    {"skill": "Frontend", "count": 38, "percentage": 24.4},
+    {"skill": "Backend", "count": 42, "percentage": 26.9}
+  ],
+  "collaboration_network": {
+    "teams": [
+      {"id": "team-1", "name": "AI先锋队", "color": "#3b82f6"},
+      {"id": "team-2", "name": "安全卫士", "color": "#ef4444"},
+      {"id": "team-3", "name": "云端探索者", "color": "#10b981"},
+      {"id": "team-4", "name": "教育创新", "color": "#f59e0b"},
+      {"id": "team-5", "name": "创新之星", "color": "#8b5cf6"}
+    ],
+    "links": [
+      {"source": "AI先锋队", "target": "云端探索者", "strength": 5},
+      {"source": "AI先锋队", "target": "教育创新", "strength": 3},
+      {"source": "安全卫士", "target": "云端探索者", "strength": 4},
+      {"source": "安全卫士", "target": "创新之星", "strength": 2},
+      {"source": "云端探索者", "target": "教育创新", "strength": 6},
+      {"source": "教育创新", "target": "创新之星", "strength": 4}
+    ]
+  },
+  "milestones": [
+    {
+      "id": "ms-001",
+      "title": "项目启动仪式",
+      "time": "2024-12-14 09:00",
+      "description": "活动正式开幕，32支团队组建完成",
+      "participants": 156
+    },
+    {
+      "id": "ms-002",
+      "title": "中期检查",
+      "time": "2024-12-15 12:00",
+      "description": "28个项目完成初版开发",
+      "participants": 142
+    },
+    {
+      "id": "ms-003",
+      "title": "代码冻结",
+      "time": "2024-12-16 08:00",
+      "description": "所有项目代码提交完毕，进入评审",
+      "participants": 156
+    },
+    {
+      "id": "ms-004",
+      "title": "决赛路演",
+      "time": "2024-12-16 14:00",
+      "description": "10支队伍进入决赛进行展示",
+      "participants": 89
+    },
+    {
+      "id": "ms-005",
+      "title": "颁奖典礼",
+      "time": "2024-12-16 18:00",
+      "description": "公布获奖名单，颁发奖项",
+      "participants": 156
+    }
+  ],
+  "achievements": [
+    {"badge": "first_commit", "name": "首次提交", "count": 145},
+    {"badge": "bug_hunter", "name": "Bug猎人", "count": 67},
+    {"badge": "team_player", "name": "团队协作", "count": 89},
+    {"badge": "code_review", "name": "代码审查", "count": 123},
+    {"badge": "documentation", "name": "文档贡献", "count": 45},
+    {"badge": "innovation_star", "name": "创新之星", "count": 28}
+  ],
+  "summary": {
+    "total_teams": 32,
+    "winners": 10,
+    "total_prs_merged": 245,
+    "total_issues_resolved": 89,
+    "projects_continued": 12,
+    "top_contributors_recognized": 20,
+    "avg_contribution_per_person": 3.6,
+    "cross_team_collaborations": 15
+  }
+}

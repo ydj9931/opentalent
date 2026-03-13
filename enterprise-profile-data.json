@@ -1,0 +1,352 @@
+{
+  "enterprise": {
+    "id": "ent-001",
+    "name": "华为技术有限公司",
+    "type": "科技企业",
+    "industry": "ICT",
+    "established": "1987",
+    "description": "全球领先的信息与通信技术解决方案供应商"
+  },
+  "overview": {
+    "total_employees": 207000,
+    "active_contributors": 1256,
+    "core_contributors": 286,
+    "total_projects": 168,
+    "external_projects": 86,
+    "internal_projects": 82,
+    "total_prs": 25680,
+    "total_commits": 89650,
+    "open_source_investment": "5.2亿/年",
+    "communities_joined": 45
+  },
+  "contributor_analysis": {
+    "by_role": {
+      "maintainer": 45,
+      "reviewer": 128,
+      "contributor": 1083
+    },
+    "by_level": {
+      "senior": 156,
+      "mid": 486,
+      "junior": 614
+    },
+    "by_skill": [
+      {"skill": "Go", "count": 356, "percentage": 28.3},
+      {"skill": "Rust", "count": 245, "percentage": 19.5},
+      {"skill": "Python", "count": 298, "percentage": 23.7},
+      {"skill": "C/C++", "count": 412, "percentage": 32.8},
+      {"skill": "JavaScript", "count": 186, "percentage": 14.8},
+      {"skill": "Java", "count": 156, "percentage": 12.4}
+    ],
+    "by_division": [
+      {"division": "2012实验室", "contributors": 286, "projects": 32},
+      {"division": "云业务部", "contributors": 345, "projects": 28},
+      {"division": "消费者业务部", "contributors": 198, "projects": 18},
+      {"division": "运营商业务部", "contributors": 156, "projects": 15},
+      {"division": "海思半导体", "contributors": 128, "projects": 22},
+      {"division": "其他", "contributors": 143, "projects": 53}
+    ]
+  },
+  "top_contributors": [
+    {
+      "id": "emp-001",
+      "name": "张伟",
+      "employee_id": "HW-2012-0089",
+      "department": "2012实验室",
+      "role": "Senior Engineer",
+      "level": "P7",
+      "contributions": 456,
+      "prs": 268,
+      "reviews": 189,
+      "projects": 12,
+      "external_projects": 8,
+      "skills": ["Rust", "Go", "操作系统"],
+      "community_roles": ["OpenHarmony PMC", "openEuler Committer"],
+      "influence_score": 95,
+      "talent_type": "技术专家",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWeiHW"
+    },
+    {
+      "id": "emp-002",
+      "name": "李明",
+      "employee_id": "HW-Cloud-0156",
+      "department": "云业务部",
+      "role": "Tech Lead",
+      "level": "P8",
+      "contributions": 398,
+      "prs": 225,
+      "reviews": 156,
+      "projects": 15,
+      "external_projects": 10,
+      "skills": ["Go", "Kubernetes", "云原生"],
+      "community_roles": ["KubeEdge Maintainer", "OpenYurt Founder"],
+      "influence_score": 92,
+      "talent_type": "技术专家",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiMingHW"
+    },
+    {
+      "id": "emp-003",
+      "name": "王芳",
+      "employee_id": "HW-2012-0123",
+      "department": "2012实验室",
+      "role": "Principal Engineer",
+      "level": "P9",
+      "contributions": 378,
+      "prs": 198,
+      "reviews": 245,
+      "projects": 18,
+      "external_projects": 12,
+      "skills": ["C/C++", "编译器", "操作系统"],
+      "community_roles": ["OpenHarmony TSC", "LLVM Contributor"],
+      "influence_score": 98,
+      "talent_type": "技术专家",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=WangFangHW"
+    },
+    {
+      "id": "emp-004",
+      "name": "陈强",
+      "employee_id": "HW-Chip-0089",
+      "department": "海思半导体",
+      "role": "Senior Engineer",
+      "level": "P7",
+      "contributions": 312,
+      "prs": 186,
+      "reviews": 98,
+      "projects": 10,
+      "external_projects": 6,
+      "skills": ["Verilog", "芯片设计", "RISC-V"],
+      "community_roles": ["RISC-V International Member"],
+      "influence_score": 78,
+      "talent_type": "技术专家",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ChenQiangHW"
+    },
+    {
+      "id": "emp-005",
+      "name": "刘洋",
+      "employee_id": "HW-Consumer-0234",
+      "department": "消费者业务部",
+      "role": "Engineer",
+      "level": "P6",
+      "contributions": 256,
+      "prs": 145,
+      "reviews": 78,
+      "projects": 8,
+      "external_projects": 5,
+      "skills": ["JavaScript", "HarmonyOS", "App开发"],
+      "community_roles": ["OpenHarmony Contributor"],
+      "influence_score": 68,
+      "talent_type": "成长型",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiuYangHW"
+    },
+    {
+      "id": "emp-006",
+      "name": "赵磊",
+      "employee_id": "HW-Cloud-0189",
+      "department": "云业务部",
+      "role": "Staff Engineer",
+      "level": "P8",
+      "contributions": 289,
+      "prs": 168,
+      "reviews": 134,
+      "projects": 14,
+      "external_projects": 9,
+      "skills": ["Go", "微服务", "Service Mesh"],
+      "community_roles": ["OpenYurt Maintainer", "Istio Contributor"],
+      "influence_score": 85,
+      "talent_type": "技术专家",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhaoLeiHW"
+    }
+  ],
+  "project_strategy": {
+    "internal_projects": [
+      {
+        "id": "int-001",
+        "name": "HarmonyOS Next",
+        "description": "华为自研操作系统",
+        "division": "消费者业务部",
+        "contributors": 568,
+        "prs": 12560,
+        "status": "active",
+        "strategic_value": 98,
+        "tech_leadership": 95,
+        "market_potential": 92
+      },
+      {
+        "id": "int-002",
+        "name": "GaussDB",
+        "description": "企业级分布式数据库",
+        "division": "云业务部",
+        "contributors": 286,
+        "prs": 5680,
+        "status": "active",
+        "strategic_value": 88,
+        "tech_leadership": 85,
+        "market_potential": 82
+      },
+      {
+        "id": "int-003",
+        "name": "MindSpore",
+        "description": "AI计算框架",
+        "division": "2012实验室",
+        "contributors": 345,
+        "prs": 6890,
+        "status": "active",
+        "strategic_value": 92,
+        "tech_leadership": 95,
+        "market_potential": 90
+      }
+    ],
+    "external_projects": [
+      {
+        "id": "ext-001",
+        "name": "OpenHarmony",
+        "description": "开放原子基金会顶级项目",
+        "enterprise_role": "主要贡献者",
+        "contributors": 286,
+        "prs": 5680,
+        "enterprise_pr_ratio": 25,
+        "influence_level": "TLP",
+        "strategic_alignment": 98,
+        "risk_level": "low"
+      },
+      {
+        "id": "ext-002",
+        "name": "openEuler",
+        "description": "开源欧拉操作系统",
+        "enterprise_role": "主导者",
+        "contributors": 245,
+        "prs": 4560,
+        "enterprise_pr_ratio": 35,
+        "influence_level": "TLP",
+        "strategic_alignment": 95,
+        "risk_level": "low"
+      },
+      {
+        "id": "ext-003",
+        "name": "KubeEdge",
+        "description": "边缘计算云原生平台",
+        "enterprise_role": "创始成员",
+        "contributors": 86,
+        "prs": 1280,
+        "enterprise_pr_ratio": 45,
+        "influence_level": "Incubating",
+        "strategic_alignment": 88,
+        "risk_level": "low"
+      },
+      {
+        "id": "ext-004",
+        "name": "OpenLooKeng",
+        "description": "大数据查询引擎",
+        "enterprise_role": "主要贡献者",
+        "contributors": 45,
+        "prs": 680,
+        "enterprise_pr_ratio": 30,
+        "influence_level": "Incubating",
+        "strategic_alignment": 72,
+        "risk_level": "medium"
+      }
+    ]
+  },
+  "trends_analysis": {
+    "contribution_trend": [
+      {"month": "2024-01", "prs": 1856, "reviews": 1230, "commits": 5620},
+      {"month": "2024-02", "prs": 1920, "reviews": 1350, "commits": 5890},
+      {"month": "2024-03", "prs": 2150, "reviews": 1480, "commits": 6340},
+      {"month": "2024-04", "prs": 2080, "reviews": 1520, "commits": 6120},
+      {"month": "2024-05", "prs": 2340, "reviews": 1680, "commits": 6890},
+      {"month": "2024-06", "prs": 2456, "reviews": 1750, "commits": 7230},
+      {"month": "2024-07", "prs": 2280, "reviews": 1620, "commits": 6780},
+      {"month": "2024-08", "prs": 2390, "reviews": 1720, "commits": 7120},
+      {"month": "2024-09", "prs": 2560, "reviews": 1850, "commits": 7650},
+      {"month": "2024-10", "prs": 2680, "reviews": 1920, "commits": 8120},
+      {"month": "2024-11", "prs": 2820, "reviews": 2050, "commits": 8560},
+      {"month": "2024-12", "prs": 2950, "reviews": 2180, "commits": 9120}
+    ],
+    "skill_trend": [
+      {"skill": "Rust", "growth": 45, "status": "growing"},
+      {"skill": "Go", "growth": 32, "status": "growing"},
+      {"skill": "AI/ML", "growth": 28, "status": "growing"},
+      {"skill": "Cloud Native", "growth": 25, "status": "growing"},
+      {"skill": "C/C++", "growth": 5, "status": "stable"}
+    ]
+  },
+  "risk_warnings": [
+    {
+      "id": "risk-001",
+      "type": "talent_loss",
+      "level": "high",
+      "title": "关键贡献者流失风险",
+      "description": "3名核心贡献者近期活跃度显著下降",
+      "affected_count": 3,
+      "suggestion": "建议及时沟通了解情况，考虑激励措施"
+    },
+    {
+      "id": "risk-002",
+      "type": "project_health",
+      "level": "medium",
+      "title": "外部项目依赖风险",
+      "description": "OpenLooKeng项目企业参与度下降",
+      "affected_count": 1,
+      "suggestion": "评估是否继续投入或寻找替代方案"
+    },
+    {
+      "id": "risk-003",
+      "type": "skill_gap",
+      "level": "low",
+      "title": "技能缺口提醒",
+      "description": "安全领域贡献者占比偏低",
+      "affected_count": 12,
+      "suggestion": "考虑招聘或内部培养安全人才"
+    }
+  ],
+  "roi_analysis": {
+    "investment": {
+      "annual_budget": "5.2亿",
+      "headcount": 1256,
+      "time_investment": "12.5万人时/年"
+    },
+    "returns": {
+      "technical_value": {
+        "score": 92,
+        "description": "技术积累、专利产出、开源创新"
+      },
+      "brand_value": {
+        "score": 88,
+        "description": "品牌影响力、社区声誉、人才吸引力"
+      },
+      "ecosystem_value": {
+        "score": 85,
+        "description": "生态主导权、标准化影响、合作伙伴"
+      },
+      "recruitment_value": {
+        "score": 90,
+        "description": "招聘效率提升、候选人质量"
+      }
+    },
+    "roi_metrics": {
+      "cost_effectiveness": "优秀",
+      "brand_roi": "+35%",
+      "tech_roi": "+42%",
+      "ecosystem_roi": "+28%"
+comparison": [
+    },
+    "      {"company": "华为技术", "contributors": 1256, "investment": "5.2亿", "roi": "优秀"},
+      {"company": "阿里云", "contributors": 980, "investment": "4.1亿", "roi": "优秀"},
+      {"company": "腾讯科技", "contributors": 856, "investment": "3.8亿", "roi": "良好"},
+      {"company": "字节跳动", "contributors": 520, "investment": "2.5亿", "roi": "良好"}
+    ]
+  },
+  "collaboration_network": {
+    "internal": [
+      {"source": "2012实验室", "target": "云业务部", "strength": 8},
+      {"source": "2012实验室", "target": "海思半导体", "strength": 6},
+      {"source": "云业务部", "target": "消费者业务部", "strength": 5}
+    ],
+    "external": [
+      {"org": "开放原子基金会", "projects": 12, "contributors": 286, "collaboration_level": "核心"},
+      {"org": "Linux基金会", "projects": 8, "contributors": 156, "collaboration_level": "重要"},
+      {"org": "CNCF", "projects": 6, "contributors": 98, "collaboration_level": "重要"},
+      {"org": "高校合作", "projects": 15, "contributors": 186, "collaboration_level": "战略"}
+    ]
+  }
+}

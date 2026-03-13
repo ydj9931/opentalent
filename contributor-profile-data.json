@@ -1,0 +1,602 @@
+{
+  "profile": {
+    "id": "contributor-001",
+    "name": "张伟",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWei",
+    "bio": "开源爱好者，专注于分布式系统与云原生技术。致力于推动开源生态发展。",
+    "email": "zhangwei@example.com",
+    "location": "北京",
+    "verified_platforms": [
+      {"platform": "GitHub", "username": "zhangwei-dev", "verified": true},
+      {"platform": "AtomGit", "username": "zhangwei", "verified": true},
+      {"platform": "Gitee", "username": "zhangwei-cn", "verified": true}
+    ],
+    "community_roles": [
+      {
+        "community": "OpenAtom Foundation",
+        "role": "SIG Leader",
+        "group": "CloudNative SIG",
+        "verified": true,
+        "verification_link": "https://www.openatom.org/sigs/cloudnative"
+      },
+      {
+        "community": "OpenEuler Community",
+        "role": "Committer",
+        "group": "Infrastructure Team",
+        "verified": true,
+        "verification_link": "https://www.openeuler.org/community/infrastructure"
+      }
+    ]
+  },
+  "tech_stack": {
+    "core_domains": ["分布式系统", "云原生", "容器技术"],
+    "skills": [
+      {"name": "Go", "level": "expert", "years": 5},
+      {"name": "Rust", "level": "advanced", "years": 3},
+      {"name": "Kubernetes", "level": "expert", "years": 4},
+      {"name": "Docker", "level": "expert", "years": 5},
+      {"name": "Python", "level": "intermediate", "years": 6},
+      {"name": "CNCF", "category": "云原生", "level": "expert"},
+      {"category": "架构", "name": "微服务", "level": "advanced"},
+      {"category": "工具", "name": "Terraform", "level": "advanced"}
+    ],
+    "tech_timeline": [
+      {"year": "2019", "event": "开始学习Go语言", "skills": ["Go"]},
+      {"year": "2020", "event": "深入Kubernetes生态", "skills": ["Kubernetes", "Docker"]},
+      {"year": "2021", "event": "参与云原生项目开源", "skills": ["CNCF", "Prometheus"]},
+      {"year": "2022", "event": "学习Rust进行系统级开发", "skills": ["Rust"]},
+      {"year": "2023", "event": "担任SIG Leader", "skills": ["团队管理", "架构设计"]},
+      {"year": "2024", "event": "主导多个项目发布", "skills": ["发布管理", "社区治理"]}
+    ]
+  },
+  "contributions": {
+    "technical": [
+      {
+        "id": "tech-001",
+        "type": "code_commit",
+        "project": "cloud-native-runtime",
+        "title": "实现容器沙箱隔离机制",
+        "description": "新增沙箱隔离功能，支持多种容器运行时",
+        "pr_link": "https://github.com/openatom/cloud-native-runtime/pull/245",
+        "date": "2024-11-15",
+        "status": "merged",
+        "metrics": {
+          "lines_added": 1523,
+          "lines_deleted": 234,
+          "files_changed": 12,
+          "modules_affected": 3,
+          "components_affected": ["runtime", "sandbox", "api"]
+        },
+        "verification": "Git已核验"
+      },
+      {
+        "id": "tech-002",
+        "type": "code_commit",
+        "project": "cloud-native-runtime",
+        "title": "优化Pod调度策略",
+        "description": "改进调度器性能，提升大规模集群调度效率",
+        "pr_link": "https://github.com/openatom/cloud-native-runtime/pull/198",
+        "date": "2024-09-20",
+        "status": "merged",
+        "metrics": {
+          "lines_added": 856,
+          "lines_deleted": 120,
+          "files_changed": 8,
+          "modules_affected": 2,
+          "components_affected": ["scheduler"]
+        },
+        "verification": "Git已核验"
+      },
+      {
+        "id": "tech-003",
+        "type": "security_fix",
+        "project": "secure-container",
+        "title": "修复权限提升漏洞CVE-2024-1234",
+        "description": "修复容器逃逸风险，提交安全补丁",
+        "cve_id": "CVE-2024-1234",
+        "severity": "high",
+        "pr_link": "https://github.com/openatom/secure-container/pull/89",
+        "date": "2024-08-10",
+        "status": "merged",
+        "metrics": {
+          "affected_users": 5000,
+          "issue_link": "https://github.com/openatom/secure-container/issues/88"
+        },
+        "verification": "Git已核验"
+      },
+      {
+        "id": "tech-004",
+        "type": "documentation",
+        "project": "cloud-native-runtime",
+        "title": "更新API文档与部署指南",
+        "description": "完善v2.0版本API文档",
+        "pr_link": "https://github.com/openatom/cloud-native-runtime/pull/267",
+        "date": "2024-12-01",
+        "status": "merged",
+        "metrics": {
+          "pages_updated": 15,
+          "doc_views": 3250,
+          "citations": 28
+        },
+        "verification": "Git已核验"
+      },
+      {
+        "id": "tech-005",
+        "type": "code_review",
+        "project": "cloud-native-runtime",
+        "title": "评审PR #289 网络插件优化",
+        "description": "提出优化建议，被采纳5条",
+        "date": "2024-12-05",
+        "status": "completed",
+        "metrics": {
+          "review_comments": 12,
+          "suggestions_adopted": 5,
+          "code_quality_improvements": 3
+        },
+        "verification": "Git已核验"
+      },
+      {
+        "id": "tech-006",
+        "type": "design_decision",
+        "project": "cloud-native-runtime",
+        "title": "提出分层存储架构设计方案",
+        "description": "设计文档被采纳，成为项目标准架构",
+        "design_doc_link": "https://github.com/openatom/cloud-native-runtime/blob/main/docs/design/layered-storage.md",
+        "date": "2024-07-15",
+        "status": "adopted",
+        "metrics": {
+          "modules_designed": 4,
+          "adoption_rate": "100%"
+        },
+        "verification": "Design Doc已采纳"
+      },
+      {
+        "id": "tech-007",
+        "type": "test_contribution",
+        "project": "cloud-native-runtime",
+        "title": "新增集成测试用例",
+        "description": "为调度器模块添加50+测试用例",
+        "pr_link": "https://github.com/openatom/cloud-native-runtime/pull/210",
+        "date": "2024-10-08",
+        "status": "merged",
+        "metrics": {
+          "test_cases_added": 52,
+          "coverage_improvement": "+8.5%",
+          "ci_pass_rate": "99.2%"
+        },
+        "verification": "Git已核验"
+      }
+    ],
+    "governance": [
+      {
+        "id": "gov-001",
+        "type": "contribution_review",
+        "project": "OpenAtom Foundation",
+        "title": "担任Q4 Release评审委员会成员",
+        "description": "评审并批准12个项目的发布",
+        "date": "2024-12-20",
+        "status": "completed",
+        "metrics": {
+          "projects_reviewed": 12,
+          "decisions_adopted": 11,
+          "improvements_proposed": 8
+        },
+        "verification": "会议纪要关联"
+      },
+      {
+        "id": "gov-002",
+        "type": "release_management",
+        "project": "cloud-native-runtime",
+        "title": "主导v2.5.0版本发布",
+        "description": "协调各模块开发，确保按时发布",
+        "date": "2024-11-30",
+        "status": "completed",
+        "metrics": {
+          "release_stability": "99.5%",
+          "user_feedback_improvement": "+15%",
+          "features_delivered": 23
+        },
+        "verification": "Release Notes关联"
+      },
+      {
+        "id": "gov-003",
+        "type": "rules_building",
+        "project": "CloudNative SIG",
+        "title": "制定SIG代码贡献规范",
+        "description": "编写贡献指南、PR审核流程、Code Style标准",
+        "date": "2024-06-01",
+        "status": "adopted",
+        "metrics": {
+          "adoption_rate": "100%",
+          "compliance_rate": "95%"
+        },
+        "verification": "官方文档关联"
+      },
+      {
+        "id": "gov-004",
+        "type": "organizational",
+        "project": "OpenAtom Foundation",
+        "title": "发起成立云原生安全工作组",
+        "description": "联合5家企业，组建专项工作组",
+        "date": "2024-04-15",
+        "status": "approved",
+        "metrics": {
+          "companies_involved": 5,
+          "members_recruited": 18,
+          "meetings_held": 12
+        },
+        "verification": "官方公告关联"
+      },
+      {
+        "id": "gov-005",
+        "type": "roadmap_decision",
+        "project": "cloud-native-runtime",
+        "title": "参与2025年度路线图规划",
+        "description": "确定技术方向与里程碑",
+        "date": "2024-12-01",
+        "status": "approved",
+        "metrics": {
+          "features_planned": 35,
+          "milestones_set": 4
+        },
+        "verification": "会议纪要关联"
+      }
+    ],
+    "ecosystem": [
+      {
+        "id": "eco-001",
+        "type": "tech_spread",
+        "project": "云原生技术博客",
+        "title": "《深入理解Kubernetes调度器》系列文章",
+        "description": "在掘金、CSDN发布技术文章",
+        "date": "2024-11-20",
+        "status": "published",
+        "metrics": {
+          "article_views": 15680,
+          "likes": 892,
+          "shares": 234,
+          "citations": 45
+        },
+        "verification": "平台数据关联"
+      },
+      {
+        "id": "eco-002",
+        "type": "tech_spread",
+        "project": "KubeCon China 2024",
+        "title": "演讲：云原生时代的容器安全实践",
+        "description": "受邀在KubeCon发表主题演讲",
+        "event_link": "https://kubecon.cn/speakers/zhangwei",
+        "date": "2024-10-15",
+        "status": "completed",
+        "metrics": {
+          "audience_size": 1200,
+          "questions_answered": 15,
+          "rating": 4.8
+        },
+        "verification": "活动记录关联"
+      },
+      {
+        "id": "eco-003",
+        "type": "community_event",
+        "project": "Hackathon 2024",
+        "title": "组织云原生主题黑客松",
+        "description": "策划并执行为期2天的黑客松活动",
+        "date": "2024-09-01",
+        "status": "completed",
+        "metrics": {
+          "participants 86":,
+          "teams": 18,
+          "projects_submitted": 15,
+          "active_contributors_new": 12
+        },
+        "verification": "活动报告关联"
+      },
+      {
+        "id": "eco-004",
+        "type": "education",
+        "project": "开源实践进校园",
+        "title": "清华大学《开源软件开发实践》课程讲师",
+        "description": "讲授8节课，涵盖Git、CNCF项目实践",
+        "date": "2024-03-15",
+        "status": "completed",
+        "metrics": {
+          "students": 120,
+          "feedback_score": 4.9,
+          "contributors_recruited": 8
+        },
+        "verification": "课程记录关联"
+      },
+      {
+        "id": "eco-005",
+        "type": "industry_promotion",
+        "project": "企业采用计划",
+        "title": "推动3家企业采用云原生运行时",
+        "description": "提供技术支持，帮助企业落地项目",
+        "date": "2024-08-01",
+        "status": "completed",
+        "metrics": {
+          "companies_adopted": 3,
+          "projects_deployed": 5,
+          "partnerships_formed": 2
+        },
+        "verification": "官方公告关联"
+      }
+    ]
+  },
+  "initiated_projects": [
+    {
+      "id": "proj-001",
+      "name": "cloud-native-runtime",
+      "description": "企业级云原生容器运行时解决方案",
+      "repository": "https://github.com/openatom/cloud-native-runtime",
+      "basic_data": {
+        "created_at": "2022-01-15",
+        "primary_language": "Go",
+        "license": "Apache-2.0",
+        "stars": 3200,
+        "forks": 456,
+        "watchers": 128,
+        "open_issues": 23,
+        "closed_issues": 287,
+        "open_prs": 12,
+        "merged_prs": 456,
+        "total_contributors": 45,
+        "new_contributors_30d": 5,
+        "active_contributors": 28,
+        "branches": 8,
+        "releases": 11,
+        "tags": 24,
+        "commits_30d": 156,
+        "commits_90d": 423,
+        "commits_1y": 1567,
+        "last_updated": "2024-12-20"
+      },
+      "five_dimension_scores": {
+        "health_community": {
+          "score": 0.88,
+          "metrics": {
+            "release_frequency": "季度发布",
+            "pr_processing_rate": "95%",
+            "issue_processing_rate": "92%",
+            "active_contributors": 45
+          }
+        },
+        "criticality": {
+          "score": 0.82,
+          "metrics": {
+            "core_modules": 12,
+            "downstream_dependencies": 28,
+            "strategic_value": "基金会重点项目"
+          }
+        },
+        "impact_adoption": {
+          "score": 0.75,
+          "metrics": {
+            "stars": 3200,
+            "forks": 456,
+            "monthly_downloads": 85000,
+            "enterprise_adoption": 15
+          }
+        },
+        "security_best_practices": {
+          "score": 0.90,
+          "metrics": {
+            "vulnerability_fix_time": "7天",
+            "ci_pass_rate": "99.5%",
+            "test_coverage": "78%",
+            "security_audit": "已通过"
+          }
+        },
+        "innovation_complexity": {
+          "score": 0.78,
+          "metrics": {
+            "new_features": 35,
+            "module_coupling": "低耦合",
+            "architecture_complexity": "中等"
+          }
+        }
+      },
+      "role": "Founder & Lead Maintainer",
+      "started_date": "2022-01-15",
+      "current_version": "v2.5.0"
+    },
+    {
+      "id": "proj-002",
+      "name": "secure-container",
+      "description": "容器安全沙箱隔离组件",
+      "repository": "https://github.com/openatom/secure-container",
+      "basic_data": {
+        "created_at": "2023-03-20",
+        "primary_language": "Rust",
+        "license": "Apache-2.0",
+        "stars": 1200,
+        "forks": 180,
+        "watchers": 45,
+        "open_issues": 8,
+        "closed_issues": 96,
+        "open_prs": 5,
+        "merged_prs": 168,
+        "total_contributors": 18,
+        "new_contributors_30d": 2,
+        "active_contributors": 12,
+        "branches": 4,
+        "releases": 8,
+        "tags": 15,
+        "commits_30d": 45,
+        "commits_90d": 128,
+        "commits_1y": 456,
+        "last_updated": "2024-12-18"
+      },
+      "five_dimension_scores": {
+        "health_community": {
+          "score": 0.85,
+          "metrics": {
+            "release_frequency": "月度发布",
+            "pr_processing_rate": "92%",
+            "issue_processing_rate": "88%",
+            "active_contributors": 18
+          }
+        },
+        "criticality": {
+          "score": 0.76,
+          "metrics": {
+            "core_modules": 5,
+            "downstream_dependencies": 12,
+            "strategic_value": "安全关键组件"
+          }
+        },
+        "impact_adoption": {
+          "score": 0.68,
+          "metrics": {
+            "stars": 1200,
+            "forks": 180,
+            "monthly_downloads": 25000,
+            "enterprise_adoption": 8
+          }
+        },
+        "security_best_practices": {
+          "score": 0.95,
+          "metrics": {
+            "vulnerability_fix_time": "3天",
+            "ci_pass_rate": "99.8%",
+            "test_coverage": "85%",
+            "security_audit": "CNCF认证"
+          }
+        },
+        "innovation_complexity": {
+          "score": 0.82,
+          "metrics": {
+            "new_features": 18,
+            "module_coupling": "极低耦合",
+            "architecture_complexity": "高"
+          }
+        }
+      },
+      "role": "Co-founder & Security Lead",
+      "started_date": "2023-03-20",
+      "current_version": "v1.8.0"
+    }
+  ],
+  "participations": [
+    {
+      "id": "part-001",
+      "project": "OpenEuler",
+      "community": "OpenEuler Community",
+      "repository": "https://github.com/openeuler/openeuler",
+      "role": "Committer",
+      "group": "Infrastructure Team",
+      "joined_date": "2023-06-01",
+      "project_basic_data": {
+        "created_at": "2019-12-31",
+        "primary_language": "C",
+        "license": "Mulan PSL v2",
+        "stars": 8500,
+        "forks": 2340,
+        "watchers": 320,
+        "open_issues": 156,
+        "closed_issues": 3240,
+        "open_prs": 45,
+        "merged_prs": 8920,
+        "total_contributors": 520,
+        "active_contributors": 180,
+        "branches": 12,
+        "releases": 28,
+        "commits_30d": 456,
+        "last_updated": "2024-12-20"
+      },
+      "five_dimension_scores": {
+        "health_community": 0.92,
+        "criticality": 0.95,
+        "impact_adoption": 0.88,
+        "security_best_practices": 0.85,
+        "innovation_complexity": 0.80
+      },
+      "contribution_summary": {
+        "technical": "优化了基础设施自动化脚本，贡献代码1500+行",
+        "governance": "参与基础设施SIG的路线图规划",
+        "ecosystem": "组织2场社区Meetup"
+      },
+      "honors": [
+        {"title": "2024年度最佳贡献者", "date": "2024-12-31", "issuer": "OpenEuler Foundation"}
+      ],
+      "verification_link": "https://www.openeuler.org/community/committers"
+    },
+    {
+      "id": "part-002",
+      "project": "K3s",
+      "community": "Rancher Labs",
+      "repository": "https://github.com/k3s-io/k3s",
+      "role": "Contributor",
+      "group": "K3s Core Team",
+      "joined_date": "2023-09-15",
+      "project_basic_data": {
+        "created_at": "2019-02-26",
+        "primary_language": "Go",
+        "license": "Apache-2.0",
+        "stars": 28900,
+        "forks": 3200,
+        "watchers": 890,
+        "open_issues": 234,
+        "closed_issues": 4560,
+        "open_prs": 78,
+        "merged_prs": 12500,
+        "total_contributors": 680,
+        "active_contributors": 245,
+        "branches": 6,
+        "releases": 52,
+        "commits_30d": 890,
+        "last_updated": "2024-12-20"
+      },
+      "five_dimension_scores": {
+        "health_community": 0.95,
+        "criticality": 0.88,
+        "impact_adoption": 0.92,
+        "security_best_practices": 0.90,
+        "innovation_complexity": 0.75
+      },
+      "contribution_summary": {
+        "technical": "修复关键Bug 5个，提交PR 12个",
+        "governance": "参与RFC评审",
+        "ecosystem": "贡献技术文档"
+      },
+      "honors": [],
+      "verification_link": "https://github.com/k3s-io/k3s/graphs/contributors"
+    }
+  ],
+  "dashboard": {
+    "contribution_timeline": [
+      {"year": "2019", "month": "03", "event": "首次参与开源项目", "type": "milestone"},
+      {"year": "2020", "month": "06", "event": "成为OpenEuler Contributor", "type": "role_change"},
+      {"year": "2021", "month": "09", "event": "首个PR被合入CNCF项目", "type": "technical"},
+      {"year": "2022", "month": "01", "event": "发起cloud-native-runtime项目", "type": "project_initiation"},
+      {"year": "2022", "month": "06", "event": "担任CloudNative SIG Leader", "type": "role_change"},
+      {"year": "2023", "month": "03", "event": "发起secure-container项目", "type": "project_initiation"},
+      {"year": "2023", "month": "08", "event": "KubeCon首次演讲", "type": "ecosystem"},
+      {"year": "2024", "month": "04", "event": "成立云原生安全工作组", "type": "governance"},
+      {"year": "2024", "month": "12", "event": "个人贡献者面板上线", "type": "milestone"}
+    ],
+    "behavior_distribution": {
+      "technical": 55,
+      "governance": 25,
+      "ecosystem": 20
+    },
+    "yearly_summary": {
+      "2024": {
+        "prs_merged": 28,
+        "issues_closed": 45,
+        "reviews_done": 62,
+        "talks_given": 5,
+        "articles_published": 12,
+        "events_organized": 3
+      },
+      "2023": {
+        "prs_merged": 22,
+        "issues_closed": 38,
+        "reviews_done": 48,
+        "talks_given": 3,
+        "articles_published": 8,
+        "events_organized": 2
+      }
+    }
+  }
+}

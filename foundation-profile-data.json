@@ -1,0 +1,313 @@
+{
+  "foundation": {
+    "id": "openatom",
+    "name": "开放原子开源基金会",
+    "type": "国家级开源基金会",
+    "established": "2019-06-15",
+    "description": "中国首个开源基金会，推动开源生态发展",
+    "website": "https://www.openatom.org"
+  },
+  "overview": {
+    "total_contributors": 156780,
+    "active_contributors": 45620,
+    "core_contributors": 8920,
+    "total_universities": 328,
+    "total_enterprises": 486,
+    "total_communities": 1256,
+    "total_activities": 268,
+    "total_projects": 1256,
+    "total_prs": 1256780,
+    "total_issues": 456780,
+    "total_commits": 3567890
+  },
+  "national_trend": [
+    {"year": "2020", "contributors": 28500, "prs": 185000, "projects": 320},
+    {"year": "2021", "contributors": 45600, "prs": 325000, "projects": 520},
+    {"year": "2022", "contributors": 78200, "prs": 568000, "projects": 780},
+    {"year": "2023", "contributors": 115600, "prs": 892000, "projects": 1020},
+    {"year": "2024", "contributors": 156780, "prs": 1256780, "projects": 1256}
+  ],
+  "technology_domains": {
+    "hot_domains": [
+      {"name": "人工智能", "contributors": 28650, "projects": 256, "growth": 28, "level": "high"},
+      {"name": "云计算/云原生", "contributors": 22340, "projects": 198, "growth": 22, "level": "high"},
+      {"name": "物联网", "contributors": 15680, "projects": 145, "growth": 15, "level": "medium"},
+      {"name": "区块链", "contributors": 8960, "projects": 78, "growth": -5, "level": "low"},
+      {"name": "网络安全", "authors": 12340, "projects": 112, "growth": 25, "level": "medium"},
+      {"name": "操作系统", "contributors": 15670, "projects": 86, "growth": 35, "level": "high"},
+      {"name": "前端开发", "contributors": 18920, "projects": 168, "growth": 18, "level": "high"},
+      {"name": "数据库", "contributors": 8920, "projects": 68, "growth": 12, "level": "medium"},
+      {"name": "DevOps", "contributors": 11230, "projects": 95, "growth": 20, "level": "medium"},
+      {"name": "大数据", "contributors": 14560, "projects": 125, "growth": 16, "level": "medium"}
+    ]
+  },
+  "layer_distribution": {
+    "individuals": {
+      "count": 156780,
+      "percentage": 65,
+      "core": 8920,
+      "growth": 35.6
+    },
+    "universities": {
+      "count": 328,
+      "contributors": 28650,
+      "percentage": 18,
+      "growth": 22.5
+    },
+    "enterprises": {
+      "count": 486,
+      "contributors": 45620,
+      "percentage": 29,
+      "growth": 28.3
+    },
+    "communities": {
+      "count": 1256,
+      "contributors": 68230,
+      "percentage": 43,
+      "growth": 32.1
+    },
+    "activities": {
+      "count": 268,
+      "contributors": 28650,
+      "growth": 45.2
+    }
+  },
+  "top_contributors": [
+    {
+      "id": "contrib-001",
+      "name": "张伟",
+      "organization": "华为技术有限公司",
+      "role": "Tech Lead",
+      "contributions": 1234,
+      "projects_count": 28,
+      "cross_org_collaborations": 15,
+      "tech_domains": ["操作系统", "云原生", "安全"],
+      "influence_score": 98,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWeiOA"
+    },
+    {
+      "id": "contrib-002",
+      "name": "李明",
+      "organization": "阿里云计算",
+      "role": "Senior Engineer",
+      "contributions": 1089,
+      "projects_count": 22,
+      "cross_org_collaborations": 12,
+      "tech_domains": ["云计算", "大数据", "AI"],
+      "influence_score": 95,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiMingOA"
+    },
+    {
+      "id": "contrib-003",
+      "name": "王芳",
+      "organization": "清华大学",
+      "role": "副教授",
+      "contributions": 956,
+      "projects_count": 18,
+      "cross_org_collaborations": 20,
+      "tech_domains": ["AI", "操作系统", "分布式系统"],
+      "influence_score": 92,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=WangFangOA"
+    },
+    {
+      "id": "contrib-004",
+      "name": "陈强",
+      "organization": "腾讯科技",
+      "role": "Principal Engineer",
+      "contributions": 892,
+      "projects_count": 25,
+      "cross_org_collaborations": 18,
+      "tech_domains": ["物联网", "边缘计算", "5G"],
+      "influence_score": 89,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ChenQiangOA"
+    },
+    {
+      "id": "contrib-005",
+      "name": "刘洋",
+      "organization": "北京大学",
+      "role": "教授",
+      "contributions": 856,
+      "projects_count": 15,
+      "cross_org_collaborations": 22,
+      "tech_domains": ["AI", "机器学习", "系统架构"],
+      "influence_score": 87,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=LiuYangOA"
+    },
+    {
+      "id": "contrib-006",
+      "name": "赵磊",
+      "organization": "字节跳动",
+      "role": "Staff Engineer",
+      "contributions": 798,
+      "projects_count": 20,
+      "cross_org_collaborations": 10,
+      "tech_domains": ["前端", "Node.js", "跨平台"],
+      "influence_score": 85,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhaoLeiOA"
+    },
+    {
+      "id": "contrib-007",
+      "name": "周敏",
+      "organization": "百度",
+      "role": "Tech Expert",
+      "contributions": 765,
+      "projects_count": 16,
+      "cross_org_collaborations": 14,
+      "tech_domains": ["AI", "深度学习", "自动驾驶"],
+      "influence_score": 83,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ZhouMinOA"
+    },
+    {
+      "id": "contrib-008",
+      "name": "吴霞",
+      "organization": "中国科学院",
+      "role": "研究员",
+      "contributions": 712,
+      "projects_count": 12,
+      "cross_org_collaborations": 18,
+      "tech_domains": ["操作系统", "编译器", "系统软件"],
+      "influence_score": 81,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=WuXiaOA"
+    }
+  ],
+  "key_projects": [
+    {
+      "id": "proj-001",
+      "name": "OpenHarmony",
+      "type": "操作系统",
+      "description": "开放原子开源基金会顶级项目，分布式全场景操作系统",
+      "foundation_level": "TLP",
+      "contributors": 5680,
+      "core_contributors": 256,
+      "prs": 25680,
+      "stars": 256000,
+      "organizations": 156,
+      "universities": 45,
+      "innovation_score": 98,
+      "adoption_score": 95,
+      "criticality_score": 98,
+      "health_score": 92,
+      "trend": "up"
+    },
+    {
+      "id": "proj-002",
+      "name": "openEuler",
+      "type": "操作系统",
+      "description": "开源欧拉操作系统，数字基础设施的坚实底座",
+      "foundation_level": "TLP",
+      "contributors": 3890,
+      "core_contributors": 186,
+      "prs": 18900,
+      "stars": 128000,
+      "organizations": 128,
+      "universities": 38,
+      "innovation_score": 92,
+      "adoption_score": 88,
+      "criticality_score": 95,
+      "health_score": 88,
+      "trend": "up"
+    },
+    {
+      "id": "proj-003",
+      "name": "OpenSumi",
+      "type": "开发工具",
+      "description": "云端开发平台，开发者效率工具",
+      "foundation_level": "Incubating",
+      "contributors": 1256,
+      "core_contributors": 68,
+      "prs": 5670,
+      "stars": 18900,
+      "organizations": 78,
+      "universities": 22,
+      "innovation_score": 85,
+      "adoption_score": 82,
+      "criticality_score": 78,
+      "health_score": 85,
+      "trend": "up"
+    },
+    {
+      "id": "proj-004",
+      "name": "Apache ShenYu",
+      "type": "中间件",
+      "description": "API网关，数字化系统流量入口",
+      "foundation_level": "Incubating",
+      "contributors": 892,
+      "core_contributors": 45,
+      "prs": 3456,
+      "stars": 8900,
+      "organizations": 56,
+      "universities": 18,
+      "innovation_score": 80,
+      "adoption_score": 75,
+      "criticality_score": 72,
+      "health_score": 78,
+      "trend": "stable"
+    },
+    {
+      "id": "proj-005",
+      "name": "OpenYurt",
+      "type": "云原生",
+      "description": "边缘计算云原生平台",
+      "foundation_level": "Incubating",
+      "contributors": 678,
+      "core_contributors": 32,
+      "prs": 2134,
+      "stars": 5600,
+      "organizations": 42,
+      "universities": 15,
+      "innovation_score": 82,
+      "adoption_score": 70,
+      "criticality_score": 68,
+      "health_score": 75,
+      "trend": "up"
+    }
+  ],
+  "ecology_health": {
+    "overall_score": 85,
+    "contribution_vitality": 88,
+    "project_health": 82,
+    "talent_retention": 78,
+    "cross_org_collaboration": 86,
+    "innovation_capability": 92
+  },
+  "predictions": {
+    "trends": [
+      {"type": "growth", "metric": "贡献者数量", "prediction": "+45%", "confidence": 92},
+      {"type": "growth", "metric": "活跃项目数", "prediction": "+35%", "confidence": 88},
+      {"type": "growth", "metric": "高校参与度", "prediction": "+52%", "confidence": 85}
+    ],
+    "warnings": [
+      {"level": "high", "type": "talent_loss", "description": "核心贡献者流失风险 - 建议加强人才激励", "affected": 28},
+      {"level": "medium", "type": "tech_gap", "description": "区块链领域活跃度下降趋势明显", "affected": 3},
+      {"level": "low", "type": "project_stagnation", "description": "12个项目活跃度低于阈值", "affected": 12}
+    ]
+  },
+  "regional_distribution": [
+    {"region": "北京", "contributors": 28650, "percentage": 18.3, "enterprises": 98, "universities": 45},
+    {"region": "广东", "contributors": 24560, "percentage": 15.7, "enterprises": 86, "universities": 38},
+    {"region": "上海", "contributors": 19870, "percentage": 12.7, "enterprises": 72, "universities": 32},
+    {"region": "浙江", "contributors": 15680, "percentage": 10.0, "enterprises": 58, "universities": 25},
+    {"region": "江苏", "contributors": 12340, "percentage": 7.9, "enterprises": 45, "universities": 28},
+    {"region": "其他", "contributors": 55680, "percentage": 35.4, "enterprises": 127, "universities": 160}
+  ],
+  "collaboration_network": {
+    "nodes": [
+      {"id": "华为技术", "type": "enterprise", "size": 156},
+      {"id": "阿里云", "type": "enterprise", "size": 128},
+      {"id": "腾讯科技", "type": "enterprise", "size": 112},
+      {"id": "清华大学", "type": "university", "size": 86},
+      {"id": "北京大学", "type": "university", "size": 72},
+      {"id": "OpenHarmony", "type": "project", "size": 256},
+      {"id": "openEuler", "type": "project", "size": 198},
+      {"id": "字节跳动", "type": "enterprise", "size": 68}
+    ],
+    "links": [
+      {"source": "华为技术", "target": "OpenHarmony", "strength": 25},
+      {"source": "华为技术", "target": "openEuler", "strength": 22},
+      {"source": "阿里云", "target": "OpenHarmony", "strength": 15},
+      {"source": "清华大学", "target": "OpenHarmony", "strength": 12},
+      {"source": "清华大学", "target": "openEuler", "strength": 10},
+      {"source": "腾讯科技", "target": "OpenHarmony", "strength": 18}
+    ]
+  }
+}
