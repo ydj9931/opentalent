@@ -1,939 +1,1050 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>开源贡献者面板 - 让每一份开源贡献被看见</title>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap"
-            rel="stylesheet"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        />
-        <style>
-            :root {
-                /* Colors - Light Mode Flat Design */
-                --bg-page: #FFFFFF;
-                --bg-gray: #F3F4F6;
-                --bg-blue: #EFF6FF;
-                --bg-green: #ECFDF5;
-                --bg-amber: #FFFBEB;
-                --bg-purple: #F5F3FF;
-                --text-primary: #111827;
-                --text-secondary: #6B7280;
-                --text-muted: #9CA3AF;
-                --primary: #3B82F6;
-                --primary-dark: #2563EB;
-                --secondary: #10B981;
-                --accent: #F59E0B;
-                --border: #E5E7EB;
-            }
-
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            body {
-                font-family: "Outfit", sans-serif;
-                background: var(--bg-page);
-                color: var(--text-primary);
-                line-height: 1.6;
-                min-height: 100vh;
-            }
-
-            /* Background Decoration - Geometric Shapes */
-            body::before {
-                content: "";
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                pointer-events: none;
-                z-index: 0;
-                overflow: hidden;
-            }
-
-            .hero-decoration {
-                position: absolute;
-                top: -200px;
-                right: -200px;
-                width: 600px;
-                height: 600px;
-                background: #EFF6FF;
-                border-radius: 50%;
-                opacity: 0.5;
-            }
-
-            .hero-decoration-2 {
-                position: absolute;
-                bottom: 100px;
-                left: -100px;
-                width: 400px;
-                height: 400px;
-                background: #F5F3FF;
-                border-radius: 50%;
-                opacity: 0.5;
-            }
-
-            .hero-decoration-3 {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 800px;
-                height: 800px;
-                background: radial-gradient(circle, #F3F4F6 0%, transparent 70%);
-                opacity: 0.5;
-            }
-
-            .container {
-                max-width: 1280px;
-                margin: 0 auto;
-                padding: 0 32px;
-                position: relative;
-                z-index: 1;
-            }
-
-            /* Hero Section */
-            .hero {
-                text-align: center;
-                padding: 120px 0 100px;
-                position: relative;
-                background: var(--bg-page);
-            }
-
-            .hero-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                background: var(--bg-blue);
-                border: 2px solid var(--primary);
-                padding: 10px 24px;
-                border-radius: 6px;
-                font-size: 0.875rem;
-                font-weight: 600;
-                color: var(--primary);
-                margin-bottom: 32px;
-                letter-spacing: 0.02em;
-                transition: all 0.2s ease;
-            }
-
-            .hero-badge:hover {
-                background: var(--primary);
-                color: white;
-                transform: scale(1.02);
-            }
-
-            .hero h1 {
-                font-size: 4.5rem;
-                font-weight: 800;
-                color: var(--text-primary);
-                margin-bottom: 24px;
-                letter-spacing: -0.03em;
-                line-height: 1.1;
-                animation: fadeInUp 0.6s ease-out 0.1s both;
-            }
-
-            .hero .subtitle {
-                font-size: 1.5rem;
-                color: var(--text-secondary);
-                max-width: 640px;
-                margin: 0 auto 56px;
-                animation: fadeInUp 0.6s ease-out 0.2s both;
-            }
-
-            .hero-stats {
-                display: flex;
-                justify-content: center;
-                gap: 48px;
-                animation: fadeInUp 0.6s ease-out 0.3s both;
-            }
-
-            .stat-item {
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-                padding: 24px 32px;
-                background: var(--bg-page);
-                border: 2px solid var(--border);
-                border-radius: 8px;
-                min-width: 160px;
-                transition: all 0.2s ease;
-            }
-
-            .stat-item:hover {
-                border-color: var(--primary);
-                transform: translateY(-4px);
-            }
-
-            .stat-icon {
-                width: 48px;
-                height: 48px;
-                border-radius: 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.25rem;
-                background: var(--bg-blue);
-                color: var(--primary);
-            }
-
-            .stat-item:nth-child(2) .stat-icon { background: var(--bg-green); color: var(--secondary); }
-            .stat-item:nth-child(3) .stat-icon { background: var(--bg-amber); color: var(--accent); }
-            .stat-item:nth-child(4) .stat-icon { background: var(--bg-purple); color: #8B5CF6; }
-            .stat-item:nth-child(5) .stat-icon { background: var(--bg-green); color: var(--secondary); }
-
-            .stat-value {
-                font-size: 2.5rem;
-                font-weight: 700;
-                color: var(--text-primary);
-            }
-
-            .stat-item:nth-child(1) .stat-value { color: var(--primary); }
-            .stat-item:nth-child(2) .stat-value { color: var(--secondary); }
-            .stat-item:nth-child(3) .stat-value { color: var(--accent); }
-            .stat-item:nth-child(4) .stat-value { color: #8B5CF6; }
-
-            .stat-label {
-                font-size: 0.9rem;
-                color: var(--text-secondary);
-                font-weight: 500;
-            }
-
-            /* Section */
-            .section {
-                padding: 80px 0;
-            }
-
-            .section-gray {
-                background: var(--bg-gray);
-            }
-
-            .section-blue {
-                background: var(--bg-blue);
-            }
-
-            .section-title {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 16px;
-                margin-bottom: 56px;
-                font-size: 2rem;
-                font-weight: 700;
-                letter-spacing: -0.02em;
-                color: var(--text-primary);
-            }
-
-            .section-title i {
-                width: 44px;
-                height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: var(--primary);
-                color: white;
-                border-radius: 6px;
-                font-size: 1.25rem;
-            }
-
-            /* Grid */
-            .grid {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 24px;
-            }
-
-            /* Cards - Flat Design Color Blocks */
-            .card {
-                background: var(--bg-page);
-                border: 2px solid var(--border);
-                border-radius: 8px;
-                padding: 32px;
-                transition: all 0.2s ease;
-                text-decoration: none;
-                display: block;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .card:hover {
-                transform: scale(1.02);
-                border-color: var(--card-color, var(--primary));
-            }
-
-            .card:hover .card-icon {
-                transform: scale(1.1);
-            }
-
-            .card-header {
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                margin-bottom: 20px;
-            }
-
-            .card-icon {
-                width: 56px;
-                height: 56px;
-                border-radius: 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.5rem;
-                background: var(--card-bg, var(--bg-blue));
-                color: var(--card-color, var(--primary));
-                transition: all 0.2s ease;
-            }
-
-            .card-badge {
-                font-size: 0.75rem;
-                padding: 6px 12px;
-                border-radius: 4px;
-                background: var(--bg-gray);
-                color: var(--text-secondary);
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-
-            .card h3 {
-                font-size: 1.25rem;
-                font-weight: 700;
-                margin-bottom: 12px;
-                color: var(--text-primary);
-                letter-spacing: -0.01em;
-            }
-
-            .card p {
-                font-size: 0.95rem;
-                color: var(--text-secondary);
-                margin-bottom: 24px;
-                line-height: 1.6;
-            }
-
-            .card-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                padding: 14px 28px;
-                background: var(--card-color, var(--primary));
-                color: white;
-                border-radius: 6px;
-                font-size: 0.9rem;
-                font-weight: 600;
-                transition: all 0.2s ease;
-                width: 100%;
-            }
-
-            .card:hover .card-btn {
-                gap: 12px;
-            }
-
-            /* Color Variants */
-            .card-developer { --card-color: #3B82F6; --card-bg: #EFF6FF; }
-            .card-activity { --card-color: #8B5CF6; --card-bg: #F5F3FF; }
-            .card-university { --card-color: #06B6D4; --card-bg: #ECFEFF; }
-            .card-community { --card-color: #F97316; --card-bg: #FFF7ED; }
-            .card-enterprise { --card-color: #F59E0B; --card-bg: #FFFBEB; }
-            .card-government { --card-color: #10B981; --card-bg: #ECFDF5; }
-            .card-foundation { --card-color: #EC4899; --card-bg: #FDF2F8; }
-
-            /* Partners Section */
-            .partners-grid {
-                display: grid;
-                grid-template-columns: repeat(6, 1fr);
-                gap: 16px;
-            }
-
-            .partner-logo {
-                background: var(--bg-page);
-                border: 2px solid var(--border);
-                border-radius: 8px;
-                padding: 28px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100px;
-                transition: all 0.2s ease;
-            }
-
-            .partner-logo:hover {
-                border-color: var(--primary);
-                transform: scale(1.02);
-            }
-
-            .partner-logo i {
-                font-size: 2rem;
-                color: var(--text-secondary);
-            }
-
-            .partner-logo:hover i {
-                color: var(--primary);
-            }
-
-            /* Users Section */
-            .users-section {
-                background: var(--bg-page);
-                border: 2px solid var(--border);
-                border-radius: 8px;
-                padding: 56px;
-            }
-
-            .users-intro {
-                text-align: center;
-                margin-bottom: 48px;
-            }
-
-            .users-intro p {
-                color: var(--text-secondary);
-                font-size: 1.1rem;
-            }
-
-            .users-grid {
-                display: grid;
-                grid-template-columns: repeat(5, 1fr);
-                gap: 32px;
-            }
-
-            .user-category h4 {
-                font-size: 1rem;
-                font-weight: 700;
-                margin-bottom: 20px;
-                color: var(--text-primary);
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-                font-size: 0.8rem;
-            }
-
-            .user-category h4 i {
-                width: 32px;
-                height: 32px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: var(--bg-blue);
-                color: var(--primary);
-                border-radius: 4px;
-            }
-
-            .user-list {
-                display: flex;
-                flex-direction: column;
-                gap: 14px;
-            }
-
-            .user-item {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                color: var(--text-secondary);
-                font-size: 0.95rem;
-                font-weight: 500;
-            }
-
-            .user-item i {
-                color: var(--secondary);
-                font-size: 0.9rem;
-            }
-
-            /* Footer */
-            .footer {
-                background: #111827;
-                color: white;
-                padding: 80px 0 32px;
-            }
-
-            .footer-grid {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 48px;
-                margin-bottom: 48px;
-            }
-
-            .footer-col h4 {
-                font-size: 1rem;
-                font-weight: 700;
-                margin-bottom: 24px;
-                color: white;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-
-            .footer-col ul {
-                list-style: none;
-            }
-
-            .footer-col li {
-                margin-bottom: 14px;
-            }
-
-            .footer-col a {
-                color: #9CA3AF;
-                text-decoration: none;
-                font-size: 0.95rem;
-                font-weight: 500;
-                transition: color 0.2s ease;
-            }
-
-            .footer-col a:hover {
-                color: white;
-            }
-
-            .footer-bottom {
-                text-align: center;
-                padding-top: 32px;
-                border-top: 1px solid #374151;
-                color: #9CA3AF;
-                font-size: 0.875rem;
-            }
-
-            .footer-bottom a {
-                color: #60A5FA;
-                text-decoration: none;
-            }
-
-            /* Animations */
-            @keyframes fadeInDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            /* Responsive */
-            @media (max-width: 1024px) {
-                .hero h1 {
-                    font-size: 3.5rem;
-                }
-                .grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-                .partners-grid {
-                    grid-template-columns: repeat(3, 1fr);
-                }
-                .users-grid {
-                    grid-template-columns: repeat(3, 1fr);
-                }
-            }
-
-            @media (max-width: 768px) {
-                .hero h1 {
-                    font-size: 2.5rem;
-                }
-                .hero-stats {
-                    gap: 16px;
-                    flex-wrap: wrap;
-                }
-                .stat-item {
-                    min-width: 140px;
-                    padding: 16px 20px;
-                }
-                .grid {
-                    grid-template-columns: 1fr;
-                }
-                .partners-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-                .users-grid {
-                    grid-template-columns: 1fr;
-                }
-                .footer-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-                .section-title {
-                    font-size: 1.5rem;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Hero Section -->
-        <div class="hero">
-            <div class="hero-decoration"></div>
-            <div class="hero-decoration-2"></div>
-            <div class="hero-decoration-3"></div>
-            <div class="container">
-                <div class="hero-badge">
-                    <i class="fas fa-heart"></i>
-                    OpenAtom 贡献者面板
-                </div>
-                <h1>让每一份开源贡献被看见</h1>
-                <p class="subtitle">构建开源贡献者的协作资本基础设施</p>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <span class="stat-value">12,000+</span>
-                        <span class="stat-label">开源贡献者</span>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <span class="stat-value">300+</span>
-                        <span class="stat-label">开源项目</span>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <span class="stat-value">80+</span>
-                        <span class="stat-label">高校</span>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-building"></i>
-                        </div>
-                        <span class="stat-value">40+</span>
-                        <span class="stat-label">企业</span>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                        <span class="stat-value">50+</span>
-                        <span class="stat-label">社区</span>
-                    </div>
-                </div>
-            </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实时贡献网络 - OpenAtom 贡献者面板</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero Section Placeholder */
+    .hero-placeholder {
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .hero-placeholder h1 {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-content {
+      text-align: center;
+    }
+
+    .hero-tagline {
+      font-size: 20px;
+      color: #94a3b8;
+      margin-top: 16px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    /* Module Container */
+    .module-section {
+      padding: 60px 0;
+    }
+
+    .module-title {
+      font-size: 32px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 48px;
+      color: #e2e8f0;
+    }
+
+    .module-title span {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* L1: Global Metrics */
+    .metrics-section {
+      margin-bottom: 60px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .metric-card.highlight {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .metric-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* L2: Opportunity & Contribution Flow */
+    .l2-section {
+      margin-bottom: 60px;
+    }
+
+    .l2-container {
+      display: grid;
+      grid-template-columns: 30% 70%;
+      gap: 24px;
+    }
+
+    /* Recommendation Panel */
+    .recommendation-panel {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .ai-badge {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: #fff;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .recommend-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .recommend-item {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .recommend-item:hover {
+      background: rgba(99, 102, 241, 0.15);
+      transform: translateX(4px);
+    }
+
+    .recommend-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .recommend-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #e2e8f0;
+    }
+
+    .recommend-type {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+    }
+
+    .recommend-type.award { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .recommend-type.job { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .recommend-type.task { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+    .recommend-type.event { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+
+    .recommend-match {
+      font-size: 12px;
+      color: #10b981;
+      margin-bottom: 8px;
+    }
+
+    .recommend-org {
+      font-size: 12px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Opportunity Categories */
+    .opportunity-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .category-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .category-tab:hover, .category-tab.active {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #e2e8f0;
+    }
+
+    .category-tab .icon {
+      font-size: 18px;
+    }
+
+    /* Opportunity List */
+    .opportunity-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .opportunity-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .opportunity-card:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: rgba(99, 102, 241, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .opportunity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .opportunity-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+      flex: 1;
+    }
+
+    .opportunity-tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+    }
+
+    .opportunity-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .opportunity-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .opportunity-org {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .opportunity-rewards {
+      display: flex;
+      gap: 8px;
+    }
+
+    .reward-badge {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+
+    /* L3: Hot Rankings */
+    .l3-section {
+      margin-bottom: 60px;
+    }
+
+    .rankings-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .ranking-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .ranking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .ranking-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ranking-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .ranking-tab {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ranking-tab.active {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #a5b4fc;
+    }
+
+    .ranking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ranking-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ranking-item:hover {
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .ranking-index {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+    }
+
+    .ranking-item:nth-child(1) .ranking-index {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #fff;
+    }
+
+    .ranking-item:nth-child(2) .ranking-index {
+      background: linear-gradient(135deg, #94a3b8, #64748b);
+      color: #fff;
+    }
+
+    .ranking-item:nth-child(3) .ranking-index {
+      background: linear-gradient(135deg, #cd7f32, #b45309);
+      color: #fff;
+    }
+
+    .ranking-info {
+      flex: 1;
+    }
+
+    .ranking-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #e2e8f0;
+      margin-bottom: 4px;
+    }
+
+    .ranking-detail {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .ranking-stat {
+      text-align: right;
+    }
+
+    .ranking-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #10b981;
+    }
+
+    .ranking-label {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* CTA Button */
+    .cta-container {
+      text-align: center;
+      margin-top: 48px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .cta-button svg {
+      transition: transform 0.2s ease;
+    }
+
+    .cta-button:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(30, 30, 46, 0.95);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #e2e8f0;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .metrics-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .rankings-container {
+        grid-template-columns: 1fr;
+      }
+
+      .l2-container {
+        grid-template-columns: 1fr;
+      }
+
+      .opportunity-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .metric-value {
+        font-size: 24px;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-placeholder h1 {
+        font-size: 32px;
+      }
+
+      .hero-tagline {
+        font-size: 16px;
+        padding: 0 20px;
+      }
+
+      .category-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 8px;
+      }
+
+      .category-tab {
+        flex-shrink: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Placeholder -->
+  <section class="hero-placeholder">
+    <div class="hero-content">
+      <h1>OpenAtom 贡献者面板</h1>
+      <p class="hero-tagline">你的每一条贡献，都会沉淀为可流动的数字履历</p>
+    </div>
+  </section>
+
+  <!-- Module Section -->
+  <section class="module-section">
+    <div class="container">
+      <h2 class="module-title">实时<span>贡献网络</span></h2>
+
+      <!-- L1: Global Metrics -->
+      <div class="metrics-section">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">🎓</div>
+            <div class="metric-value" data-target="245">0</div>
+            <div class="metric-label">高校参与数</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🌐</div>
+            <div class="metric-value" data-target="186">0</div>
+            <div class="metric-label">社区参与数</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🏢</div>
+            <div class="metric-value" data-target="328">0</div>
+            <div class="metric-label">企业参与数</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📍</div>
+            <div class="metric-value" data-target="52">0</div>
+            <div class="metric-label">地方专区数</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🎪</div>
+            <div class="metric-value" data-target="1247">0</div>
+            <div class="metric-label">活动参与数</div>
+          </div>
+          <div class="metric-card highlight">
+            <div class="metric-icon">🚀</div>
+            <div class="metric-value" data-target="892">0</div>
+            <div class="metric-label">今日新增</div>
+          </div>
         </div>
+      </div>
 
-        <!-- 用户入口 Section -->
-        <div class="section section-gray">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-door-open"></i>
-                    选择您的入口
-                </h2>
-                <div class="grid">
-                    <!-- 开发者贡献面板 -->
-                    <a href="contributor-profile-v3.html" class="card card-developer">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <span class="card-badge">开发者</span>
-                        </div>
-                        <h3>开发者贡献面板</h3>
-                        <p>展示你的开源贡献，建立可信技术声誉</p>
-                        <span class="card-btn">
-                            创建我的贡献面板 <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-
-                    <!-- 活动贡献面板 -->
-                    <a href="activity-profile.html" class="card card-activity">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-calendar-star"></i>
-                            </div>
-                            <span class="card-badge">活动</span>
-                        </div>
-                        <h3>活动贡献面板</h3>
-                        <p>记录活动贡献，识别优秀贡献者</p>
-                        <span class="card-btn">
-                            为活动创建贡献面板 <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-
-                    <!-- 高校贡献面板 -->
-                    <a href="university-profile-v2.html" class="card card-university">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <span class="card-badge">高校</span>
-                        </div>
-                        <h3>高校贡献面板</h3>
-                        <p>追踪学生开源成长，培养未来技术人才</p>
-                        <span class="card-btn">
-                            为高校创建贡献面板 <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-
-                    <!-- 社区贡献面板 -->
-                    <a href="community-governance.html" class="card card-community">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-users-rectangle"></i>
-                            </div>
-                            <span class="card-badge">社区</span>
-                        </div>
-                        <h3>社区贡献面板</h3>
-                        <p>洞察社区贡献生态，治理开源贡献者</p>
-                        <span class="card-btn">
-                            为社区创建贡献面板 <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-
-                    <!-- 企业贡献面板 -->
-                    <a href="enterprise-profile.html" class="card card-enterprise">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-building"></i>
-                            </div>
-                            <span class="card-badge">企业</span>
-                        </div>
-                        <h3>企业贡献面板</h3>
-                        <p>管理企业开源贡献，打造技术影响力</p>
-                        <span class="card-btn">
-                            为企业创建贡献面板 <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-
-                    <!-- 地方政府贡献面板 -->
-                    <a href="government-profile.html" class="card card-government">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-landmark"></i>
-                            </div>
-                            <span class="card-badge">政府</span>
-                        </div>
-                        <h3>地方政府贡献面板</h3>
-                        <p>洞察区域开源人才与技术优势</p>
-                        <span class="card-btn">
-                            查看区域开源生态 <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-
-                    <!-- 基金会贡献面板 -->
-                    <a href="national-foundation-v1.2.html" class="card card-foundation">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-flag"></i>
-                            </div>
-                            <span class="card-badge">基金会</span>
-                        </div>
-                        <h3>基金会贡献面板</h3>
-                        <p>掌握开源生态态势，推动协作创新</p>
-                        <span class="card-btn">
-                            查看基金会生态面板 <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-                </div>
+      <!-- L2: Opportunity & Contribution Flow -->
+      <div class="l2-section">
+        <div class="l2-container">
+          <!-- AI Recommendation Panel -->
+          <div class="recommendation-panel">
+            <div class="panel-header">
+              <h3>为你推荐</h3>
+              <span class="ai-badge">AI</span>
             </div>
+            <div class="recommend-list" id="recommendList">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Opportunity Section -->
+          <div class="opportunity-section">
+            <!-- Category Tabs -->
+            <div class="category-tabs">
+              <div class="category-tab active" data-category="all">
+                <span class="icon">📋</span> 全部
+              </div>
+              <div class="category-tab" data-category="award">
+                <span class="icon">🏆</span> 评选与荣誉
+              </div>
+              <div class="category-tab" data-category="job">
+                <span class="icon">💼</span> 岗位与实习
+              </div>
+              <div class="category-tab" data-category="task">
+                <span class="icon">🧩</span> 社区任务
+              </div>
+              <div class="category-tab" data-category="event">
+                <span class="icon">🚀</span> 活动与竞赛
+              </div>
+            </div>
+
+            <!-- Opportunity List -->
+            <div class="opportunity-list" id="opportunityList">
+              <!-- Populated by JS -->
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- 合作伙伴 Section -->
-        <div class="section">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-handshake"></i>
-                    合作伙伴
-                </h2>
-                <div class="partners-grid">
-                    <div class="partner-logo" title="OpenAtom 基金会">
-                        <i class="fas fa-atom"></i>
-                    </div>
-                    <div class="partner-logo" title="CSDN">
-                        <i class="fab fa-linux"></i>
-                    </div>
-                    <div class="partner-logo" title="Apache 软件基金会">
-                        <i class="fas fa-feather"></i>
-                    </div>
-                    <div class="partner-logo" title="CNCF">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <div class="partner-logo" title="GitHub">
-                        <i class="fab fa-github"></i>
-                    </div>
-                    <div class="partner-logo" title="Gitee">
-                        <i class="fas fa-code-branch"></i>
-                    </div>
-                    <div class="partner-logo" title="清华大学">
-                        <i class="fas fa-university"></i>
-                    </div>
-                    <div class="partner-logo" title="北京大学">
-                        <i class="fas fa-school"></i>
-                    </div>
-                    <div class="partner-logo" title="华为">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <div class="partner-logo" title="阿里巴巴">
-                        <i class="fas fa-shopping-bag"></i>
-                    </div>
-                    <div class="partner-logo" title="腾讯">
-                        <i class="fas fa-comment"></i>
-                    </div>
-                    <div class="partner-logo" title="字节跳动">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                </div>
+      <!-- L3: Hot Rankings -->
+      <div class="l3-section">
+        <div class="rankings-container">
+          <!-- Contributors Ranking -->
+          <div class="ranking-card">
+            <div class="ranking-header">
+              <div class="ranking-title">👤 贡献者榜单</div>
+              <div class="ranking-tabs">
+                <button class="ranking-tab active">今日</button>
+                <button class="ranking-tab">本周</button>
+                <button class="ranking-tab">本月</button>
+              </div>
             </div>
+            <div class="ranking-list" id="contributorRanking">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Project Ranking -->
+          <div class="ranking-card">
+            <div class="ranking-header">
+              <div class="ranking-title">📦 项目榜单</div>
+              <div class="ranking-tabs">
+                <button class="ranking-tab active">活跃</button>
+                <button class="ranking-tab">新增</button>
+                <button class="ranking-tab">贡献</button>
+              </div>
+            </div>
+            <div class="ranking-list" id="projectRanking">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Opportunity Ranking -->
+          <div class="ranking-card">
+            <div class="ranking-header">
+              <div class="ranking-title">🎯 机会榜单</div>
+              <div class="ranking-tabs">
+                <button class="ranking-tab active">热门</button>
+                <button class="ranking-tab">奖励</button>
+                <button class="ranking-tab">影响力</button>
+              </div>
+            </div>
+            <div class="ranking-list" id="opportunityRanking">
+              <!-- Populated by JS -->
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- 用户 Section -->
-        <div class="section section-gray">
-            <div class="container">
-                <div class="users-section">
-                    <div class="users-intro">
-                        <h2 class="section-title" style="margin-bottom: 16px">
-                            <i class="fas fa-users"></i>
-                            用户
-                        </h2>
-                        <p>贡献者面板正在被以下组织使用</p>
-                    </div>
-                    <div class="users-grid">
-                        <div class="user-category">
-                            <h4><i class="fas fa-graduation-cap"></i> 高校</h4>
-                            <div class="user-list">
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 清华大学
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 北京大学
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 上海交通大学
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 浙江大学
-                                </div>
-                            </div>
-                        </div>
-                        <div class="user-category">
-                            <h4><i class="fas fa-code-branch"></i> 开源社区</h4>
-                            <div class="user-list">
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> OpenAtom
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> Apache APISIX
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> TiDB
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> OceanBase
-                                </div>
-                            </div>
-                        </div>
-                        <div class="user-category">
-                            <h4><i class="fas fa-building"></i> 企业</h4>
-                            <div class="user-list">
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 华为
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 阿里巴巴
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 腾讯
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 字节跳动
-                                </div>
-                            </div>
-                        </div>
-                        <div class="user-category">
-                            <h4><i class="fas fa-cogs"></i> 技术组织</h4>
-                            <div class="user-list">
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> CSDN
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> CNCF
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 开源中国
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> InfoQ
-                                </div>
-                            </div>
-                        </div>
-                        <div class="user-category">
-                            <h4><i class="fas fa-calendar"></i> 开源活动</h4>
-                            <div class="user-list">
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> KubeCon
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> OpenSource Summit
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> 中国开源年会
-                                </div>
-                                <div class="user-item">
-                                    <i class="fas fa-check"></i> GDG 开发者大会
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- CTA -->
+      <div class="cta-container">
+        <button class="cta-button" onclick="showToast()">
+          探索贡献网络
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">登录后查看完整贡献详情</div>
+
+  <script>
+    // Sample Data
+    const recommendData = [
+      { type: 'award', title: '开源先锋奖评选', match: '匹配度 92%', org: 'OpenAtom 基金会', orgIcon: '🏆' },
+      { type: 'job', title: 'K8s 开发工程师实习', match: '匹配度 88%', org: '华为云', orgIcon: '🏢' },
+      { type: 'task', title: 'Rust 性能优化任务', match: '匹配度 85%', org: 'Rust 中文社区', orgIcon: '🌐' }
+    ];
+
+    const opportunityData = [
+      { type: 'award', title: '2026年度开源先锋奖', desc: '表彰年度杰出开源贡献者，展示个人影响力', org: 'OpenAtom', participants: 1.2, rewards: ['证书', '徽章'] },
+      { type: 'job', title: '云原生开发工程师', desc: '参与 CNCF 顶级项目开发，积累实战经验', org: '阿里云', participants: 856, rewards: ['实习证明', '推荐信'] },
+      { type: 'task', title: 'TensorFlow 模型优化', desc: '优化模型推理性能，参与顶级AI框架建设', org: 'TF中文社区', participants: 324, rewards: ['积分', '徽章'] },
+      { type: 'event', title: '黑客松大赛 2026', desc: '48小时极限挑战，赢取现金大奖和offer', org: '字节跳动', participants: 2.1, rewards: ['奖金', '证书'] },
+      { type: 'award', title: '最佳新人贡献奖', desc: '鼓励开源新手参与，挖掘潜力新星', org: '开源中国', participants: 567, rewards: ['证书', '礼品'] },
+      { type: 'job', title: '前端开发志愿者', desc: '为开源项目贡献前端代码，提升技能', org: 'Vue中文社区', participants: 234, rewards: ['经历', '推荐信'] }
+    ];
+
+    const contributorRankingData = [
+      { name: 'zhangsan', detail: 'Kubernetes / 128次贡献', value: 128, label: '贡献' },
+      { name: 'lisi', detail: 'OpenHarmony / 96次贡献', value: 96, label: '贡献' },
+      { name: 'wangwu', detail: 'Vue / 85次贡献', value: 85, label: '贡献' },
+      { name: 'zhaoliu', detail: 'React / 72次贡献', value: 72, label: '贡献' },
+      { name: 'sunqi', detail: 'TensorFlow / 68次贡献', value: 68, label: '贡献' }
+    ];
+
+    const projectRankingData = [
+      { name: 'Kubernetes', detail: '云原生 / 活跃贡献者 2,431', value: 2431, label: '贡献者' },
+      { name: 'OpenHarmony', detail: '操作系统 / 活跃贡献者 1,856', value: 1856, label: '贡献者' },
+      { name: 'Vue', detail: '前端框架 / 活跃贡献者 1,234', value: 1234, label: '贡献者' },
+      { name: 'TensorFlow', detail: 'AI框架 / 活跃贡献者 987', value: 987, label: '贡献者' },
+      { name: 'Rust', detail: '系统语言 / 活跃贡献者 756', value: 756, label: '贡献者' }
+    ];
+
+    const opportunityRankingData = [
+      { name: '开源先锋奖评选', detail: '参与 1,234 人', value: 1234, label: '参与' },
+      { name: '黑客松大赛', detail: '参与 2,156 人', value: 2156, label: '参与' },
+      { name: 'K8s 开发实习', detail: '申请 856 人', value: 856, label: '申请' },
+      { name: 'TF 优化任务', detail: '完成 324 人', value: 324, label: '完成' },
+      { name: 'Vue 贡献任务', detail: '完成 287 人', value: 287, label: '完成' }
+    ];
+
+    // Render Recommendation List
+    function renderRecommendations() {
+      const container = document.getElementById('recommendList');
+      container.innerHTML = recommendData.map(item => `
+        <div class="recommend-item" onclick="showToast()">
+          <div class="recommend-item-header">
+            <span class="recommend-title">${item.title}</span>
+            <span class="recommend-type ${item.type}">${getTypeLabel(item.type)}</span>
+          </div>
+          <div class="recommend-match">${item.match}</div>
+          <div class="recommend-org">${item.orgIcon} ${item.org}</div>
         </div>
+      `).join('');
+    }
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-grid">
-                    <div class="footer-col">
-                        <h4>项目</h4>
-                        <ul>
-                            <li><a href="#">项目介绍</a></li>
-                            <li><a href="#">产品架构</a></li>
-                            <li><a href="#">愿景</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-col">
-                        <h4>资源</h4>
-                        <ul>
-                            <li><a href="#"><i class="fas fa-code-branch"></i> AtomGit</a></li>
-                            <li><a href="#"><i class="fas fa-book"></i> 开发文档</a></li>
-                            <li><a href="#"><i class="fas fa-plug"></i> API</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-col">
-                        <h4>生态</h4>
-                        <ul>
-                            <li><a href="#">合作伙伴</a></li>
-                            <li><a href="#">共建计划</a></li>
-                            <li><a href="#">社区</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-col">
-                        <h4>联系</h4>
-                        <ul>
-                            <li><a href="#">联系我们</a></li>
-                            <li><a href="#"><i class="fas fa-envelope"></i> 邮件</a></li>
-                            <li><a href="#"><i class="fas fa-comments"></i> 社区</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <p>基于 <a href="#">开源贡献评估规范</a> 构建 | 版本 v1.0</p>
-                    <p style="margin-top: 8px; opacity: 0.7">OpenAtom Contributors Profile 2026</p>
-                </div>
+    function getTypeLabel(type) {
+      const labels = { award: '评选', job: '岗位', task: '任务', event: '活动' };
+      return labels[type] || type;
+    }
+
+    // Render Opportunity List
+    function renderOpportunities(filter = 'all') {
+      const container = document.getElementById('opportunityList');
+      const filtered = filter === 'all' ? opportunityData : opportunityData.filter(o => o.type === filter);
+      container.innerHTML = filtered.map(item => `
+        <div class="opportunity-card" onclick="showToast()">
+          <div class="opportunity-header">
+            <span class="opportunity-title">${item.title}</span>
+            <span class="opportunity-tag">${getTypeLabel(item.type)}</span>
+          </div>
+          <div class="opportunity-desc">${item.desc}</div>
+          <div class="opportunity-meta">
+            <div class="opportunity-org">
+              <span>🏢</span> ${item.org}
             </div>
-        </footer>
-    </body>
+            <div class="opportunity-rewards">
+              ${item.rewards.map(r => `<span class="reward-badge">${r}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Rankings
+    function renderRanking(data, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = data.map((item, index) => `
+        <div class="ranking-item" onclick="showToast()">
+          <div class="ranking-index">${index + 1}</div>
+          <div class="ranking-info">
+            <div class="ranking-name">${item.name}</div>
+            <div class="ranking-detail">${item.detail}</div>
+          </div>
+          <div class="ranking-stat">
+            <div class="ranking-value">${item.value >= 1000 ? (item.value / 1000).toFixed(1) + 'k' : item.value}</div>
+            <div class="ranking-label">${item.label}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Category Tab Click
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        renderOpportunities(this.dataset.category);
+      });
+    });
+
+    // Ranking Tab Click
+    document.querySelectorAll('.ranking-tabs').forEach(tabs => {
+      tabs.querySelectorAll('.ranking-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          tabs.querySelectorAll('.ranking-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+
+    // Animate Numbers
+    function animateNumbers() {
+      const values = document.querySelectorAll('.metric-value');
+      values.forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const duration = 1000;
+        const start = performance.now();
+
+        function update(currentTime) {
+          const elapsed = currentTime - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(target * easeOut);
+
+          el.textContent = current.toLocaleString();
+
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          }
+        }
+
+        requestAnimationFrame(update);
+      });
+    }
+
+    // Simulate Real-time Updates
+    function simulateMetricsUpdate() {
+      setInterval(() => {
+        const values = document.querySelectorAll('.metric-value');
+        values.forEach(el => {
+          const current = parseInt(el.textContent.replace(/,/g, ''));
+          const target = parseInt(el.dataset.target);
+          if (current < target) {
+            el.textContent = (current + Math.floor(Math.random() * 5) + 1).toLocaleString();
+          }
+        });
+      }, 3000);
+    }
+
+    // Show Toast
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      animateNumbers();
+      renderRecommendations();
+      renderOpportunities();
+      renderRanking(contributorRankingData, 'contributorRanking');
+      renderRanking(projectRankingData, 'projectRanking');
+      renderRanking(opportunityRankingData, 'opportunityRanking');
+      simulateMetricsUpdate();
+    });
+  </script>
+
+  <!-- Panel Entry Section -->
+  <section class="panel-entry-section">
+    <div class="container">
+      <h2 class="panel-entry-title">多维面板入口</h2>
+      <div class="panel-entry-grid">
+        <div class="panel-entry-card" onclick="window.location.href='contributor-profile-v3.html'">
+          <div class="panel-icon">👤</div>
+          <div class="panel-name">贡献者面板</div>
+          <div class="panel-desc">个人贡献履历与成长轨迹</div>
+        </div>
+        <div class="panel-entry-card" onclick="window.location.href='activity-profile.html'">
+          <div class="panel-icon">🎪</div>
+          <div class="panel-name">活动面板</div>
+          <div class="panel-desc">赛事活动与参与数据</div>
+        </div>
+        <div class="panel-entry-card" onclick="window.location.href='university-profile-v2.html'">
+          <div class="panel-icon">🎓</div>
+          <div class="panel-name">高校面板</div>
+          <div class="panel-desc">校园开源贡献与人才培养</div>
+        </div>
+        <div class="panel-entry-card" onclick="window.location.href='community-governance.html'">
+          <div class="panel-icon">🌐</div>
+          <div class="panel-name">社区面板</div>
+          <div class="panel-desc">开源社区活跃度与治理</div>
+        </div>
+        <div class="panel-entry-card" onclick="window.location.href='enterprise-profile.html'">
+          <div class="panel-icon">🏢</div>
+          <div class="panel-name">企业面板</div>
+          <div class="panel-desc">企业开源贡献与人才战略</div>
+        </div>
+        <div class="panel-entry-card" onclick="window.location.href='government-profile.html'">
+          <div class="panel-icon">📍</div>
+          <div class="panel-name">地方专区面板</div>
+          <div class="panel-desc">区域开源生态与政策效果</div>
+        </div>
+        <div class="panel-entry-card highlight" onclick="window.location.href='national-foundation-v1.2.html'">
+          <div class="panel-icon">🎗️</div>
+          <div class="panel-name">基金会面板（内部）</div>
+          <div class="panel-desc">整体贡献者态势情况和培养成效</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .panel-entry-section {
+      padding: 60px 0 80px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .panel-entry-title {
+      font-size: 28px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 40px;
+      color: #e2e8f0;
+    }
+
+    .panel-entry-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 16px;
+    }
+
+    .panel-entry-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .panel-entry-card:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .panel-entry-card.highlight {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .panel-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .panel-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+
+    .panel-desc {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 1200px) {
+      .panel-entry-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .panel-entry-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</body>
 </html>
