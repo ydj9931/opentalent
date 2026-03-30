@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>贡献者共同面板 - Explore</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* Header / L1 Metrics Bar */
+    .header {
+      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .metrics-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo::before {
+      content: '🔗';
+    }
+
+    .metrics-bar-items {
+      display: flex;
+      gap: 40px;
+    }
+
+    .metrics-item {
+      text-align: center;
+    }
+
+    .metrics-item-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metrics-item-value .arrow {
+      font-size: 14px;
+      color: #10b981;
+    }
+
+    .metrics-item-label {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 20px 32px;
+      display: grid;
+      grid-template-columns: 260px 1fr 360px;
+      gap: 20px;
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Left Sidebar - Rankings */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 2px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.3);
+      border-radius: 2px;
+    }
+
+    .ranking-panel {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .ranking-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ranking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ranking-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ranking-item:hover {
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    .ranking-item.highlight {
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+
+    .ranking-index {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+    }
+
+    .ranking-item:nth-child(1) .ranking-index {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #fff;
+    }
+
+    .ranking-item:nth-child(2) .ranking-index {
+      background: linear-gradient(135deg, #94a3b8, #64748b);
+      color: #fff;
+    }
+
+    .ranking-item:nth-child(3) .ranking-index {
+      background: linear-gradient(135deg, #cd7f32, #b45309);
+      color: #fff;
+    }
+
+    .ranking-name {
+      flex: 1;
+      font-size: 13px;
+      color: #e2e8f0;
+    }
+
+    .ranking-count {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* Center - Network Graph */
+    .graph-container {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+    }
+
+    .graph-header {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      z-index: 10;
+    }
+
+    .graph-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .graph-subtitle {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .graph-legend {
+      position: absolute;
+      bottom: 14px;
+      left: 16px;
+      display: flex;
+      gap: 14px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 12px;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.contributor { background: #3498db; }
+    .legend-dot.project { background: #e67e22; }
+    .legend-dot.org { background: #2ecc71; }
+
+    .graph-canvas {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+    }
+
+    .node {
+      position: absolute;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .node:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    .node.contributor { background: #3498db; }
+    .node.project { background: #e67e22; }
+    .node.org { background: #2ecc71; }
+
+    .node-link {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      transform-origin: left center;
+    }
+
+    /* Right Panel */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .right-panel::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .right-panel::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 2px;
+    }
+
+    .right-panel::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.3);
+      border-radius: 2px;
+    }
+
+    /* Right Panel Top Row - Two Columns */
+    .right-panel-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .right-panel-top .info-block {
+      margin-bottom: 0;
+    }
+
+    /* Right Panel Bottom */
+    .right-panel-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-block {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .block-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .block-icon {
+      font-size: 15px;
+    }
+
+    .block-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    /* Scale Block */
+    .scale-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .scale-item {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .scale-item strong {
+      color: #e2e8f0;
+    }
+
+    /* Activity Block */
+    .activity-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .activity-stat {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .activity-stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #10b981;
+    }
+
+    .activity-stat-label {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Flow Block - Core */
+    .flow-block {
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.06) 0%, rgba(168, 85, 247, 0.06) 100%);
+    }
+
+    .flow-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .flow-stat {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .flow-stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .flow-stat-label {
+      font-size: 9px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Opportunity List */
+    .opportunity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .opportunity-item {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .opportunity-item:hover {
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    .opportunity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .opportunity-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: #e2e8f0;
+    }
+
+    .opportunity-type {
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+    }
+
+    .opportunity-type.event { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+    .opportunity-type.award { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .opportunity-type.job { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+    .opportunity-org {
+      font-size: 10px;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .opportunity-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .opportunity-rewards {
+      font-size: 10px;
+      color: #fbbf24;
+    }
+
+    .opportunity-status {
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+
+    .opportunity-status.ended {
+      background: rgba(100, 116, 139, 0.2);
+      color: #94a3b8;
+    }
+
+    /* Reputation */
+    .reputation-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 10px;
+    }
+
+    .reputation-stat {
+      text-align: center;
+    }
+
+    .reputation-stat-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #a855f7;
+    }
+
+    .reputation-stat-label {
+      font-size: 9px;
+      color: #94a3b8;
+    }
+
+    /* Live Feed */
+    .live-feed {
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .live-feed-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .live-feed-item:last-child {
+      border-bottom: none;
+    }
+
+    .live-feed-icon {
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .live-feed-content {
+      flex: 1;
+      font-size: 11px;
+      color: #e2e8f0;
+      line-height: 1.4;
+    }
+
+    .live-feed-time {
+      font-size: 9px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Growth Block */
+    .growth-scale {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .growth-scale-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .growth-arrow {
+      color: #10b981;
+    }
+
+    .growth-label {
+      color: #94a3b8;
+    }
+
+    .growth-label strong {
+      color: #e2e8f0;
+    }
+
+    .growth-path {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .growth-path-step {
+      font-size: 9px;
+      color: #64748b;
+      padding: 3px 6px;
+      background: rgba(99, 102, 241, 0.08);
+      border-radius: 3px;
+    }
+
+    .growth-path-step.active {
+      background: rgba(99, 102, 241, 0.25);
+      color: #a5b4fc;
+    }
+
+    .growth-path-arrow {
+      color: #64748b;
+      font-size: 10px;
+    }
+
+    .growth-speed {
+      text-align: center;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .growth-speed strong {
+      color: #10b981;
+      font-size: 16px;
+    }
+
+    /* Global Tagline */
+    .global-tagline {
+      text-align: center;
+      padding: 12px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+      border-radius: 6px;
+      margin-top: auto;
+    }
+
+    .global-tagline-main {
+      font-size: 12px;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .global-tagline-sub {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 3px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1400px) {
+      .main-container {
+        grid-template-columns: 220px 1fr 320px;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .main-container {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .sidebar {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        overflow-x: auto;
+      }
+
+      .ranking-panel {
+        min-width: 200px;
+      }
+
+      .metrics-bar-items {
+        gap: 24px;
+      }
+
+      .metrics-item-value {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        flex-direction: column;
+      }
+
+      .ranking-panel {
+        min-width: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0 16px;
+      }
+
+      .metrics-bar {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .metrics-bar-items {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .metrics-item-value {
+        font-size: 20px;
+      }
+
+      .main-container {
+        padding: 12px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / L1 Metrics Bar -->
+  <header class="header">
+    <div class="header-container">
+      <div class="metrics-bar">
+        <div class="logo">OpenAtom Explore</div>
+        <div class="metrics-bar-items">
+          <div class="metrics-item">
+            <div class="metrics-item-value">1,245,221</div>
+            <div class="metrics-item-label">贡献者总数</div>
+          </div>
+          <div class="metrics-item">
+            <div class="metrics-item-value">3,201</div>
+            <div class="metrics-item-label">组织参与数</div>
+          </div>
+          <div class="metrics-item">
+            <div class="metrics-item-value">+1,245 <span class="arrow">↑</span></div>
+            <div class="metrics-item-label">今日新增贡献者</div>
+          </div>
+          <div class="metrics-item">
+            <div class="metrics-item-value">38%</div>
+            <div class="metrics-item-label">战略贡献占比</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="main-container">
+    <!-- Left Sidebar - Rankings -->
+    <div class="sidebar">
+      <!-- Contributors Ranking -->
+      <div class="ranking-panel">
+        <div class="ranking-title">👤 贡献者榜单</div>
+        <div class="ranking-list" id="contributorRanking">
+          <div class="ranking-item" data-node="zhangsan">
+            <div class="ranking-index">1</div>
+            <div class="ranking-name">张三</div>
+            <div class="ranking-count">128次</div>
+          </div>
+          <div class="ranking-item" data-node="lisi">
+            <div class="ranking-index">2</div>
+            <div class="ranking-name">李四</div>
+            <div class="ranking-count">96次</div>
+          </div>
+          <div class="ranking-item" data-node="wangwu">
+            <div class="ranking-index">3</div>
+            <div class="ranking-name">王五</div>
+            <div class="ranking-count">85次</div>
+          </div>
+          <div class="ranking-item" data-node="zhaoliu">
+            <div class="ranking-index">4</div>
+            <div class="ranking-name">赵六</div>
+            <div class="ranking-count">72次</div>
+          </div>
+          <div class="ranking-item" data-node="sunqi">
+            <div class="ranking-index">5</div>
+            <div class="ranking-name">孙七</div>
+            <div class="ranking-count">68次</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Ranking -->
+      <div class="ranking-panel">
+        <div class="ranking-title">📦 项目榜单</div>
+        <div class="ranking-list" id="projectRanking">
+          <div class="ranking-item" data-node="k8s">
+            <div class="ranking-index">1</div>
+            <div class="ranking-name">Kubernetes</div>
+            <div class="ranking-count">2,431</div>
+          </div>
+          <div class="ranking-item" data-node="ohos">
+            <div class="ranking-index">2</div>
+            <div class="ranking-name">OpenHarmony</div>
+            <div class="ranking-count">1,856</div>
+          </div>
+          <div class="ranking-item" data-node="vue">
+            <div class="ranking-index">3</div>
+            <div class="ranking-name">Vue</div>
+            <div class="ranking-count">1,234</div>
+          </div>
+          <div class="ranking-item" data-node="tf">
+            <div class="ranking-index">4</div>
+            <div class="ranking-name">TensorFlow</div>
+            <div class="ranking-count">987</div>
+          </div>
+          <div class="ranking-item" data-node="rust">
+            <div class="ranking-index">5</div>
+            <div class="ranking-name">Rust</div>
+            <div class="ranking-count">756</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity Ranking -->
+      <div class="ranking-panel">
+        <div class="ranking-title">🎯 机会榜单</div>
+        <div class="ranking-list" id="opportunityRanking">
+          <div class="ranking-item" data-node="award1">
+            <div class="ranking-index">1</div>
+            <div class="ranking-name">开源先锋奖</div>
+            <div class="ranking-count">高校</div>
+          </div>
+          <div class="ranking-item" data-node="job1">
+            <div class="ranking-index">2</div>
+            <div class="ranking-name">AI工程师岗位</div>
+            <div class="ranking-count">企业</div>
+          </div>
+          <div class="ranking-item" data-node="event1">
+            <div class="ranking-index">3</div>
+            <div class="ranking-name">开发者大赛</div>
+            <div class="ranking-count">社区</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center - Network Graph -->
+    <div class="graph-container">
+      <div class="graph-header">
+        <div class="graph-title">贡献者网络图谱</div>
+        <div class="graph-subtitle">展示贡献者、项目、组织的关系网络</div>
+      </div>
+      <div class="graph-legend">
+        <div class="legend-item">
+          <div class="legend-dot contributor"></div>
+          <span>贡献者</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot project"></div>
+          <span>项目/机会</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot org"></div>
+          <span>组织</span>
+        </div>
+      </div>
+      <div class="graph-canvas" id="graphCanvas">
+        <!-- Nodes will be generated by JS -->
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <!-- Top Row - Two Columns -->
+      <div class="right-panel-top">
+        <!-- Scale Block -->
+        <div class="info-block">
+          <div class="block-header">
+            <span class="block-icon">📊</span>
+            <span class="block-title">网络规模</span>
+          </div>
+          <div class="scale-content">
+            <div class="scale-item">覆盖 <strong>12</strong> 个技术领域</div>
+            <div class="scale-item"><strong>高校 / 企业 / 社区</strong> 协同</div>
+          </div>
+        </div>
+
+        <!-- Activity Block -->
+        <div class="info-block">
+          <div class="block-header">
+            <span class="block-icon">⚡</span>
+            <span class="block-title">网络活跃</span>
+          </div>
+          <div class="activity-stats">
+            <div class="activity-stat">
+              <div class="activity-stat-value">32%</div>
+              <div class="activity-stat-label">7日活跃率</div>
+            </div>
+            <div class="activity-stat">
+              <div class="activity-stat-value">3.2</div>
+              <div class="activity-stat-label">人均贡献/周</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section -->
+      <div class="right-panel-bottom">
+        <!-- Flow Block - Core -->
+        <div class="info-block flow-block">
+        <div class="block-header">
+          <span class="block-icon">🔄</span>
+          <span class="block-title">价值流动</span>
+        </div>
+
+        <div class="flow-stats">
+          <div class="flow-stat">
+            <div class="flow-stat-value">342</div>
+            <div class="flow-stat-label">人进入企业</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-value">1,245</div>
+            <div class="flow-stat-label">人进入社区</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-value">28%</div>
+            <div class="flow-stat-label">跨组织流动率</div>
+          </div>
+        </div>
+
+        <!-- Opportunity List -->
+        <div class="opportunity-list">
+          <div class="opportunity-item">
+            <div class="opportunity-header">
+              <span class="opportunity-title">开发者大赛</span>
+              <span class="opportunity-type event">比赛</span>
+            </div>
+            <div class="opportunity-org">某社区 · 面向全体开发者</div>
+            <div class="opportunity-meta">
+              <span class="opportunity-rewards">奖金 + 徽章</span>
+              <span class="opportunity-status">报名中</span>
+            </div>
+          </div>
+          <div class="opportunity-item">
+            <div class="opportunity-header">
+              <span class="opportunity-title">开源先锋奖</span>
+              <span class="opportunity-type award">评选</span>
+            </div>
+            <div class="opportunity-org">某高校 · 面向学生</div>
+            <div class="opportunity-meta">
+              <span class="opportunity-rewards">证书</span>
+              <span class="opportunity-status">评选中</span>
+            </div>
+          </div>
+          <div class="opportunity-item">
+            <div class="opportunity-header">
+              <span class="opportunity-title">开源智能体工程师</span>
+              <span class="opportunity-type job">岗位</span>
+            </div>
+            <div class="opportunity-org">某企业 · 面向有经验者</div>
+            <div class="opportunity-meta">
+              <span class="opportunity-rewards">Offer</span>
+              <span class="opportunity-status">招聘中</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reputation -->
+        <div class="reputation-stats">
+          <div class="reputation-stat">
+            <div class="reputation-stat-value">2,341</div>
+            <div class="reputation-stat-label">获得声誉</div>
+          </div>
+          <div class="reputation-stat">
+            <div class="reputation-stat-value">128</div>
+            <div class="reputation-stat-label">发放组织</div>
+          </div>
+          <div class="reputation-stat">
+            <div class="reputation-stat-value">7,562</div>
+            <div class="reputation-stat-label">证书/徽章</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Feed -->
+      <div class="info-block">
+        <div class="block-header">
+          <span class="block-icon">📡</span>
+          <span class="block-title">实时动态</span>
+        </div>
+        <div class="live-feed" id="liveFeed">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      </div>
+
+      <!-- Growth Block -->
+      <div class="info-block">
+        <div class="block-header">
+          <span class="block-icon">📈</span>
+          <span class="block-title">成长轨迹</span>
+        </div>
+        <div class="growth-scale">
+          <div class="growth-scale-item">
+            <span class="growth-arrow">→</span>
+            <span class="growth-label"><strong>120</strong> 人：新手 → 贡献者</span>
+          </div>
+          <div class="growth-scale-item">
+            <span class="growth-arrow">→</span>
+            <span class="growth-label"><strong>45</strong> 人：贡献者 → 核心</span>
+          </div>
+        </div>
+        <div class="growth-path">
+          <span class="growth-path-step">新手</span>
+          <span class="growth-path-arrow">→</span>
+          <span class="growth-path-step active">贡献者</span>
+          <span class="growth-path-arrow">→</span>
+          <span class="growth-path-step">活跃</span>
+          <span class="growth-path-arrow">→</span>
+          <span class="growth-path-step">核心</span>
+        </div>
+        <div class="growth-speed">
+          平均成长周期：<strong>3.2</strong> 个月
+        </div>
+      </div>
+
+      <!-- Global Tagline -->
+      <div class="global-tagline">
+        <div class="global-tagline-main">每天都有贡献被识别、匹配，并转化为机会与声誉</div>
+        <div class="global-tagline-sub">组织正在基于贡献识别主动发起机会 · 贡献者正在持续成长</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Graph Nodes Data
+    const graphData = {
+      nodes: [
+        // Contributors (Blue)
+        { id: 'zhangsan', type: 'contributor', name: '张三', x: 15, y: 30, size: 20 },
+        { id: 'lisi', type: 'contributor', name: '李四', x: 25, y: 50, size: 18 },
+        { id: 'wangwu', type: 'contributor', name: '王五', x: 20, y: 70, size: 16 },
+        { id: 'zhaoliu', type: 'contributor', name: '赵六', x: 35, y: 25, size: 14 },
+        { id: 'sunqi', type: 'contributor', name: '孙七', x: 40, y: 55, size: 12 },
+
+        // Projects/Opportunities (Orange)
+        { id: 'k8s', type: 'project', name: 'K8s', x: 55, y: 35, size: 28 },
+        { id: 'ohos', type: 'project', name: 'OpenHarmony', x: 60, y: 60, size: 25 },
+        { id: 'award1', type: 'project', name: '开源先锋奖', x: 50, y: 80, size: 22 },
+
+        // Organizations (Green)
+        { id: 'university', type: 'org', name: '某高校', x: 80, y: 25, size: 35 },
+        { id: 'company', type: 'org', name: '某企业', x: 85, y: 50, size: 32 },
+        { id: 'community', type: 'org', name: '某社区', x: 80, y: 75, size: 30 }
+      ],
+      links: [
+        { from: 'zhangsan', to: 'k8s' },
+        { from: 'lisi', to: 'k8s' },
+        { from: 'zhangsan', to: 'ohos' },
+        { from: 'wangwu', to: 'ohos' },
+        { from: 'zhaoliu', to: 'award1' },
+        { from: 'sunqi', to: 'company' },
+        { from: 'k8s', to: 'company' },
+        { from: 'ohos', to: 'university' },
+        { from: 'award1', to: 'university' },
+        { from: 'university', to: 'community' }
+      ]
+    };
+
+    // Render Graph
+    function renderGraph() {
+      const canvas = document.getElementById('graphCanvas');
+      const width = canvas.offsetWidth;
+      const height = canvas.offsetHeight;
+
+      // Calculate positions
+      const getX = (percent) => (percent / 100) * width;
+      const getY = (percent) => (percent / 100) * height;
+
+      // Render links
+      graphData.links.forEach(link => {
+        const fromNode = graphData.nodes.find(n => n.id === link.from);
+        const toNode = graphData.nodes.find(n => n.id === link.to);
+
+        if (fromNode && toNode) {
+          const line = document.createElement('div');
+          line.className = 'node-link';
+          const x1 = getX(fromNode.x);
+          const y1 = getY(fromNode.y);
+          const x2 = getX(toNode.x);
+          const y2 = getY(toNode.y);
+          const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+          const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+          line.style.width = length + 'px';
+          line.style.height = '1px';
+          line.style.left = x1 + 'px';
+          line.style.top = y1 + 'px';
+          line.style.transform = `rotate(${angle}deg)`;
+
+          canvas.appendChild(line);
+        }
+      });
+
+      // Render nodes
+      graphData.nodes.forEach(node => {
+        const el = document.createElement('div');
+        el.className = `node ${node.type}`;
+        el.id = `node-${node.id}`;
+        el.style.left = getX(node.x) - node.size / 2 + 'px';
+        el.style.top = getY(node.y) - node.size / 2 + 'px';
+        el.style.width = node.size + 'px';
+        el.style.height = node.size + 'px';
+        el.textContent = node.name.charAt(0);
+        el.title = node.name;
+
+        canvas.appendChild(el);
+      });
+    }
+
+    // Live Feed Data
+    const liveFeedData = [
+      { type: 'opportunity', icon: '🚀', content: '某社区发布开发者大赛', time: '刚刚' },
+      { type: 'opportunity', icon: '🏆', content: '某高校发布开源先锋奖', time: '1分钟前' },
+      { type: 'reputation', icon: '🎉', content: '张三获得社区徽章', time: '2分钟前' },
+      { type: 'reputation', icon: '🏅', content: '李四获得高校证书', time: '3分钟前' },
+      { type: 'opportunity', icon: '💼', content: '某企业发布开源智能体工程师岗位', time: '5分钟前' },
+      { type: 'contribution', icon: '📝', content: '王五提交PR到Kubernetes', time: '6分钟前' },
+      { type: 'contribution', icon: '✅', content: '赵六完成任务', time: '8分钟前' },
+      { type: 'contribution', icon: '🔧', content: '孙七修复bug', time: '10分钟前' }
+    ];
+
+    // Render Live Feed
+    function renderLiveFeed() {
+      const container = document.getElementById('liveFeed');
+      container.innerHTML = liveFeedData.map(item => `
+        <div class="live-feed-item">
+          <div class="live-feed-icon">${item.icon}</div>
+          <div class="live-feed-content">
+            ${item.content}
+            <div class="live-feed-time">${item.time}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Ranking Click - Highlight Node
+    document.querySelectorAll('.ranking-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const nodeId = this.dataset.node;
+
+        // Remove previous highlight
+        document.querySelectorAll('.ranking-item').forEach(i => i.classList.remove('highlight'));
+        document.querySelectorAll('.node').forEach(n => n.classList.remove('highlight'));
+
+        // Add highlight
+        this.classList.add('highlight');
+        const node = document.getElementById(`node-${nodeId}`);
+        if (node) {
+          node.classList.add('highlight');
+          node.style.boxShadow = '0 0 30px rgba(99, 102, 241, 0.8)';
+        }
+      });
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      renderGraph();
+      renderLiveFeed();
+    });
+  </script>
+</body>
+</html>
