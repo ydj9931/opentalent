@@ -49,7 +49,7 @@
             /* Background Decorations */
             .bg-decoration {
                 position: fixed;
-                top: 0;
+                top: 0;c.
                 left: 0;
                 right: 0;
                 bottom: 0;
@@ -1445,11 +1445,11 @@
                 plugins: {
                     legend: {
                         labels: {
-                            color: '#6B7280',
-                            font: { family: 'Outfit' }
-                        }
-                    }
-                }
+                            color: "#6B7280",
+                            font: { family: "Outfit" },
+                        },
+                    },
+                },
             };
 
             // L1 Charts
@@ -1471,7 +1471,7 @@
                                     "#f59e0b",
                                 ],
                                 borderWidth: 2,
-                                borderColor: '#ffffff'
+                                borderColor: "#ffffff",
                             },
                         ],
                     },
@@ -1481,7 +1481,10 @@
                             ...chartDefaults.plugins,
                             legend: {
                                 position: "right",
-                                labels: { color: '#6B7280', font: { family: 'Outfit' } }
+                                labels: {
+                                    color: "#6B7280",
+                                    font: { family: "Outfit" },
+                                },
                             },
                         },
                     },
@@ -1500,7 +1503,7 @@
                                     "#8b5cf6",
                                 ],
                                 borderWidth: 2,
-                                borderColor: '#ffffff'
+                                borderColor: "#ffffff",
                             },
                         ],
                     },
@@ -1510,7 +1513,10 @@
                             ...chartDefaults.plugins,
                             legend: {
                                 position: "right",
-                                labels: { color: '#6B7280', font: { family: 'Outfit' } }
+                                labels: {
+                                    color: "#6B7280",
+                                    font: { family: "Outfit" },
+                                },
                             },
                         },
                     },
@@ -1599,7 +1605,14 @@
                     },
                     options: {
                         ...chartDefaults,
-                        plugins: { legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } } },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: "#6B7280",
+                                    font: { family: "Outfit" },
+                                },
+                            },
+                        },
                         scales: {
                             x: {
                                 ticks: { color: "#6B7280" },
@@ -1627,7 +1640,7 @@
                                     "#f59e0b",
                                 ],
                                 borderWidth: 2,
-                                borderColor: '#ffffff'
+                                borderColor: "#ffffff",
                             },
                         ],
                     },
@@ -1637,7 +1650,10 @@
                             ...chartDefaults.plugins,
                             legend: {
                                 position: "right",
-                                labels: { color: '#6B7280', font: { family: 'Outfit' } }
+                                labels: {
+                                    color: "#6B7280",
+                                    font: { family: "Outfit" },
+                                },
                             },
                         },
                     },
@@ -1705,19 +1721,31 @@
                         plugins: { legend: { display: false } },
                         scales: {
                             r: {
-                                ticks: { color: "#6B7280", backdropColor: 'transparent' },
+                                ticks: {
+                                    color: "#6B7280",
+                                    backdropColor: "transparent",
+                                },
                                 grid: { color: "#E5E7EB" },
-                                pointLabels: { color: "#6B7280", font: { family: 'Outfit' } },
+                                pointLabels: {
+                                    color: "#6B7280",
+                                    font: { family: "Outfit" },
+                                },
                             },
                         },
                     },
                 });
 
                 const talentHtml = data.l2.talentRanking
-                    .map(
-                        (item, i) => {
-                            const tagClass = item.type === '高校' ? 'tag-university' : item.type === '企业' ? 'tag-enterprise' : item.type === '社区' ? 'tag-community' : 'tag-activity';
-                            return `
+                    .map((item, i) => {
+                        const tagClass =
+                            item.type === "高校"
+                                ? "tag-university"
+                                : item.type === "企业"
+                                  ? "tag-enterprise"
+                                  : item.type === "社区"
+                                    ? "tag-community"
+                                    : "tag-activity";
+                        return `
                 <div class="ranking-item">
                     <div class="ranking-number ${i < 3 ? "top-3" : "other"}">${i + 1}</div>
                     <div class="ranking-info">
@@ -1727,8 +1755,7 @@
                     <div class="ranking-value">${item.value.toLocaleString()}</div>
                 </div>
             `;
-                        },
-                    )
+                    })
                     .join("");
                 document.getElementById("talentRanking").innerHTML = talentHtml;
             }
@@ -1778,7 +1805,14 @@
                     },
                     options: {
                         ...chartDefaults,
-                        plugins: { legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } } },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: "#6B7280",
+                                    font: { family: "Outfit" },
+                                },
+                            },
+                        },
                         scales: {
                             x: {
                                 ticks: { color: "#6B7280" },
@@ -1824,7 +1858,14 @@
                     },
                     options: {
                         ...chartDefaults,
-                        plugins: { legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } } },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: "#6B7280",
+                                    font: { family: "Outfit" },
+                                },
+                            },
+                        },
                         scales: {
                             x: {
                                 ticks: { color: "#6B7280" },
@@ -1867,10 +1908,12 @@
 
                 // Organization Ranking
                 const orgRankingHtml = data.strategic.orgRanking
-                    .map(
-                        (item, i) => {
-                            const tagClass = item.type === 'university' ? 'tag-university' : 'tag-enterprise';
-                            return `
+                    .map((item, i) => {
+                        const tagClass =
+                            item.type === "university"
+                                ? "tag-university"
+                                : "tag-enterprise";
+                        return `
                 <div class="ranking-item">
                     <div class="ranking-number ${i < 3 ? "top-3" : "other"}">${i + 1}</div>
                     <div class="ranking-info">
@@ -1880,8 +1923,7 @@
                     <div class="ranking-value">${item.contributors.toLocaleString()} <span style="font-size: 0.7rem; color: #9CA3AF;">(${item.projects}个项目)</span></div>
                 </div>
             `;
-                        },
-                    )
+                    })
                     .join("");
                 document.getElementById("strategicOrgRanking").innerHTML =
                     orgRankingHtml;
@@ -1922,10 +1964,12 @@
             }
 
             // Filter Tab functionality
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    this.parentElement.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
+            document.querySelectorAll(".filter-tab").forEach((tab) => {
+                tab.addEventListener("click", function () {
+                    this.parentElement
+                        .querySelectorAll(".filter-tab")
+                        .forEach((t) => t.classList.remove("active"));
+                    this.classList.add("active");
                 });
             });
 

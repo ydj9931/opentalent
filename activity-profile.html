@@ -1,997 +1,1764 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>活动视角贡献者面板 - 2024 OpenAtom 开源黑客松</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            /* Colors - Light Mode Flat Design */
-            --bg-page: #FFFFFF;
-            --bg-gray: #F3F4F6;
-            --bg-blue: #EFF6FF;
-            --bg-green: #ECFDF5;
-            --bg-amber: #FFFBEB;
-            --bg-purple: #F5F3FF;
-            --bg-orange: #FFF7ED;
-            --text-primary: #111827;
-            --text-secondary: #6B7280;
-            --text-muted: #9CA3AF;
-            --primary: #F97316;
-            --primary-dark: #EA580C;
-            --secondary: #8B5CF6;
-            --success: #10B981;
-            --accent: #F59E0B;
-            --border: #E5E7EB;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-page);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        /* Background Decoration */
-        .page-decoration {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .page-decoration::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 500px;
-            height: 500px;
-            background: var(--bg-orange);
-            border-radius: 50%;
-            opacity: 0.5;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 32px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Header */
-        .header {
-            background: var(--bg-orange);
-            padding: 48px 0;
-            margin-bottom: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -200px;
-            right: -200px;
-            width: 600px;
-            height: 600px;
-            background: rgba(249, 115, 22, 0.1);
-            border-radius: 50%;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            letter-spacing: -0.02em;
-        }
-
-        .header .activity-meta {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .header .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .status-badge.completed {
-            background: var(--bg-green);
-            color: var(--success);
-            border: 2px solid var(--success);
-        }
-
-        /* Navigation */
-        .nav-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            background: var(--bg-gray);
-            padding: 8px;
-            border-radius: 8px;
-        }
-
-        .nav-tab {
-            padding: 12px 24px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .nav-tab:hover {
-            background: var(--bg-page);
-            color: var(--text-primary);
-        }
-
-        .nav-tab.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Cards - Flat Design */
-        .card {
-            background: var(--bg-page);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            letter-spacing: -0.01em;
-        }
-
-        .card-title i {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-orange);
-            color: var(--primary);
-            border-radius: 6px;
-        }
-
-        /* KPI Grid */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .kpi-card {
-            background: var(--bg-page);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s ease;
-        }
-
-        .kpi-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .kpi-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
-
-        .kpi-icon.teams { background: var(--bg-blue); color: #3B82F6; }
-        .kpi-icon.participants { background: var(--bg-green); color: var(--success); }
-        .kpi-icon.projects { background: var(--bg-purple); color: var(--secondary); }
-        .kpi-icon.prs { background: var(--bg-orange); color: var(--primary); }
-        .kpi-icon.issues { background: var(--bg-amber); color: var(--accent); }
-        .kpi-icon.commits { background: #FDF2F8; color: #EC4899; }
-
-        .kpi-content h3 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 2px;
-            color: var(--text-primary);
-        }
-
-        .kpi-content p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--border);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 28px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -26px;
-            top: 4px;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: var(--bg-page);
-            border: 3px solid var(--border);
-        }
-
-        .timeline-item.completed::before {
-            background: var(--success);
-            border-color: var(--success);
-        }
-
-        .timeline-item.completed .phase-status {
-            background: var(--bg-green);
-            color: var(--success);
-        }
-
-        .timeline-content h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .timeline-content .time {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 8px;
-        }
-
-        .phase-status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: var(--bg-amber);
-            color: var(--accent);
-        }
-
-        /* Leaderboard Table */
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .leaderboard-table th,
-        .leaderboard-table td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .leaderboard-table th {
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            background: var(--bg-gray);
-        }
-
-        .leaderboard-table tr:hover {
-            background: var(--bg-gray);
-        }
-
-        .rank-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-
-        .rank-badge.gold { background: #FEF3C7; color: #D97706; }
-        .rank-badge.silver { background: #F3F4F6; color: #6B7280; }
-        .rank-badge.bronze { background: #FED7AA; color: #C2410C; }
-        .rank-badge.normal { background: var(--bg-gray); color: var(--text-secondary); }
-
-        .contributor-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .contributor-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 6px;
-            background: var(--bg-gray);
-        }
-
-        .contributor-name {
-            font-weight: 600;
-        }
-
-        .skill-tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .skill-tag {
-            padding: 4px 10px;
-            background: var(--bg-blue);
-            color: #3B82F6;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* Team Card */
-        .team-card {
-            background: var(--bg-page);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s ease;
-        }
-
-        .team-card:hover {
-            border-color: var(--primary);
-            transform: scale(1.01);
-        }
-
-        .team-card:first-child {
-            background: #FEF3C7;
-            border-color: #FCD34D;
-        }
-
-        .team-rank {
-            font-size: 1.5rem;
-            font-weight: 700;
-            width: 40px;
-            color: var(--text-secondary);
-        }
-
-        .team-card:first-child .team-rank { color: #D97706; }
-
-        .team-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            background: var(--bg-gray);
-            color: var(--text-secondary);
-        }
-
-        .team-card:first-child .team-icon {
-            background: #FCD34D;
-            color: #92400E;
-        }
-
-        .team-info {
-            flex: 1;
-        }
-
-        .team-info h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .team-info p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .team-stats {
-            text-align: right;
-        }
-
-        .team-score {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .team-prs {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* Project Cards */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .project-card {
-            background: var(--bg-page);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
-            transition: all 0.2s ease;
-        }
-
-        .project-card:hover {
-            border-color: var(--primary);
-            transform: scale(1.02);
-        }
-
-        .project-card:first-child {
-            border-color: #FCD34D;
-            background: #FFFBEB;
-        }
-
-        .project-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .project-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .project-team {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 8px;
-        }
-
-        .project-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 16px;
-        }
-
-        .project-scores {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .score-item {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            background: var(--bg-gray);
-            border-radius: 6px;
-        }
-
-        .score-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .score-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .project-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 2px solid var(--border);
-        }
-
-        .project-stats {
-            display: flex;
-            gap: 16px;
-        }
-
-        .project-stat {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .project-status {
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .project-status.first { background: #FEF3C7; color: #D97706; }
-        .project-status.second { background: #F3F4F6; color: #6B7280; }
-        .project-status.third { background: #FED7AA; color: #C2410C; }
-        .project-status.honor { background: var(--bg-purple); color: var(--secondary); }
-
-        /* Skills Cloud */
-        .skills-cloud {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .skill-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: var(--bg-gray);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .skill-item:hover {
-            background: var(--bg-blue);
-            color: #3B82F6;
-        }
-
-        .skill-count {
-            background: var(--primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* Milestones */
-        .milestone-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .milestone-card {
-            background: var(--bg-page);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.2s ease;
-        }
-
-        .milestone-card:hover {
-            border-color: var(--primary);
-        }
-
-        .milestone-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--accent);
-        }
-
-        .milestone-card.completed::before {
-            background: var(--success);
-        }
-
-        .milestone-time {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .milestone-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .milestone-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Achievements */
-        .achievement-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 16px;
-        }
-
-        .achievement-card {
-            background: var(--bg-page);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .achievement-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .achievement-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 12px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            background: var(--bg-orange);
-            color: var(--primary);
-        }
-
-        .achievement-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-        }
-
-        .achievement-count {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        /* Summary */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        .summary-item {
-            background: var(--bg-gray);
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .summary-item:hover {
-            background: var(--bg-blue);
-        }
-
-        .summary-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .summary-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* Charts */
-        .chart-container {
-            height: 300px;
-            margin-top: 16px;
-        }
-
-        /* Grid layouts */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        /* Tracks */
-        .tracks {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-
-        .track-tag {
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            background: var(--bg-orange);
-            color: var(--primary);
-            border: 2px solid rgba(249, 115, 22, 0.3);
-        }
-
-        /* Section */
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 28px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 2px solid transparent;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-secondary {
-            background: var(--bg-gray);
-            color: var(--text-primary);
-            border-color: var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .kpi-grid {
-                grid-template-columns: repeat(3, 1fr);
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>活动视角贡献者面板 - 校源行训练营</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            :root {
+                /* Colors - Light Mode Flat Design */
+                --bg-page: #ffffff;
+                --bg-gray: #f3f4f6;
+                --bg-blue: #eff6ff;
+                --bg-green: #ecfdf5;
+                --bg-amber: #fffbeb;
+                --bg-purple: #f5f3ff;
+                --bg-orange: #fff7ed;
+                --text-primary: #111827;
+                --text-secondary: #6b7280;
+                --text-muted: #9ca3af;
+                --primary: #f97316;
+                --primary-dark: #ea580c;
+                --secondary: #8b5cf6;
+                --success: #10b981;
+                --accent: #f59e0b;
+                --border: #e5e7eb;
             }
-            .project-grid {
-                grid-template-columns: 1fr;
-            }
-            .milestone-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .achievement-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .summary-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
 
-        @media (max-width: 768px) {
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Outfit", sans-serif;
+                background: var(--bg-page);
+                color: var(--text-primary);
+                line-height: 1.6;
+            }
+
+            /* Background Decoration */
+            .page-decoration {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                pointer-events: none;
+                z-index: 0;
+                overflow: hidden;
+            }
+
+            .page-decoration::before {
+                content: "";
+                position: absolute;
+                top: -100px;
+                right: -100px;
+                width: 500px;
+                height: 500px;
+                background: var(--bg-orange);
+                border-radius: 50%;
+                opacity: 0.5;
+            }
+
+            .container {
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: 0 32px;
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Header */
+            .header {
+                background: var(--bg-orange);
+                padding: 48px 0;
+                margin-bottom: 32px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .header::before {
+                content: "";
+                position: absolute;
+                top: -200px;
+                right: -200px;
+                width: 600px;
+                height: 600px;
+                background: rgba(249, 115, 22, 0.1);
+                border-radius: 50%;
+            }
+
+            .header-content {
+                position: relative;
+                z-index: 1;
+            }
+
             .header h1 {
-                font-size: 1.75rem;
+                font-size: 2.5rem;
+                font-weight: 800;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                letter-spacing: -0.02em;
             }
-            .kpi-grid {
-                grid-template-columns: repeat(2, 1fr);
+
+            .header .activity-meta {
+                display: flex;
+                gap: 24px;
+                flex-wrap: wrap;
             }
-            .grid-2 {
-                grid-template-columns: 1fr;
+
+            .header .meta-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.95rem;
+                color: var(--text-secondary);
+                font-weight: 500;
             }
-            .milestone-grid {
-                grid-template-columns: 1fr;
+
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                margin-bottom: 16px;
             }
-            .achievement-grid {
-                grid-template-columns: repeat(2, 1fr);
+
+            .status-badge.completed {
+                background: var(--bg-green);
+                color: var(--success);
+                border: 2px solid var(--success);
             }
+
+            /* Navigation */
             .nav-tabs {
-                overflow-x: auto;
+                display: flex;
+                gap: 8px;
+                margin-bottom: 24px;
+                flex-wrap: wrap;
+                background: var(--bg-gray);
+                padding: 8px;
+                border-radius: 8px;
             }
+
+            .nav-tab {
+                padding: 12px 24px;
+                border: none;
+                background: transparent;
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                font-weight: 600;
+                cursor: pointer;
+                border-radius: 6px;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-family: "Outfit", sans-serif;
+            }
+
+            .nav-tab:hover {
+                background: var(--bg-page);
+                color: var(--text-primary);
+            }
+
+            .nav-tab.active {
+                background: var(--primary);
+                color: white;
+            }
+
+            /* Cards - Flat Design */
+            .card {
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 24px;
+                margin-bottom: 24px;
+            }
+
+            .card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+                border-bottom: 2px solid var(--border);
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                letter-spacing: -0.01em;
+            }
+
+            .card-title i {
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--bg-orange);
+                color: var(--primary);
+                border-radius: 6px;
+            }
+
+            /* KPI Grid */
+            .kpi-grid {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .kpi-card {
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 20px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                transition: all 0.2s ease;
+            }
+
+            .kpi-card:hover {
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            .kpi-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+            }
+
+            .kpi-icon.teams {
+                background: var(--bg-blue);
+                color: #3b82f6;
+            }
+            .kpi-icon.participants {
+                background: var(--bg-green);
+                color: var(--success);
+            }
+            .kpi-icon.projects {
+                background: var(--bg-purple);
+                color: var(--secondary);
+            }
+            .kpi-icon.prs {
+                background: var(--bg-orange);
+                color: var(--primary);
+            }
+            .kpi-icon.issues {
+                background: var(--bg-amber);
+                color: var(--accent);
+            }
+            .kpi-icon.commits {
+                background: #fdf2f8;
+                color: #ec4899;
+            }
+
+            .kpi-content h3 {
+                font-size: 1.75rem;
+                font-weight: 700;
+                margin-bottom: 2px;
+                color: var(--text-primary);
+            }
+
+            .kpi-content p {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+
+            /* Timeline */
+            .timeline {
+                position: relative;
+                padding-left: 30px;
+            }
+
+            .timeline::before {
+                content: "";
+                position: absolute;
+                left: 8px;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: var(--border);
+            }
+
+            .timeline-item {
+                position: relative;
+                padding-bottom: 28px;
+            }
+
+            .timeline-item::before {
+                content: "";
+                position: absolute;
+                left: -26px;
+                top: 4px;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: var(--bg-page);
+                border: 3px solid var(--border);
+            }
+
+            .timeline-item.completed::before {
+                background: var(--success);
+                border-color: var(--success);
+            }
+
+            .timeline-item.completed .phase-status {
+                background: var(--bg-green);
+                color: var(--success);
+            }
+
+            .timeline-content h4 {
+                font-size: 1rem;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+
+            .timeline-content .time {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                margin-bottom: 8px;
+            }
+
+            .phase-status {
+                display: inline-block;
+                padding: 4px 12px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                background: var(--bg-amber);
+                color: var(--accent);
+            }
+
+            /* Leaderboard Table */
+            .leaderboard-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 14px 16px;
+                text-align: left;
+                border-bottom: 2px solid var(--border);
+            }
+
+            .leaderboard-table th {
+                color: var(--text-secondary);
+                font-weight: 600;
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                background: var(--bg-gray);
+            }
+
+            .leaderboard-table tr:hover {
+                background: var(--bg-gray);
+            }
+
+            .rank-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+                font-weight: 700;
+                font-size: 0.9rem;
+            }
+
+            .rank-badge.gold {
+                background: #fef3c7;
+                color: #d97706;
+            }
+            .rank-badge.silver {
+                background: #f3f4f6;
+                color: #6b7280;
+            }
+            .rank-badge.bronze {
+                background: #fed7aa;
+                color: #c2410c;
+            }
+            .rank-badge.normal {
+                background: var(--bg-gray);
+                color: var(--text-secondary);
+            }
+
+            .contributor-info {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .contributor-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 6px;
+                background: var(--bg-gray);
+            }
+
+            .contributor-name {
+                font-weight: 600;
+            }
+
+            .skill-tags {
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+
+            .skill-tag {
+                padding: 4px 10px;
+                background: var(--bg-blue);
+                color: #3b82f6;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+
+            /* Team Card */
+            .team-card {
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                transition: all 0.2s ease;
+            }
+
+            .team-card:hover {
+                border-color: var(--primary);
+                transform: scale(1.01);
+            }
+
+            .team-card:first-child {
+                background: #fef3c7;
+                border-color: #fcd34d;
+            }
+
+            .team-rank {
+                font-size: 1.5rem;
+                font-weight: 700;
+                width: 40px;
+                color: var(--text-secondary);
+            }
+
+            .team-card:first-child .team-rank {
+                color: #d97706;
+            }
+
+            .team-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                background: var(--bg-gray);
+                color: var(--text-secondary);
+            }
+
+            .team-card:first-child .team-icon {
+                background: #fcd34d;
+                color: #92400e;
+            }
+
+            .team-info {
+                flex: 1;
+            }
+
+            .team-info h4 {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+
+            .team-info p {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+            }
+
+            .team-stats {
+                text-align: right;
+            }
+
+            .team-score {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--primary);
+            }
+
+            .team-prs {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+            }
+
+            /* Project Cards */
+            .project-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .project-card {
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 24px;
+                transition: all 0.2s ease;
+            }
+
+            .project-card:hover {
+                border-color: var(--primary);
+                transform: scale(1.02);
+            }
+
+            .project-card:first-child {
+                border-color: #fcd34d;
+                background: #fffbeb;
+            }
+
+            .project-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px;
+            }
+
+            .project-name {
+                font-size: 1.1rem;
+                font-weight: 700;
+            }
+
+            .project-team {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                margin-bottom: 8px;
+            }
+
+            .project-desc {
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+                margin-bottom: 16px;
+            }
+
+            .project-scores {
+                display: flex;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            .score-item {
+                flex: 1;
+                text-align: center;
+                padding: 12px;
+                background: var(--bg-gray);
+                border-radius: 6px;
+            }
+
+            .score-value {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: var(--primary);
+            }
+
+            .score-label {
+                font-size: 0.75rem;
+                color: var(--text-secondary);
+            }
+
+            .project-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 12px;
+                border-top: 2px solid var(--border);
+            }
+
+            .project-stats {
+                display: flex;
+                gap: 16px;
+            }
+
+            .project-stat {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+            }
+
+            .project-status {
+                padding: 6px 14px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 700;
+            }
+
+            .project-status.first {
+                background: #fef3c7;
+                color: #d97706;
+            }
+            .project-status.second {
+                background: #f3f4f6;
+                color: #6b7280;
+            }
+            .project-status.third {
+                background: #fed7aa;
+                color: #c2410c;
+            }
+            .project-status.honor {
+                background: var(--bg-purple);
+                color: var(--secondary);
+            }
+
+            /* Skills Cloud */
+            .skills-cloud {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .skill-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 18px;
+                background: var(--bg-gray);
+                border-radius: 6px;
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+
+            .skill-item:hover {
+                background: var(--bg-blue);
+                color: #3b82f6;
+            }
+
+            .skill-count {
+                background: var(--primary);
+                color: white;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+
+            /* Milestones */
+            .milestone-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+            }
+
+            .milestone-card {
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 20px;
+                position: relative;
+                overflow: hidden;
+                transition: all 0.2s ease;
+            }
+
+            .milestone-card:hover {
+                border-color: var(--primary);
+            }
+
+            .milestone-card::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 4px;
+                background: var(--accent);
+            }
+
+            .milestone-card.completed::before {
+                background: var(--success);
+            }
+
+            .milestone-time {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                margin-bottom: 8px;
+                font-weight: 500;
+            }
+
+            .milestone-title {
+                font-size: 1rem;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .milestone-desc {
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+            }
+
+            /* Achievements */
+            .achievement-grid {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 16px;
+            }
+
+            .achievement-card {
+                background: var(--bg-page);
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                padding: 20px;
+                text-align: center;
+                transition: all 0.2s ease;
+            }
+
+            .achievement-card:hover {
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            .achievement-icon {
+                width: 56px;
+                height: 56px;
+                margin: 0 auto 12px;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                background: var(--bg-orange);
+                color: var(--primary);
+            }
+
+            .achievement-name {
+                font-weight: 600;
+                margin-bottom: 4px;
+                font-size: 0.9rem;
+            }
+
+            .achievement-count {
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+            }
+
+            /* Summary */
             .summary-grid {
-                grid-template-columns: 1fr;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
             }
-        }
-    </style>
-</head>
-<body>
-    <div class="page-decoration"></div>
 
-    <div class="header">
+            .summary-item {
+                background: var(--bg-gray);
+                border-radius: 8px;
+                padding: 24px;
+                text-align: center;
+                transition: all 0.2s ease;
+            }
+
+            .summary-item:hover {
+                background: var(--bg-blue);
+            }
+
+            .summary-value {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: var(--primary);
+                margin-bottom: 8px;
+            }
+
+            .summary-label {
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+                font-weight: 500;
+            }
+
+            /* Charts */
+            .chart-container {
+                height: 300px;
+                margin-top: 16px;
+            }
+
+            /* Grid layouts */
+            .grid-2 {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            /* Tracks */
+            .tracks {
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+                margin-bottom: 24px;
+            }
+
+            .track-tag {
+                padding: 8px 18px;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                background: var(--bg-orange);
+                color: var(--primary);
+                border: 2px solid rgba(249, 115, 22, 0.3);
+            }
+
+            /* Section */
+            .section {
+                display: none;
+            }
+
+            .section.active {
+                display: block;
+            }
+
+            /* Buttons */
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 14px 28px;
+                border-radius: 6px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                border: 2px solid transparent;
+                font-family: "Outfit", sans-serif;
+            }
+
+            .btn-primary {
+                background: var(--primary);
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: var(--primary-dark);
+            }
+
+            .btn-secondary {
+                background: var(--bg-gray);
+                color: var(--text-primary);
+                border-color: var(--border);
+            }
+
+            .btn-secondary:hover {
+                background: var(--border);
+            }
+
+            /* Responsive */
+            @media (max-width: 1024px) {
+                .kpi-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                .project-grid {
+                    grid-template-columns: 1fr;
+                }
+                .milestone-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .achievement-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                .summary-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .header h1 {
+                    font-size: 1.75rem;
+                }
+                .kpi-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .grid-2 {
+                    grid-template-columns: 1fr;
+                }
+                .milestone-grid {
+                    grid-template-columns: 1fr;
+                }
+                .achievement-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .nav-tabs {
+                    overflow-x: auto;
+                }
+                .summary-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page-decoration"></div>
+
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <span class="status-badge completed"
+                        ><i class="fas fa-check-circle"></i> 已结束</span
+                    >
+                    <h1>
+                        <i class="fas fa-laptop-code"></i> 2024 OpenAtom
+                        开源黑客松
+                    </h1>
+                    <div class="activity-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i> 2024-12-14 ~
+                            2024-12-16
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i> 48小时
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i> 线上 +
+                            北京线下
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-users"></i> 156人 / 32团队
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container">
-            <div class="header-content">
-                <span class="status-badge completed"><i class="fas fa-check-circle"></i> 已结束</span>
-                <h1><i class="fas fa-laptop-code"></i> 2024 OpenAtom 开源黑客松</h1>
-                <div class="activity-meta">
-                    <div class="meta-item"><i class="fas fa-calendar"></i> 2024-12-14 ~ 2024-12-16</div>
-                    <div class="meta-item"><i class="fas fa-clock"></i> 48小时</div>
-                    <div class="meta-item"><i class="fas fa-map-marker-alt"></i> 线上 + 北京线下</div>
-                    <div class="meta-item"><i class="fas fa-users"></i> 156人 / 32团队</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Navigation -->
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('overview')"><i class="fas fa-home"></i> 活动概览</button>
-            <button class="nav-tab" onclick="showSection('leaderboard')"><i class="fas fa-trophy"></i> 贡献排行榜</button>
-            <button class="nav-tab" onclick="showSection('projects')"><i class="fas fa-project-diagram"></i> 项目展示</button>
-            <button class="nav-tab" onclick="showSection('skills')"><i class="fas fa-code"></i> 技能分布</button>
-            <button class="nav-tab" onclick="showSection('network')"><i class="fas fa-project-network"></i> 协作网络</button>
-            <button class="nav-tab" onclick="showSection('milestones')"><i class="fas fa-flag"></i> 阶段性成就</button>
-            <button class="nav-tab" onclick="showSection('summary')"><i class="fas fa-file-alt"></i> 活动总结</button>
-        </div>
-
-        <!-- Section: Overview -->
-        <div id="overview" class="section active">
-            <div class="tracks">
-                <span class="track-tag"><i class="fas fa-robot"></i> AI创新</span>
-                <span class="track-tag"><i class="fas fa-cloud"></i> 云原生</span>
-                <span class="track-tag"><i class="fas fa-shield-alt"></i> 安全工具</span>
-                <span class="track-tag"><i class="fas fa-graduation-cap"></i> 教育科技</span>
+            <!-- Navigation -->
+            <div class="nav-tabs">
+                <button
+                    class="nav-tab active"
+                    onclick="showSection('overview')"
+                >
+                    <i class="fas fa-home"></i> 活动概览
+                </button>
+                <button class="nav-tab" onclick="showSection('leaderboard')">
+                    <i class="fas fa-trophy"></i> 贡献排行榜
+                </button>
+                <button class="nav-tab" onclick="showSection('projects')">
+                    <i class="fas fa-project-diagram"></i> 项目展示
+                </button>
+                <button class="nav-tab" onclick="showSection('skills')">
+                    <i class="fas fa-code"></i> 技能分布
+                </button>
+                <button class="nav-tab" onclick="showSection('network')">
+                    <i class="fas fa-project-network"></i> 协作网络
+                </button>
+                <button class="nav-tab" onclick="showSection('milestones')">
+                    <i class="fas fa-flag"></i> 阶段性成就
+                </button>
+                <button class="nav-tab" onclick="showSection('summary')">
+                    <i class="fas fa-file-alt"></i> 活动总结
+                </button>
             </div>
 
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-icon teams"><i class="fas fa-users"></i></div>
-                    <div class="kpi-content">
-                        <h3>32</h3>
-                        <p>参赛团队</p>
+            <!-- Section: Overview -->
+            <div id="overview" class="section active">
+                <div class="tracks">
+                    <span class="track-tag"
+                        ><i class="fas fa-robot"></i> AI创新</span
+                    >
+                    <span class="track-tag"
+                        ><i class="fas fa-cloud"></i> 云原生</span
+                    >
+                    <span class="track-tag"
+                        ><i class="fas fa-shield-alt"></i> 安全工具</span
+                    >
+                    <span class="track-tag"
+                        ><i class="fas fa-graduation-cap"></i> 教育科技</span
+                    >
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon teams">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>32</h3>
+                            <p>参赛团队</p>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon participants">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>156</h3>
+                            <p>参与人数</p>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon projects">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>38</h3>
+                            <p>提交项目</p>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon prs">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>245</h3>
+                            <p>合并PR</p>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon issues">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>89</h3>
+                            <p>解决Issue</p>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon commits">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>567</h3>
+                            <p>代码提交</p>
+                        </div>
                     </div>
                 </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon participants"><i class="fas fa-user-friends"></i></div>
-                    <div class="kpi-content">
-                        <h3>156</h3>
-                        <p>参与人数</p>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-history"></i> 活动时间线
+                            </h3>
+                        </div>
+                        <div class="timeline">
+                            <div class="timeline-item completed">
+                                <div class="timeline-content">
+                                    <h4>报名阶段</h4>
+                                    <div class="time">
+                                        2024-11-01 ~ 2024-12-10
+                                    </div>
+                                    <span class="phase-status">已完成</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item completed">
+                                <div class="timeline-content">
+                                    <h4>初赛评审</h4>
+                                    <div class="time">
+                                        2024-12-14 ~ 2024-12-15
+                                    </div>
+                                    <span class="phase-status">已完成</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item completed">
+                                <div class="timeline-content">
+                                    <h4>决赛路演</h4>
+                                    <div class="time">2024-12-16</div>
+                                    <span class="phase-status">已完成</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item completed">
+                                <div class="timeline-content">
+                                    <h4>颁奖典礼</h4>
+                                    <div class="time">2024-12-16</div>
+                                    <span class="phase-status">已完成</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon projects"><i class="fas fa-folder-open"></i></div>
-                    <div class="kpi-content">
-                        <h3>38</h3>
-                        <p>提交项目</p>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon prs"><i class="fas fa-code-branch"></i></div>
-                    <div class="kpi-content">
-                        <h3>245</h3>
-                        <p>合并PR</p>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon issues"><i class="fas fa-bug"></i></div>
-                    <div class="kpi-content">
-                        <h3>89</h3>
-                        <p>解决Issue</p>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon commits"><i class="fas fa-code"></i></div>
-                    <div class="kpi-content">
-                        <h3>567</h3>
-                        <p>代码提交</p>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-line"></i> 贡献趋势
+                            </h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="contributionTrend"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid-2">
+            <!-- Section: Leaderboard -->
+            <div id="leaderboard" class="section">
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-medal"></i> 个人贡献排行
+                            </h3>
+                        </div>
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>贡献者</th>
+                                    <th>团队</th>
+                                    <th>评分</th>
+                                    <th>PRs</th>
+                                    <th>技能</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge gold">1</span>
+                                    </td>
+                                    <td>
+                                        <div class="contributor-info">
+                                            <img
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWei"
+                                                class="contributor-avatar"
+                                                alt="avatar"
+                                            />
+                                            <span class="contributor-name"
+                                                >张伟</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td>AI先锋队</td>
+                                    <td><strong>95</strong></td>
+                                    <td>28</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag"
+                                                >Python</span
+                                            >
+                                            <span class="skill-tag">AI/ML</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge silver">2</span>
+                                    </td>
+                                    <td>
+                                        <div class="contributor-info">
+                                            <img
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiNa"
+                                                class="contributor-avatar"
+                                                alt="avatar"
+                                            />
+                                            <span class="contributor-name"
+                                                >李娜</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td>云端探索者</td>
+                                    <td><strong>92</strong></td>
+                                    <td>24</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag"
+                                                >Kubernetes</span
+                                            >
+                                            <span class="skill-tag">Go</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge bronze">3</span>
+                                    </td>
+                                    <td>
+                                        <div class="contributor-info">
+                                            <img
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=WangQiang"
+                                                class="contributor-avatar"
+                                                alt="avatar"
+                                            />
+                                            <span class="contributor-name"
+                                                >王强</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td>安全卫士</td>
+                                    <td><strong>89</strong></td>
+                                    <td>22</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag">Rust</span>
+                                            <span class="skill-tag"
+                                                >Security</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge normal">4</span>
+                                    </td>
+                                    <td>
+                                        <div class="contributor-info">
+                                            <img
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=ChenMing"
+                                                class="contributor-avatar"
+                                                alt="avatar"
+                                            />
+                                            <span class="contributor-name"
+                                                >陈明</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td>教育创新</td>
+                                    <td><strong>86</strong></td>
+                                    <td>20</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag">React</span>
+                                            <span class="skill-tag"
+                                                >Node.js</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge normal">5</span>
+                                    </td>
+                                    <td>
+                                        <div class="contributor-info">
+                                            <img
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiuFang"
+                                                class="contributor-avatar"
+                                                alt="avatar"
+                                            />
+                                            <span class="contributor-name"
+                                                >刘芳</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td>AI先锋队</td>
+                                    <td><strong>84</strong></td>
+                                    <td>18</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag"
+                                                >Python</span
+                                            >
+                                            <span class="skill-tag"
+                                                >TensorFlow</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-users"></i> 团队贡献排行
+                            </h3>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-rank">1</div>
+                            <div class="team-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>AI先锋队</h4>
+                                <p>5人 · AI代码助手</p>
+                            </div>
+                            <div class="team-stats">
+                                <div class="team-score">268</div>
+                                <div class="team-prs">68 PRs</div>
+                            </div>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-rank">2</div>
+                            <div class="team-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>安全卫士</h4>
+                                <p>4人 · 漏洞扫描工具</p>
+                            </div>
+                            <div class="team-stats">
+                                <div class="team-score">245</div>
+                                <div class="team-prs">56 PRs</div>
+                            </div>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-rank">3</div>
+                            <div class="team-icon">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>云端探索者</h4>
+                                <p>5人 · 云原生监控平台</p>
+                            </div>
+                            <div class="team-stats">
+                                <div class="team-score">232</div>
+                                <div class="team-prs">52 PRs</div>
+                            </div>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-rank">4</div>
+                            <div class="team-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>教育创新</h4>
+                                <p>4人 · 在线编程教育平台</p>
+                            </div>
+                            <div class="team-stats">
+                                <div class="team-score">218</div>
+                                <div class="team-prs">45 PRs</div>
+                            </div>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-rank">5</div>
+                            <div class="team-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>创新之星</h4>
+                                <p>5人 · 开源社区助手</p>
+                            </div>
+                            <div class="team-stats">
+                                <div class="team-score">195</div>
+                                <div class="team-prs">38 PRs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Projects -->
+            <div id="projects" class="section">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-history"></i> 活动时间线</h3>
+                        <h3 class="card-title">
+                            <i class="fas fa-trophy"></i> 获奖项目
+                        </h3>
                     </div>
-                    <div class="timeline">
-                        <div class="timeline-item completed">
-                            <div class="timeline-content">
-                                <h4>报名阶段</h4>
-                                <div class="time">2024-11-01 ~ 2024-12-10</div>
-                                <span class="phase-status">已完成</span>
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div>
+                                    <div class="project-name">AI代码助手</div>
+                                    <div class="project-team">
+                                        AI先锋队 · AI创新赛道
+                                    </div>
+                                </div>
+                                <span class="project-status first">一等奖</span>
+                            </div>
+                            <p class="project-desc">
+                                基于大语言模型的智能代码补全与重构工具
+                            </p>
+                            <div class="project-scores">
+                                <div class="score-item">
+                                    <div class="score-value">95</div>
+                                    <div class="score-label">创新性</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">88</div>
+                                    <div class="score-label">复杂度</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">92</div>
+                                    <div class="score-label">技术性</div>
+                                </div>
+                            </div>
+                            <div class="project-footer">
+                                <div class="project-stats">
+                                    <span class="project-stat"
+                                        ><i class="fas fa-code-branch"></i>
+                                        68</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-bug"></i> 25</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-star"></i> 156</span
+                                    >
+                                </div>
                             </div>
                         </div>
-                        <div class="timeline-item completed">
-                            <div class="timeline-content">
-                                <h4>初赛评审</h4>
-                                <div class="time">2024-12-14 ~ 2024-12-15</div>
-                                <span class="phase-status">已完成</span>
+
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div>
+                                    <div class="project-name">漏洞扫描工具</div>
+                                    <div class="project-team">
+                                        安全卫士 · 安全工具赛道
+                                    </div>
+                                </div>
+                                <span class="project-status second"
+                                    >二等奖</span
+                                >
+                            </div>
+                            <p class="project-desc">
+                                自动化开源依赖漏洞检测与修复建议工具
+                            </p>
+                            <div class="project-scores">
+                                <div class="score-item">
+                                    <div class="score-value">88</div>
+                                    <div class="score-label">创新性</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">90</div>
+                                    <div class="score-label">复杂度</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">85</div>
+                                    <div class="score-label">技术性</div>
+                                </div>
+                            </div>
+                            <div class="project-footer">
+                                <div class="project-stats">
+                                    <span class="project-stat"
+                                        ><i class="fas fa-code-branch"></i>
+                                        56</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-bug"></i> 18</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-star"></i> 89</span
+                                    >
+                                </div>
                             </div>
                         </div>
-                        <div class="timeline-item completed">
-                            <div class="timeline-content">
-                                <h4>决赛路演</h4>
-                                <div class="time">2024-12-16</div>
-                                <span class="phase-status">已完成</span>
+
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div>
+                                    <div class="project-name">
+                                        云原生监控平台
+                                    </div>
+                                    <div class="project-team">
+                                        云端探索者 · 云原生赛道
+                                    </div>
+                                </div>
+                                <span class="project-status second"
+                                    >二等奖</span
+                                >
+                            </div>
+                            <p class="project-desc">
+                                面向Kubernetes的多维度可视化监控系统
+                            </p>
+                            <div class="project-scores">
+                                <div class="score-item">
+                                    <div class="score-value">82</div>
+                                    <div class="score-label">创新性</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">85</div>
+                                    <div class="score-label">复杂度</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">88</div>
+                                    <div class="score-label">技术性</div>
+                                </div>
+                            </div>
+                            <div class="project-footer">
+                                <div class="project-stats">
+                                    <span class="project-stat"
+                                        ><i class="fas fa-code-branch"></i>
+                                        52</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-bug"></i> 15</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-star"></i> 67</span
+                                    >
+                                </div>
                             </div>
                         </div>
-                        <div class="timeline-item completed">
-                            <div class="timeline-content">
-                                <h4>颁奖典礼</h4>
-                                <div class="time">2024-12-16</div>
-                                <span class="phase-status">已完成</span>
+
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div>
+                                    <div class="project-name">
+                                        在线编程教育平台
+                                    </div>
+                                    <div class="project-team">
+                                        教育创新 · 教育科技赛道
+                                    </div>
+                                </div>
+                                <span class="project-status third">三等奖</span>
+                            </div>
+                            <p class="project-desc">互动式编程学习与实践平台</p>
+                            <div class="project-scores">
+                                <div class="score-item">
+                                    <div class="score-value">85</div>
+                                    <div class="score-label">创新性</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">78</div>
+                                    <div class="score-label">复杂度</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">80</div>
+                                    <div class="score-label">技术性</div>
+                                </div>
+                            </div>
+                            <div class="project-footer">
+                                <div class="project-stats">
+                                    <span class="project-stat"
+                                        ><i class="fas fa-code-branch"></i>
+                                        45</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-bug"></i> 12</span
+                                    >
+                                    <span class="project-stat"
+                                        ><i class="fas fa-star"></i> 45</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Skills -->
+            <div id="skills" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-code"></i> 技能与技术标签分布
+                        </h3>
+                    </div>
+                    <div class="skills-cloud">
+                        <div class="skill-item" style="font-size: 1.1rem">
+                            Python <span class="skill-count">68</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 1rem">
+                            JavaScript <span class="skill-count">45</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.95rem">
+                            Backend <span class="skill-count">42</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.95rem">
+                            Frontend <span class="skill-count">38</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.9rem">
+                            AI/ML <span class="skill-count">35</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.9rem">
+                            Go <span class="skill-count">32</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.85rem">
+                            Kubernetes <span class="skill-count">28</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.85rem">
+                            DevOps <span class="skill-count">22</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.8rem">
+                            Rust <span class="skill-count">18</span>
+                        </div>
+                        <div class="skill-item" style="font-size: 0.8rem">
+                            Security <span class="skill-count">15</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-pie"></i> 技术方向分布
+                            </h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-fire"></i> Top 10 贡献者技能
+                            </h3>
+                        </div>
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>贡献者</th>
+                                    <th>主要技能</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge gold">1</span>
+                                    </td>
+                                    <td>张伟</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag">Python</span
+                                            ><span class="skill-tag">AI/ML</span
+                                            ><span class="skill-tag"
+                                                >FastAPI</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge silver">2</span>
+                                    </td>
+                                    <td>李娜</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag"
+                                                >Kubernetes</span
+                                            ><span class="skill-tag">Go</span
+                                            ><span class="skill-tag"
+                                                >DevOps</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge bronze">3</span>
+                                    </td>
+                                    <td>王强</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag">Rust</span
+                                            ><span class="skill-tag"
+                                                >Security</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge normal">4</span>
+                                    </td>
+                                    <td>陈明</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag">React</span
+                                            ><span class="skill-tag"
+                                                >Node.js</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="rank-badge normal">5</span>
+                                    </td>
+                                    <td>刘芳</td>
+                                    <td>
+                                        <div class="skill-tags">
+                                            <span class="skill-tag">Python</span
+                                            ><span class="skill-tag"
+                                                >TensorFlow</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Network -->
+            <div id="network" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-project-network"></i> 团队协作网络
+                        </h3>
+                    </div>
+                    <div class="chart-container" style="height: 500px">
+                        <canvas id="networkChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Milestones -->
+            <div id="milestones" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-flag"></i> 活动里程碑
+                        </h3>
+                    </div>
+                    <div class="milestone-grid">
+                        <div class="milestone-card completed">
+                            <div class="milestone-time">2024-12-14 09:00</div>
+                            <div class="milestone-title">项目启动仪式</div>
+                            <div class="milestone-desc">
+                                活动正式开幕，32支团队组建完成，156人参与
+                            </div>
+                        </div>
+                        <div class="milestone-card completed">
+                            <div class="milestone-time">2024-12-15 12:00</div>
+                            <div class="milestone-title">中期检查</div>
+                            <div class="milestone-desc">
+                                28个项目完成初版开发，进入评审阶段
+                            </div>
+                        </div>
+                        <div class="milestone-card completed">
+                            <div class="milestone-time">2024-12-16 08:00</div>
+                            <div class="milestone-title">代码冻结</div>
+                            <div class="milestone-desc">
+                                所有项目代码提交完毕，进入最终评审
+                            </div>
+                        </div>
+                        <div class="milestone-card completed">
+                            <div class="milestone-time">2024-12-16 14:00</div>
+                            <div class="milestone-title">决赛路演</div>
+                            <div class="milestone-desc">
+                                10支队伍进入决赛进行项目展示
+                            </div>
+                        </div>
+                        <div class="milestone-card completed">
+                            <div class="milestone-time">2024-12-16 18:00</div>
+                            <div class="milestone-title">颁奖典礼</div>
+                            <div class="milestone-desc">
+                                公布获奖名单，颁发一二三等奖及优秀奖
                             </div>
                         </div>
                     </div>
@@ -999,327 +1766,172 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-chart-line"></i> 贡献趋势</h3>
+                        <h3 class="card-title">
+                            <i class="fas fa-medal"></i> 成就徽章统计
+                        </h3>
                     </div>
-                    <div class="chart-container">
-                        <canvas id="contributionTrend"></canvas>
+                    <div class="achievement-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="achievement-name">首次提交</div>
+                            <div class="achievement-count">145 人获得</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div
+                                class="achievement-icon"
+                                style="background: #fee2e2; color: #dc2626"
+                            >
+                                <i class="fas fa-bug"></i>
+                            </div>
+                            <div class="achievement-name">Bug猎人</div>
+                            <div class="achievement-count">67 人获得</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div
+                                class="achievement-icon"
+                                style="
+                                    background: var(--bg-blue);
+                                    color: #3b82f6;
+                                "
+                            >
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="achievement-name">团队协作</div>
+                            <div class="achievement-count">89 人获得</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div
+                                class="achievement-icon"
+                                style="
+                                    background: var(--bg-green);
+                                    color: #059669;
+                                "
+                            >
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="achievement-name">代码审查</div>
+                            <div class="achievement-count">123 人获得</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div
+                                class="achievement-icon"
+                                style="
+                                    background: var(--bg-purple);
+                                    color: #7c3aed;
+                                "
+                            >
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="achievement-name">文档贡献</div>
+                            <div class="achievement-count">45 人获得</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div
+                                class="achievement-icon"
+                                style="
+                                    background: var(--bg-amber);
+                                    color: #d97706;
+                                "
+                            >
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="achievement-name">创新之星</div>
+                            <div class="achievement-count">28 人获得</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Section: Leaderboard -->
-        <div id="leaderboard" class="section">
-            <div class="grid-2">
+            <!-- Section: Summary -->
+            <div id="summary" class="section">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-medal"></i> 个人贡献排行</h3>
+                        <h3 class="card-title">
+                            <i class="fas fa-file-alt"></i> 活动总结报告
+                        </h3>
                     </div>
-                    <table class="leaderboard-table">
-                        <thead>
-                            <tr>
-                                <th>排名</th>
-                                <th>贡献者</th>
-                                <th>团队</th>
-                                <th>评分</th>
-                                <th>PRs</th>
-                                <th>技能</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="rank-badge gold">1</span></td>
-                                <td>
-                                    <div class="contributor-info">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ZhangWei" class="contributor-avatar" alt="avatar">
-                                        <span class="contributor-name">张伟</span>
-                                    </div>
-                                </td>
-                                <td>AI先锋队</td>
-                                <td><strong>95</strong></td>
-                                <td>28</td>
-                                <td>
-                                    <div class="skill-tags">
-                                        <span class="skill-tag">Python</span>
-                                        <span class="skill-tag">AI/ML</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge silver">2</span></td>
-                                <td>
-                                    <div class="contributor-info">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiNa" class="contributor-avatar" alt="avatar">
-                                        <span class="contributor-name">李娜</span>
-                                    </div>
-                                </td>
-                                <td>云端探索者</td>
-                                <td><strong>92</strong></td>
-                                <td>24</td>
-                                <td>
-                                    <div class="skill-tags">
-                                        <span class="skill-tag">Kubernetes</span>
-                                        <span class="skill-tag">Go</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge bronze">3</span></td>
-                                <td>
-                                    <div class="contributor-info">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=WangQiang" class="contributor-avatar" alt="avatar">
-                                        <span class="contributor-name">王强</span>
-                                    </div>
-                                </td>
-                                <td>安全卫士</td>
-                                <td><strong>89</strong></td>
-                                <td>22</td>
-                                <td>
-                                    <div class="skill-tags">
-                                        <span class="skill-tag">Rust</span>
-                                        <span class="skill-tag">Security</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge normal">4</span></td>
-                                <td>
-                                    <div class="contributor-info">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ChenMing" class="contributor-avatar" alt="avatar">
-                                        <span class="contributor-name">陈明</span>
-                                    </div>
-                                </td>
-                                <td>教育创新</td>
-                                <td><strong>86</strong></td>
-                                <td>20</td>
-                                <td>
-                                    <div class="skill-tags">
-                                        <span class="skill-tag">React</span>
-                                        <span class="skill-tag">Node.js</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge normal">5</span></td>
-                                <td>
-                                    <div class="contributor-info">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiuFang" class="contributor-avatar" alt="avatar">
-                                        <span class="contributor-name">刘芳</span>
-                                    </div>
-                                </td>
-                                <td>AI先锋队</td>
-                                <td><strong>84</strong></td>
-                                <td>18</td>
-                                <td>
-                                    <div class="skill-tags">
-                                        <span class="skill-tag">Python</span>
-                                        <span class="skill-tag">TensorFlow</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-users"></i> 团队贡献排行</h3>
-                    </div>
-                    <div class="team-card">
-                        <div class="team-rank">1</div>
-                        <div class="team-icon"><i class="fas fa-crown"></i></div>
-                        <div class="team-info">
-                            <h4>AI先锋队</h4>
-                            <p>5人 · AI代码助手</p>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-value">32</div>
+                            <div class="summary-label">参赛团队</div>
                         </div>
-                        <div class="team-stats">
-                            <div class="team-score">268</div>
-                            <div class="team-prs">68 PRs</div>
+                        <div class="summary-item">
+                            <div class="summary-value">10</div>
+                            <div class="summary-label">获奖团队</div>
                         </div>
-                    </div>
-                    <div class="team-card">
-                        <div class="team-rank">2</div>
-                        <div class="team-icon"><i class="fas fa-medal"></i></div>
-                        <div class="team-info">
-                            <h4>安全卫士</h4>
-                            <p>4人 · 漏洞扫描工具</p>
+                        <div class="summary-item">
+                            <div class="summary-value">245</div>
+                            <div class="summary-label">合并PR数</div>
                         </div>
-                        <div class="team-stats">
-                            <div class="team-score">245</div>
-                            <div class="team-prs">56 PRs</div>
+                        <div class="summary-item">
+                            <div class="summary-value">89</div>
+                            <div class="summary-label">解决Issue</div>
                         </div>
-                    </div>
-                    <div class="team-card">
-                        <div class="team-rank">3</div>
-                        <div class="team-icon"><i class="fas fa-award"></i></div>
-                        <div class="team-info">
-                            <h4>云端探索者</h4>
-                            <p>5人 · 云原生监控平台</p>
+                        <div class="summary-item">
+                            <div class="summary-value">12</div>
+                            <div class="summary-label">项目持续开发</div>
                         </div>
-                        <div class="team-stats">
-                            <div class="team-score">232</div>
-                            <div class="team-prs">52 PRs</div>
+                        <div class="summary-item">
+                            <div class="summary-value">20</div>
+                            <div class="summary-label">优秀贡献者</div>
                         </div>
-                    </div>
-                    <div class="team-card">
-                        <div class="team-rank">4</div>
-                        <div class="team-icon"><i class="fas fa-code"></i></div>
-                        <div class="team-info">
-                            <h4>教育创新</h4>
-                            <p>4人 · 在线编程教育平台</p>
+                        <div class="summary-item">
+                            <div class="summary-value">3.6</div>
+                            <div class="summary-label">人均贡献</div>
                         </div>
-                        <div class="team-stats">
-                            <div class="team-score">218</div>
-                            <div class="team-prs">45 PRs</div>
-                        </div>
-                    </div>
-                    <div class="team-card">
-                        <div class="team-rank">5</div>
-                        <div class="team-icon"><i class="fas fa-code"></i></div>
-                        <div class="team-info">
-                            <h4>创新之星</h4>
-                            <p>5人 · 开源社区助手</p>
-                        </div>
-                        <div class="team-stats">
-                            <div class="team-score">195</div>
-                            <div class="team-prs">38 PRs</div>
+                        <div class="summary-item">
+                            <div class="summary-value">15</div>
+                            <div class="summary-label">跨队协作</div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Section: Projects -->
-        <div id="projects" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-trophy"></i> 获奖项目</h3>
-                </div>
-                <div class="project-grid">
-                    <div class="project-card">
-                        <div class="project-header">
-                            <div>
-                                <div class="project-name">AI代码助手</div>
-                                <div class="project-team">AI先锋队 · AI创新赛道</div>
-                            </div>
-                            <span class="project-status first">一等奖</span>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-bar"></i> 各赛道参与情况
+                            </h3>
                         </div>
-                        <p class="project-desc">基于大语言模型的智能代码补全与重构工具</p>
-                        <div class="project-scores">
-                            <div class="score-item">
-                                <div class="score-value">95</div>
-                                <div class="score-label">创新性</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">88</div>
-                                <div class="score-label">复杂度</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">92</div>
-                                <div class="score-label">技术性</div>
-                            </div>
-                        </div>
-                        <div class="project-footer">
-                            <div class="project-stats">
-                                <span class="project-stat"><i class="fas fa-code-branch"></i> 68</span>
-                                <span class="project-stat"><i class="fas fa-bug"></i> 25</span>
-                                <span class="project-stat"><i class="fas fa-star"></i> 156</span>
-                            </div>
+                        <div class="chart-container">
+                            <canvas id="tracksChart"></canvas>
                         </div>
                     </div>
 
-                    <div class="project-card">
-                        <div class="project-header">
-                            <div>
-                                <div class="project-name">漏洞扫描工具</div>
-                                <div class="project-team">安全卫士 · 安全工具赛道</div>
-                            </div>
-                            <span class="project-status second">二等奖</span>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-download"></i> 导出报告
+                            </h3>
                         </div>
-                        <p class="project-desc">自动化开源依赖漏洞检测与修复建议工具</p>
-                        <div class="project-scores">
-                            <div class="score-item">
-                                <div class="score-value">88</div>
-                                <div class="score-label">创新性</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">90</div>
-                                <div class="score-label">复杂度</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">85</div>
-                                <div class="score-label">技术性</div>
-                            </div>
-                        </div>
-                        <div class="project-footer">
-                            <div class="project-stats">
-                                <span class="project-stat"><i class="fas fa-code-branch"></i> 56</span>
-                                <span class="project-stat"><i class="fas fa-bug"></i> 18</span>
-                                <span class="project-stat"><i class="fas fa-star"></i> 89</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-header">
-                            <div>
-                                <div class="project-name">云原生监控平台</div>
-                                <div class="project-team">云端探索者 · 云原生赛道</div>
-                            </div>
-                            <span class="project-status second">二等奖</span>
-                        </div>
-                        <p class="project-desc">面向Kubernetes的多维度可视化监控系统</p>
-                        <div class="project-scores">
-                            <div class="score-item">
-                                <div class="score-value">82</div>
-                                <div class="score-label">创新性</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">85</div>
-                                <div class="score-label">复杂度</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">88</div>
-                                <div class="score-label">技术性</div>
-                            </div>
-                        </div>
-                        <div class="project-footer">
-                            <div class="project-stats">
-                                <span class="project-stat"><i class="fas fa-code-branch"></i> 52</span>
-                                <span class="project-stat"><i class="fas fa-bug"></i> 15</span>
-                                <span class="project-stat"><i class="fas fa-star"></i> 67</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-header">
-                            <div>
-                                <div class="project-name">在线编程教育平台</div>
-                                <div class="project-team">教育创新 · 教育科技赛道</div>
-                            </div>
-                            <span class="project-status third">三等奖</span>
-                        </div>
-                        <p class="project-desc">互动式编程学习与实践平台</p>
-                        <div class="project-scores">
-                            <div class="score-item">
-                                <div class="score-value">85</div>
-                                <div class="score-label">创新性</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">78</div>
-                                <div class="score-label">复杂度</div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-value">80</div>
-                                <div class="score-label">技术性</div>
-                            </div>
-                        </div>
-                        <div class="project-footer">
-                            <div class="project-stats">
-                                <span class="project-stat"><i class="fas fa-code-branch"></i> 45</span>
-                                <span class="project-stat"><i class="fas fa-bug"></i> 12</span>
-                                <span class="project-stat"><i class="fas fa-star"></i> 45</span>
+                        <div style="text-align: center; padding: 40px 0">
+                            <p
+                                style="
+                                    color: var(--text-secondary);
+                                    margin-bottom: 24px;
+                                    font-size: 1rem;
+                                "
+                            >
+                                导出活动数据用于进一步分析
+                            </p>
+                            <div
+                                style="
+                                    display: flex;
+                                    gap: 16px;
+                                    justify-content: center;
+                                    flex-wrap: wrap;
+                                "
+                            >
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-file-pdf"></i> 导出 PDF
+                                    报告
+                                </button>
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-file-csv"></i> 导出 CSV
+                                    数据
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1327,424 +1939,268 @@
             </div>
         </div>
 
-        <!-- Section: Skills -->
-        <div id="skills" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-code"></i> 技能与技术标签分布</h3>
-                </div>
-                <div class="skills-cloud">
-                    <div class="skill-item" style="font-size: 1.1rem;">
-                        Python <span class="skill-count">68</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 1rem;">
-                        JavaScript <span class="skill-count">45</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.95rem;">
-                        Backend <span class="skill-count">42</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.95rem;">
-                        Frontend <span class="skill-count">38</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.9rem;">
-                        AI/ML <span class="skill-count">35</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.9rem;">
-                        Go <span class="skill-count">32</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.85rem;">
-                        Kubernetes <span class="skill-count">28</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.85rem;">
-                        DevOps <span class="skill-count">22</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.8rem;">
-                        Rust <span class="skill-count">18</span>
-                    </div>
-                    <div class="skill-item" style="font-size: 0.8rem;">
-                        Security <span class="skill-count">15</span>
-                    </div>
-                </div>
-            </div>
+        <script>
+            // Tab navigation
+            function showSection(sectionId) {
+                document
+                    .querySelectorAll(".section")
+                    .forEach((s) => s.classList.remove("active"));
+                document
+                    .querySelectorAll(".nav-tab")
+                    .forEach((t) => t.classList.remove("active"));
+                document.getElementById(sectionId).classList.add("active");
+                event.target.closest(".nav-tab").classList.add("active");
 
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-chart-pie"></i> 技术方向分布</h3>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="skillsChart"></canvas>
-                    </div>
-                </div>
+                if (sectionId === "overview") initOverviewCharts();
+                if (sectionId === "skills") initSkillsChart();
+                if (sectionId === "network") initNetworkChart();
+                if (sectionId === "summary") initSummaryCharts();
+            }
 
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-fire"></i> Top 10 贡献者技能</h3>
-                    </div>
-                    <table class="leaderboard-table">
-                        <thead>
-                            <tr>
-                                <th>排名</th>
-                                <th>贡献者</th>
-                                <th>主要技能</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="rank-badge gold">1</span></td>
-                                <td>张伟</td>
-                                <td><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">AI/ML</span><span class="skill-tag">FastAPI</span></div></td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge silver">2</span></td>
-                                <td>李娜</td>
-                                <td><div class="skill-tags"><span class="skill-tag">Kubernetes</span><span class="skill-tag">Go</span><span class="skill-tag">DevOps</span></div></td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge bronze">3</span></td>
-                                <td>王强</td>
-                                <td><div class="skill-tags"><span class="skill-tag">Rust</span><span class="skill-tag">Security</span></div></td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge normal">4</span></td>
-                                <td>陈明</td>
-                                <td><div class="skill-tags"><span class="skill-tag">React</span><span class="skill-tag">Node.js</span></div></td>
-                            </tr>
-                            <tr>
-                                <td><span class="rank-badge normal">5</span></td>
-                                <td>刘芳</td>
-                                <td><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">TensorFlow</span></div></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+            // Charts
+            let overviewChartsInitialized = false;
+            function initOverviewCharts() {
+                if (overviewChartsInitialized) return;
+                overviewChartsInitialized = true;
 
-        <!-- Section: Network -->
-        <div id="network" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-project-network"></i> 团队协作网络</h3>
-                </div>
-                <div class="chart-container" style="height: 500px;">
-                    <canvas id="networkChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section: Milestones -->
-        <div id="milestones" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-flag"></i> 活动里程碑</h3>
-                </div>
-                <div class="milestone-grid">
-                    <div class="milestone-card completed">
-                        <div class="milestone-time">2024-12-14 09:00</div>
-                        <div class="milestone-title">项目启动仪式</div>
-                        <div class="milestone-desc">活动正式开幕，32支团队组建完成，156人参与</div>
-                    </div>
-                    <div class="milestone-card completed">
-                        <div class="milestone-time">2024-12-15 12:00</div>
-                        <div class="milestone-title">中期检查</div>
-                        <div class="milestone-desc">28个项目完成初版开发，进入评审阶段</div>
-                    </div>
-                    <div class="milestone-card completed">
-                        <div class="milestone-time">2024-12-16 08:00</div>
-                        <div class="milestone-title">代码冻结</div>
-                        <div class="milestone-desc">所有项目代码提交完毕，进入最终评审</div>
-                    </div>
-                    <div class="milestone-card completed">
-                        <div class="milestone-time">2024-12-16 14:00</div>
-                        <div class="milestone-title">决赛路演</div>
-                        <div class="milestone-desc">10支队伍进入决赛进行项目展示</div>
-                    </div>
-                    <div class="milestone-card completed">
-                        <div class="milestone-time">2024-12-16 18:00</div>
-                        <div class="milestone-title">颁奖典礼</div>
-                        <div class="milestone-desc">公布获奖名单，颁发一二三等奖及优秀奖</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-medal"></i> 成就徽章统计</h3>
-                </div>
-                <div class="achievement-grid">
-                    <div class="achievement-card">
-                        <div class="achievement-icon"><i class="fas fa-code"></i></div>
-                        <div class="achievement-name">首次提交</div>
-                        <div class="achievement-count">145 人获得</div>
-                    </div>
-                    <div class="achievement-card">
-                        <div class="achievement-icon" style="background: #FEE2E2; color: #DC2626;"><i class="fas fa-bug"></i></div>
-                        <div class="achievement-name">Bug猎人</div>
-                        <div class="achievement-count">67 人获得</div>
-                    </div>
-                    <div class="achievement-card">
-                        <div class="achievement-icon" style="background: var(--bg-blue); color: #3B82F6;"><i class="fas fa-users"></i></div>
-                        <div class="achievement-name">团队协作</div>
-                        <div class="achievement-count">89 人获得</div>
-                    </div>
-                    <div class="achievement-card">
-                        <div class="achievement-icon" style="background: var(--bg-green); color: #059669;"><i class="fas fa-eye"></i></div>
-                        <div class="achievement-name">代码审查</div>
-                        <div class="achievement-count">123 人获得</div>
-                    </div>
-                    <div class="achievement-card">
-                        <div class="achievement-icon" style="background: var(--bg-purple); color: #7C3AED;"><i class="fas fa-file-alt"></i></div>
-                        <div class="achievement-name">文档贡献</div>
-                        <div class="achievement-count">45 人获得</div>
-                    </div>
-                    <div class="achievement-card">
-                        <div class="achievement-icon" style="background: var(--bg-amber); color: #D97706;"><i class="fas fa-lightbulb"></i></div>
-                        <div class="achievement-name">创新之星</div>
-                        <div class="achievement-count">28 人获得</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section: Summary -->
-        <div id="summary" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-file-alt"></i> 活动总结报告</h3>
-                </div>
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <div class="summary-value">32</div>
-                        <div class="summary-label">参赛团队</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">10</div>
-                        <div class="summary-label">获奖团队</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">245</div>
-                        <div class="summary-label">合并PR数</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">89</div>
-                        <div class="summary-label">解决Issue</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">12</div>
-                        <div class="summary-label">项目持续开发</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">20</div>
-                        <div class="summary-label">优秀贡献者</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">3.6</div>
-                        <div class="summary-label">人均贡献</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">15</div>
-                        <div class="summary-label">跨队协作</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-chart-bar"></i> 各赛道参与情况</h3>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="tracksChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-download"></i> 导出报告</h3>
-                    </div>
-                    <div style="text-align: center; padding: 40px 0;">
-                        <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 1rem;">导出活动数据用于进一步分析</p>
-                        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-file-pdf"></i> 导出 PDF 报告
-                            </button>
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-file-csv"></i> 导出 CSV 数据
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Tab navigation
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            event.target.closest('.nav-tab').classList.add('active');
-
-            if (sectionId === 'overview') initOverviewCharts();
-            if (sectionId === 'skills') initSkillsChart();
-            if (sectionId === 'network') initNetworkChart();
-            if (sectionId === 'summary') initSummaryCharts();
-        }
-
-        // Charts
-        let overviewChartsInitialized = false;
-        function initOverviewCharts() {
-            if (overviewChartsInitialized) return;
-            overviewChartsInitialized = true;
-
-            const trendCtx = document.getElementById('contributionTrend');
-            if (trendCtx) {
-                new Chart(trendCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ['12-14 08:00', '12-14 14:00', '12-14 20:00', '12-15 08:00', '12-15 14:00', '12-15 20:00', '12-16 08:00', '12-16 14:00'],
-                        datasets: [{
-                            label: 'PR提交',
-                            data: [12, 35, 48, 78, 102, 125, 156, 180],
-                            borderColor: '#F97316',
-                            backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        }, {
-                            label: 'Issue提交',
-                            data: [5, 15, 22, 38, 52, 65, 78, 89],
-                            borderColor: '#3B82F6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } }
+                const trendCtx = document.getElementById("contributionTrend");
+                if (trendCtx) {
+                    new Chart(trendCtx, {
+                        type: "line",
+                        data: {
+                            labels: [
+                                "12-14 08:00",
+                                "12-14 14:00",
+                                "12-14 20:00",
+                                "12-15 08:00",
+                                "12-15 14:00",
+                                "12-15 20:00",
+                                "12-16 08:00",
+                                "12-16 14:00",
+                            ],
+                            datasets: [
+                                {
+                                    label: "PR提交",
+                                    data: [12, 35, 48, 78, 102, 125, 156, 180],
+                                    borderColor: "#F97316",
+                                    backgroundColor: "rgba(249, 115, 22, 0.1)",
+                                    fill: true,
+                                    tension: 0.4,
+                                },
+                                {
+                                    label: "Issue提交",
+                                    data: [5, 15, 22, 38, 52, 65, 78, 89],
+                                    borderColor: "#3B82F6",
+                                    backgroundColor: "rgba(59, 130, 246, 0.1)",
+                                    fill: true,
+                                    tension: 0.4,
+                                },
+                            ],
                         },
-                        scales: {
-                            x: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } },
-                            y: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } }
-                        }
-                    }
-                });
-            }
-        }
-
-        let skillsChartInitialized = false;
-        function initSkillsChart() {
-            if (skillsChartInitialized) return;
-            skillsChartInitialized = true;
-
-            const ctx = document.getElementById('skillsChart');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Python', 'JavaScript', 'Go', 'Rust', 'Kubernetes', 'AI/ML', 'Frontend', 'Backend', 'DevOps', 'Security'],
-                        datasets: [{
-                            data: [68, 45, 32, 18, 28, 35, 38, 42, 22, 15],
-                            backgroundColor: [
-                                '#3B82F6', '#10B981', '#F97316', '#8B5CF6', '#EC4899',
-                                '#06B6D4', '#F59E0B', '#EF4444', '#14B8A6', '#6366F1'
-                            ]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'right', labels: { color: '#6B7280', font: { family: 'Outfit' } } }
-                        }
-                    }
-                });
-            }
-        }
-
-        let networkChartInitialized = false;
-        function initNetworkChart() {
-            if (networkChartInitialized) return;
-            networkChartInitialized = true;
-
-            const ctx = document.getElementById('networkChart');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'radar',
-                    data: {
-                        labels: ['AI先锋队', '安全卫士', '云端探索者', '教育创新', '创新之星'],
-                        datasets: [{
-                            label: '团队贡献',
-                            data: [268, 245, 232, 218, 195],
-                            backgroundColor: 'rgba(249, 115, 22, 0.2)',
-                            borderColor: '#F97316',
-                            pointBackgroundColor: '#F97316'
-                        }, {
-                            label: '团队协作',
-                            data: [180, 200, 220, 190, 160],
-                            backgroundColor: 'rgba(139, 92, 246, 0.2)',
-                            borderColor: '#8B5CF6',
-                            pointBackgroundColor: '#8B5CF6'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } }
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: "#6B7280",
+                                        font: { family: "Outfit" },
+                                    },
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: "#6B7280" },
+                                    grid: { color: "#E5E7EB" },
+                                },
+                                y: {
+                                    ticks: { color: "#6B7280" },
+                                    grid: { color: "#E5E7EB" },
+                                },
+                            },
                         },
-                        scales: {
-                            r: {
-                                angleLines: { color: '#E5E7EB' },
-                                grid: { color: '#E5E7EB' },
-                                pointLabels: { color: '#111827', font: { size: 14, family: 'Outfit' } },
-                                ticks: { display: false }
-                            }
-                        }
-                    }
-                });
+                    });
+                }
             }
-        }
 
-        let summaryChartsInitialized = false;
-        function initSummaryCharts() {
-            if (summaryChartsInitialized) return;
-            summaryChartsInitialized = true;
+            let skillsChartInitialized = false;
+            function initSkillsChart() {
+                if (skillsChartInitialized) return;
+                skillsChartInitialized = true;
 
-            const ctx = document.getElementById('tracksChart');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['AI创新', '云原生', '安全工具', '教育科技'],
-                        datasets: [{
-                            label: '团队数',
-                            data: [12, 8, 6, 6],
-                            backgroundColor: ['#3B82F6', '#10B981', '#F97316', '#8B5CF6']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { labels: { color: '#6B7280', font: { family: 'Outfit' } } }
+                const ctx = document.getElementById("skillsChart");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: "doughnut",
+                        data: {
+                            labels: [
+                                "Python",
+                                "JavaScript",
+                                "Go",
+                                "Rust",
+                                "Kubernetes",
+                                "AI/ML",
+                                "Frontend",
+                                "Backend",
+                                "DevOps",
+                                "Security",
+                            ],
+                            datasets: [
+                                {
+                                    data: [
+                                        68, 45, 32, 18, 28, 35, 38, 42, 22, 15,
+                                    ],
+                                    backgroundColor: [
+                                        "#3B82F6",
+                                        "#10B981",
+                                        "#F97316",
+                                        "#8B5CF6",
+                                        "#EC4899",
+                                        "#06B6D4",
+                                        "#F59E0B",
+                                        "#EF4444",
+                                        "#14B8A6",
+                                        "#6366F1",
+                                    ],
+                                },
+                            ],
                         },
-                        scales: {
-                            x: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } },
-                            y: { ticks: { color: '#6B7280' }, grid: { color: '#E5E7EB' } }
-                        }
-                    }
-                });
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: "right",
+                                    labels: {
+                                        color: "#6B7280",
+                                        font: { family: "Outfit" },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                }
             }
-        }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initOverviewCharts();
-        });
-    </script>
-</body>
+            let networkChartInitialized = false;
+            function initNetworkChart() {
+                if (networkChartInitialized) return;
+                networkChartInitialized = true;
+
+                const ctx = document.getElementById("networkChart");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: "radar",
+                        data: {
+                            labels: [
+                                "AI先锋队",
+                                "安全卫士",
+                                "云端探索者",
+                                "教育创新",
+                                "创新之星",
+                            ],
+                            datasets: [
+                                {
+                                    label: "团队贡献",
+                                    data: [268, 245, 232, 218, 195],
+                                    backgroundColor: "rgba(249, 115, 22, 0.2)",
+                                    borderColor: "#F97316",
+                                    pointBackgroundColor: "#F97316",
+                                },
+                                {
+                                    label: "团队协作",
+                                    data: [180, 200, 220, 190, 160],
+                                    backgroundColor: "rgba(139, 92, 246, 0.2)",
+                                    borderColor: "#8B5CF6",
+                                    pointBackgroundColor: "#8B5CF6",
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: "#6B7280",
+                                        font: { family: "Outfit" },
+                                    },
+                                },
+                            },
+                            scales: {
+                                r: {
+                                    angleLines: { color: "#E5E7EB" },
+                                    grid: { color: "#E5E7EB" },
+                                    pointLabels: {
+                                        color: "#111827",
+                                        font: { size: 14, family: "Outfit" },
+                                    },
+                                    ticks: { display: false },
+                                },
+                            },
+                        },
+                    });
+                }
+            }
+
+            let summaryChartsInitialized = false;
+            function initSummaryCharts() {
+                if (summaryChartsInitialized) return;
+                summaryChartsInitialized = true;
+
+                const ctx = document.getElementById("tracksChart");
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: [
+                                "AI创新",
+                                "云原生",
+                                "安全工具",
+                                "教育科技",
+                            ],
+                            datasets: [
+                                {
+                                    label: "团队数",
+                                    data: [12, 8, 6, 6],
+                                    backgroundColor: [
+                                        "#3B82F6",
+                                        "#10B981",
+                                        "#F97316",
+                                        "#8B5CF6",
+                                    ],
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: "#6B7280",
+                                        font: { family: "Outfit" },
+                                    },
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: "#6B7280" },
+                                    grid: { color: "#E5E7EB" },
+                                },
+                                y: {
+                                    ticks: { color: "#6B7280" },
+                                    grid: { color: "#E5E7EB" },
+                                },
+                            },
+                        },
+                    });
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                initOverviewCharts();
+            });
+        </script>
+    </body>
 </html>
